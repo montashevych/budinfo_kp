@@ -26,6 +26,8 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 ## Phase 0 — Project bootstrap
 
+**Phase 0 — status:** Successfully passed for this repository (Docker-first path: Rails 8, PostgreSQL 16, Tailwind + Hotwire, Compose services `web` / `db` / `pgadmin`, `Dockerfile.dev` for dev and generated `Dockerfile` for production/Kamal). Use the host port published in `docker-compose.yml` for the app (e.g. `http://localhost:3001` if `3001:3000` is set).
+
 ### 0.1 Create the Rails application
 
 **Options (pick one path and stay consistent):**
@@ -41,9 +43,9 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Deliverables:**
 
-- [ ] `Gemfile` includes `pg`, Hotwire defaults (`turbo-rails`, `stimulus-rails`), Tailwind setup per chosen gem.
-- [ ] `config/database.yml` uses `ENV['DATABASE_URL']` or host `db` for Docker.
-- [ ] `.env.example` lists `DATABASE_URL`, `RAILS_MASTER_KEY`, `SECRET_KEY_BASE` (for production), `RAILS_ENV`.
+- [x] `Gemfile` includes `pg`, Hotwire defaults (`turbo-rails`, `stimulus-rails`), Tailwind setup per chosen gem.
+- [x] `config/database.yml` uses `ENV['DATABASE_URL']` or host `db` for Docker.
+- [x] `.env.example` lists `DATABASE_URL`, `RAILS_MASTER_KEY`, `SECRET_KEY_BASE` (for production), `RAILS_ENV`.
 
 ### 0.2 Docker Compose (development)
 
@@ -61,20 +63,22 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Deliverables:**
 
-- [ ] `docker compose up` starts DB + web.
-- [ ] `docker compose run web rails db:create` succeeds.
-- [ ] Browser opens app at `http://localhost:3000`.
+- [x] `docker compose up` starts DB + web.
+- [x] `docker compose run web rails db:create` succeeds.
+- [x] Browser opens app at the mapped host URL (see `docker-compose.yml`; e.g. `http://localhost:3001`).
 
 ### 0.3 Git hygiene
 
-- [ ] `.gitignore` includes `/log`, `/tmp`, `/storage`, `.env`, `master.key` handling per Rails docs.
-- [ ] `config/master.key` **not** committed; use `RAILS_MASTER_KEY` in production.
+- [x] `.gitignore` includes `/log`, `/tmp`, `/storage`, `.env`, `master.key` handling per Rails docs.
+- [x] `config/master.key` **not** committed; use `RAILS_MASTER_KEY` in production.
 
-**Phase 0 definition of done:** App boots in Docker; DB connects; Tailwind builds; Hotwire loads on a smoke page.
+**Phase 0 definition of done:** App boots in Docker; DB connects; Tailwind builds; Hotwire loads on a smoke page. **Done for this repo.**
 
 ---
 
 ## Phase A — Foundation
+
+**Phase A — status:** A.1 (I18n) and A.2 (layout + static skeleton) implemented: default locale `uk`, optional `ru`, no `:en` in `available_locales`, fallbacks `ru → uk`. A.3 (Devise) not started yet.
 
 ### A.1 Internationalization
 
@@ -97,8 +101,8 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Checklist:**
 
-- [ ] No Ukrainian/Russian shopper copy hardcoded in English in main layout.
-- [ ] Switching locale updates nav and shared strings.
+- [x] No Ukrainian/Russian shopper copy hardcoded in English in main layout.
+- [x] Switching locale updates nav and shared strings.
 
 ### A.2 Base layout & static skeleton
 
@@ -116,8 +120,8 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Checklist:**
 
-- [ ] Root renders with Tailwind styling.
-- [ ] Footer has placeholder links (policy pages can wait until Phase E).
+- [x] Root renders with Tailwind styling.
+- [x] Footer has placeholder links (policy pages can wait until Phase E).
 
 ### A.3 Devise (or Rails 8 native auth)
 
@@ -131,7 +135,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 - [ ] Sign up / sign in / sign out work in `:uk` / `:ru` Devise views (generate views + translate or use I18n YAML).
 
-**Phase A definition of done:** Localized shell of the site; auth works; Docker workflow is routine.
+**Phase A definition of done:** Localized shell of the site; auth works; Docker workflow is routine. *(Auth / A.3 still to do.)*
 
 ---
 

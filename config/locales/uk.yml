@@ -1,0 +1,29 @@
+uk:
+  layouts:
+    application:
+      title: "Budinfo"
+      meta_description: "Інтернет-магазин"
+  nav:
+    main_navigation: "Головна навігація"
+    home: "Головна"
+    catalog: "Каталог"
+    delivery: "Доставка"
+    contacts: "Контакти"
+    cart: "Кошик"
+    menu_toggle: "Відкрити меню"
+    menu_close: "Закрити меню"
+    locale_switch: "Мова"
+  pages:
+    delivery:
+      heading: "Доставка та оплата"
+      placeholder: "Тут буде текст про доставку."
+  contacts:
+    heading: "Контакти"
+    placeholder: "Форма зворотного звʼязку зʼявиться на наступному етапі."
+    stub_submitted: "Заглушка: форма ще не надсилає листи."
+    email_label: "Електронна пошта"
+    message_label: "Повідомлення"
+    submit: "Надіслати"
+  flash:
+    notice: "Повідомлення"
+    alert: "Увага"

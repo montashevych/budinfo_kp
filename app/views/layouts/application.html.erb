@@ -1,31 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
-    <title><%= content_for(:title) || "App" %></title>
+    <title><%= content_for(:title) || t("layouts.application.title") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="<%= content_for(:meta_description) || t('layouts.application.meta_description') %>">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="App">
+    <meta name="application-name" content="<%= t('layouts.application.title') %>">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="min-h-screen bg-stone-50 text-stone-900 antialiased">
+    <div data-controller="mobile-menu">
+      <header class="border-b border-stone-200 bg-white">
+        <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
+          <%= link_to root_path, class: "text-lg font-semibold tracking-tight text-stone-800" do %>
+            <%= t("layouts.application.title") %>
+          <% end %>
+
+          <nav class="hidden items-center gap-6 md:flex" aria-label="<%= t('nav.main_navigation') %>">
+            <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+            <span class="text-sm font-medium text-stone-400" aria-disabled="true"><%= t("nav.catalog") %></span>
+            <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+            <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+            <span class="text-sm font-medium text-stone-400" aria-disabled="true"><%= t("nav.cart") %></span>
+          </nav>
+
+          <div class="hidden items-center gap-2 md:flex">
+            <%= link_to "УК", set_locale_path(locale: :uk), class: locale_link_class(:uk) %>
+            <%= link_to "RU", set_locale_path(locale: :ru), class: locale_link_class(:ru) %>
+          </div>
+
+          <div class="flex items-center gap-2 md:hidden">
+            <%= link_to "УК", set_locale_path(locale: :uk), class: "#{locale_link_class(:uk)} text-sm" %>
+            <%= link_to "RU", set_locale_path(locale: :ru), class: "#{locale_link_class(:ru)} text-sm" %>
+            <button type="button" class="rounded-md p-2 text-stone-600 hover:bg-stone-100" data-mobile-menu-target="openButton" data-action="click->mobile-menu#open" aria-label="<%= t('nav.menu_toggle') %>">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+            <button type="button" class="hidden rounded-md p-2 text-stone-600 hover:bg-stone-100" data-mobile-menu-target="closeButton" data-action="click->mobile-menu#close" aria-label="<%= t('nav.menu_close') %>">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <nav class="hidden border-t border-stone-100 bg-white px-4 py-3 md:hidden" data-mobile-menu-target="panel" aria-label="Mobile">
+          <div class="mx-auto flex max-w-5xl flex-col gap-3">
+            <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
+            <span class="text-sm font-medium text-stone-400"><%= t("nav.catalog") %></span>
+            <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
+            <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
+            <span class="text-sm font-medium text-stone-400"><%= t("nav.cart") %></span>
+          </div>
+        </nav>
+      </header>
+    </div>
+
+    <main class="mx-auto max-w-5xl px-4 py-10">
+      <% if notice.present? %>
+        <p class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900" role="status"><%= notice %></p>
+      <% end %>
+      <% if alert.present? %>
+        <p class="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="alert"><%= alert %></p>
+      <% end %>
       <%= yield %>
     </main>
+
+    <footer class="mt-auto border-t border-stone-200 bg-white py-8">
+      <div class="mx-auto flex max-w-5xl flex-col gap-4 px-4 text-sm text-stone-500 md:flex-row md:items-center md:justify-between">
+        <span>&copy; <%= Time.current.year %> <%= t("layouts.application.title") %></span>
+        <div class="flex flex-wrap gap-4">
+          <%= link_to t("nav.delivery"), delivery_path, class: "hover:text-stone-800" %>
+          <%= link_to t("nav.contacts"), new_contact_path, class: "hover:text-stone-800" %>
+          <span class="text-stone-400"><%= t("nav.catalog") %></span>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>
