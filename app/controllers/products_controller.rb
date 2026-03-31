@@ -2,9 +2,21 @@ class ProductsController < ApplicationController
   allow_unauthenticated_access
 
   def index
-    @products = Product.active.with_attached_images.includes(:category).order(:title_uk)
-    @products = apply_filters(@products)
+    scope = Product.active.with_attached_images.includes(:category).order(:title_uk)
+    scope = apply_filters(scope)
     @filter_categories = Category.roots.ordered.includes(:children)
+    @pagy, @products = pagy(
+      :offset,
+      scope,
+      limit: pagination_limit,
+      overflow: :last_page
+    )
+
+    if request.headers["Turbo-Frame"] == "products"
+      render partial: "products/index_frame", layout: false
+    else
+      render :index
+    end
   end
 
   def show
@@ -12,6 +24,10 @@ class ProductsController < ApplicationController
   end
 
   private
+
+  def pagination_limit
+    Rails.env.test? ? 1 : 12
+  end
 
   def apply_filters(scope)
     rel = scope

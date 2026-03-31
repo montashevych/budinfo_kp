@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "products", data: { turbo_action: "advance" }, class: "block" do %>
+  <%= render "products/grid", products: @products %>
+  <% if @pagy.pages > 1 %>
+    <div class="pagy-nav-wrap mt-8 text-sm" role="navigation" aria-label="<%= t('products.pagination.nav_label') %>">
+      <%== @pagy.series_nav %>
+    </div>
+  <% end %>
+<% end %>

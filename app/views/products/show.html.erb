@@ -41,6 +41,10 @@
         <p class="mt-4 text-sm text-stone-500"><span class="font-medium text-stone-700"><%= t("products.sku") %>:</span> <%= @product.sku %></p>
       <% end %>
 
+      <div class="mt-6 max-w-sm">
+        <%= render "products/add_to_cart_stub" %>
+      </div>
+
       <% if @product.display_description.present? %>
         <div class="mt-8 whitespace-pre-wrap text-stone-700 leading-relaxed">
           <%= @product.display_description %>

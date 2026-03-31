@@ -4,6 +4,10 @@ require "rails/all"
 
 Bundler.require(*Rails.groups)
 
+# Pagy does not always load before controllers in all environments (e.g. Docker after Gemfile
+# changes). Require explicitly so `include Pagy::Method` in ApplicationController works.
+require "pagy"
+
 module App
   class Application < Rails::Application
     config.load_defaults 8.1

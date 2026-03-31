@@ -206,8 +206,8 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 ### B.3 Turbo / Stimulus touches
 
-- [ ] Pagination: `turbo_frame` or full page—pick one and stay consistent.
-- [ ] “Add to cart” button exists as stub (disabled or Phase D)—optional link to Phase D.
+- [x] Pagination: `turbo_frame` or full page—pick one and stay consistent. (**Implemented:** Pagy `:offset` + `<turbo-frame id="products">` for grid, filters, and page links; full document load without frame header; `data-turbo-action="advance"` on the frame for URL updates.)
+- [x] “Add to cart” button exists as stub (disabled or Phase D)—optional link to Phase D. (**Implemented:** disabled “У кошик” / “В корзину” on product cards and show page; copy references Phase D.)
 
 **Phase B definition of done:** Full browse path: categories → filtered list → product detail with images; copy in Ukrainian/Russian per DB fields + I18n chrome.
 
