@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
   resource :registration, only: %i[new create]
 
+  resources :categories, only: %i[index show], param: :slug
+
   root "home#index"
   get "delivery", to: "pages#delivery"
   resources :contacts, only: %i[new create]
