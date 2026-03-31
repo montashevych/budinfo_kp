@@ -78,7 +78,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 ## Phase A — Foundation
 
-**Phase A — status:** A.1 (I18n) and A.2 (layout + static skeleton) implemented: default locale `uk`, optional `ru`, no `:en` in `available_locales`, fallbacks `ru → uk`. A.3 (Devise) not started yet.
+**Phase A — status:** A.1–A.3 done: I18n (`uk` / `ru`), layout shell, **Rails 8 native authentication** (`bin/rails generate authentication`), `User` roles `customer` / `admin`, localized auth views, seeds admin (`db/seeds.rb`, optional `ADMIN_SEED_PASSWORD`).
 
 ### A.1 Internationalization
 
@@ -123,19 +123,37 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 - [x] Root renders with Tailwind styling.
 - [x] Footer has placeholder links (policy pages can wait until Phase E).
 
-### A.3 Devise (or Rails 8 native auth)
+### A.3 Authentication (Rails 8 native — chosen)
 
-**Tasks:**
+**Why native instead of Devise (shop + admins):**
 
-1. Add **Devise**; `rails g devise User`.
-2. Add **role** to `users`: `enum :role, { customer: 0, admin: 1 }` (or string enum—pick one convention).
-3. First user seed or console: promote one admin.
+| Topic | Rails 8 `generate authentication` | Devise |
+|-------|-------------------------------------|--------|
+| Footprint | Small: `User`, `Session`, cookie, `Authentication` concern — matches app code | Larger DSL, more generators, more “magic” |
+| Upgrades | Stays aligned with Rails releases | Extra gem compatibility work per Rails major |
+| Admin (`/admin`) | Same `User` + `current_user.admin?` + `before_action` in `Admin::ApplicationController` | `authenticate_user!` + role check — same idea, different API |
+| Customization | You own every line (password reset mail, rate limits already in generated controllers) | Often `devise_scope`, overridden controllers, I18n YAML for devise views |
+| Features | Covers sign-in, session cookie, password reset; **registration** added as `RegistrationsController` | Registration, confirmable, lockable, OAuth plugins, etc. out of the box |
+
+**Product rules tracked here:**
+
+- **Guest checkout:** placing an order must **not** require registration. Phase **D** `OrdersController` / checkout flow will use `allow_unauthenticated_access` (and optional `user_id` when logged in). Registered users are optional.
+- **Cart persistence (30 days):** guest cart should survive return visits ~**30 days** — implement in Phase **D** with **`Rails.cache`** (or Solid Cache) keyed by signed cookie / `guest_cart_id`, `expires_in: 30.days`, not only the default session cookie. Documented under Phase D.1 below.
+
+**Implemented tasks:**
+
+1. `bin/rails generate authentication` + `bcrypt`; migration **`role`** on `users` (`enum`: `customer`, `admin`).
+2. **`RegistrationsController`** — public sign-up always creates **`customer`** (never `admin` from params).
+3. **`db/seeds.rb`** — `admin@example.com` (password from `ADMIN_SEED_PASSWORD` or dev default; change in production).
+4. I18n for sessions, registration, passwords, mailer (`uk` / `ru`); layout links **Увійти / Реєстрація / Вийти**.
+5. Public controllers use **`allow_unauthenticated_access`** so the storefront stays open without login.
 
 **Checklist:**
 
-- [ ] Sign up / sign in / sign out work in `:uk` / `:ru` Devise views (generate views + translate or use I18n YAML).
+- [x] Sign up / sign in / sign out + password reset flow; strings in `:uk` / `:ru`.
+- [x] `current_user` / `authenticated?` available in views (via `Authentication`).
 
-**Phase A definition of done:** Localized shell of the site; auth works; Docker workflow is routine. *(Auth / A.3 still to do.)*
+**Phase A definition of done:** Localized shell of the site; auth works; Docker workflow is routine. **Met for A.1–A.3.**
 
 ---
 
@@ -194,7 +212,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 1. Add `administrate` gem; run install generator.
 2. Mount dashboards under `/admin`.
-3. **Authenticate**: `before_action` requiring `current_user.admin?` (or Devise `authenticate_user!` + role check).
+3. **Authenticate**: `before_action` requiring `current_user.admin?` (same `User` model as storefront; no Devise).
 4. Consider **Pundit** for `Admin::ApplicationController` policies if you split permissions later.
 
 ### C.2 Dashboards
@@ -219,11 +237,17 @@ Register resources:
 
 ### D.1 Cart storage
 
-**Choose one for v1:**
+**Requirements (from product planning):**
+
+- **Guest orders:** checkout and order creation **without** `User` — see A.3; do not gate `OrdersController` with `authenticate_user!`.
+- **Cart ~30 days:** persist guest (and optionally logged-in) cart for return visits using **`Rails.cache`** (e.g. Solid Cache in production) with **`expires_in: 30.days`**, keyed by a stable signed token in cookies (e.g. `guest_cart_id`) or `user_id` when present. Session-only storage is insufficient for a 30-day window unless session cookie lifetime is explicitly extended — prefer cache + explicit TTL.
+
+**Choose one for v1 (implementation detail):**
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| Session (serialized product ids + qty) | Simple, no login | Size limits; no cross-device |
+| Session (serialized product ids + qty) | Simple, no login | Size limits; short TTL unless cookie max-age tuned |
+| **`Rails.cache` + cookie key** (30d TTL) | Matches “come back within a month” | Must define key rotation / merge on login |
 | `Cart` model + `session_id` / user | Clearer domain | More tables |
 
 **Tasks:**

@@ -13,6 +13,45 @@ ru:
     menu_toggle: "Открыть меню"
     menu_close: "Закрыть меню"
     locale_switch: "Язык"
+    sign_in: "Войти"
+    sign_up: "Регистрация"
+    sign_out: "Выйти"
+  auth:
+    sessions:
+      title: "Вход"
+      email_placeholder: "Электронная почта"
+      password_placeholder: "Пароль"
+      submit: "Войти"
+      forgot_password: "Забыли пароль?"
+      signed_in: "Вы вошли."
+      signed_out: "Вы вышли."
+      invalid_credentials: "Неверная почта или пароль."
+      rate_limited: "Слишком много попыток. Попробуйте позже."
+      no_account: "Нет аккаунта?"
+    registration:
+      title: "Регистрация"
+      password_confirmation_placeholder: "Повторите пароль"
+      submit: "Создать учётную запись"
+      success: "Учётная запись создана."
+      has_account: "Уже есть аккаунт?"
+    passwords:
+      new_title: "Сброс пароля"
+      edit_title: "Новый пароль"
+      email_placeholder: "Электронная почта"
+      submit_request: "Отправить инструкции"
+      submit_reset: "Сохранить пароль"
+      back_to_sign_in: "Вернуться ко входу"
+      instructions_sent: "Если такой аккаунт существует, мы отправили письмо с инструкциями."
+      reset_success: "Пароль обновлён."
+      mismatch: "Пароли не совпадают."
+      invalid_token: "Ссылка недействительна или устарела."
+      rate_limited: "Слишком много попыток. Попробуйте позже."
+  passwords_mailer:
+    reset:
+      subject: "Сброс пароля"
+      intro: "Чтобы сбросить пароль, перейдите по ссылке:"
+      link_label: "Страница сброса пароля"
+      expiry: "Ссылка действительна ещё %{duration}."
   pages:
     delivery:
       heading: "Доставка и оплата"

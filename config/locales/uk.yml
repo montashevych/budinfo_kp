@@ -13,6 +13,45 @@ uk:
     menu_toggle: "Відкрити меню"
     menu_close: "Закрити меню"
     locale_switch: "Мова"
+    sign_in: "Увійти"
+    sign_up: "Реєстрація"
+    sign_out: "Вийти"
+  auth:
+    sessions:
+      title: "Вхід"
+      email_placeholder: "Електронна пошта"
+      password_placeholder: "Пароль"
+      submit: "Увійти"
+      forgot_password: "Забули пароль?"
+      signed_in: "Ви увійшли."
+      signed_out: "Ви вийшли."
+      invalid_credentials: "Невірна пошта або пароль."
+      rate_limited: "Забагато спроб. Спробуйте пізніше."
+      no_account: "Немає акаунту?"
+    registration:
+      title: "Реєстрація"
+      password_confirmation_placeholder: "Повторіть пароль"
+      submit: "Створити обліковий запис"
+      success: "Обліковий запис створено."
+      has_account: "Вже є акаунт?"
+    passwords:
+      new_title: "Скинути пароль"
+      edit_title: "Новий пароль"
+      email_placeholder: "Електронна пошта"
+      submit_request: "Надіслати інструкції"
+      submit_reset: "Зберегти пароль"
+      back_to_sign_in: "Повернутися до входу"
+      instructions_sent: "Якщо такий акаунт існує, ми надіслали лист з інструкціями."
+      reset_success: "Пароль оновлено."
+      mismatch: "Паролі не збігаються."
+      invalid_token: "Посилання недійсне або прострочене."
+      rate_limited: "Забагато спроб. Спробуйте пізніше."
+  passwords_mailer:
+    reset:
+      subject: "Скидання пароля"
+      intro: "Щоб скинути пароль, перейдіть за посиланням:"
+      link_label: "Сторінка скидання пароля"
+      expiry: "Посилання діє ще %{duration}."
   pages:
     delivery:
       heading: "Доставка та оплата"
