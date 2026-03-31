@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@layer components {
+  .pagy-nav-wrap nav.pagy.series-nav {
+    @apply flex flex-wrap items-center justify-center gap-1;
+  }
+
+  .pagy-nav-wrap nav.pagy.series-nav a {
+    @apply inline-flex min-w-[2.25rem] items-center justify-center rounded-md border border-stone-300 bg-white px-3 py-1.5 font-medium text-stone-700 no-underline hover:bg-stone-50;
+  }
+
+  .pagy-nav-wrap nav.pagy.series-nav a[aria-disabled="true"],
+  .pagy-nav-wrap nav.pagy.series-nav a[aria-current="page"] {
+    @apply cursor-default border-stone-900 bg-stone-900 text-white hover:bg-stone-900;
+  }
+}

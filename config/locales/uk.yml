@@ -96,6 +96,12 @@ uk:
     out_of_stock: "Немає в наявності"
     in_stock: "В наявності: %{count} шт."
     sku: "Артикул"
+    pagination:
+      nav_label: "Сторінки товарів"
+    cart:
+      add_to_cart: "У кошик"
+      stub_hint: "Кошик і оформлення — на етапі D."
+      stub_title: "Незабаром: додавання в кошик (фаза D)"
   activerecord:
     errors:
       models:

@@ -96,6 +96,12 @@ ru:
     out_of_stock: "Нет в наличии"
     in_stock: "В наличии: %{count} шт."
     sku: "Артикул"
+    pagination:
+      nav_label: "Страницы товаров"
+    cart:
+      add_to_cart: "В корзину"
+      stub_hint: "Корзина и оформление — на этапе D."
+      stub_title: "Скоро: добавление в корзину (фаза D)"
   activerecord:
     errors:
       models:

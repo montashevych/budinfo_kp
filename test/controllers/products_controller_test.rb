@@ -4,12 +4,30 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   test "index" do
     get products_path
     assert_response :success
-    assert_match products(:cement).title_uk, @response.body
+    assert_select "turbo-frame#products"
+    assert_match products(:bolt).title_uk, @response.body
   end
 
   test "index hides inactive products" do
     get products_path
     assert_no_match products(:hidden).title_uk, @response.body
+  end
+
+  test "index turbo frame returns partial without layout" do
+    get products_path, headers: { "Turbo-Frame" => "products" }
+    assert_response :success
+    assert_select "turbo-frame#products"
+    assert_no_match(/<body/i, @response.body)
+  end
+
+  test "index paginates" do
+    get products_path
+    assert_match products(:bolt).title_uk, @response.body
+    assert_no_match products(:cement).title_uk, @response.body
+
+    get products_path, params: { page: 2 }
+    assert_response :success
+    assert_match products(:cement).title_uk, @response.body
   end
 
   test "index filters by category_id" do
@@ -30,6 +48,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   test "show by slug" do
     get product_path(products(:cement))
     assert_response :success
+    assert_match I18n.t("products.cart.stub_hint"), @response.body
   end
 
   test "inactive product returns not found" do

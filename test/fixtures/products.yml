@@ -1,3 +1,13 @@
+bolt:
+  category: root
+  title_uk: "Болт М10"
+  title_ru: "Болт М10"
+  slug: bolt-fixture
+  price: 3.50
+  stock: 200
+  active: true
+  sku: FIX-BOLT-M10
+
 cement:
   category: root
   title_uk: "Цемент 50 кг"
