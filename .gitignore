@@ -1,0 +1,32 @@
+# See https://help.github.com/articles/ignoring-files for more about ignoring files.
+
+/.bundle
+/vendor/bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/.keep
+
+# Ignore storage (uploaded files in development).
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/.keep
+
+/public/assets
+
+# Ignore key files and local env.
+/config/master.key
+.env
+.env*.local
+
+# Ignore node / builds if added later.
+/node_modules
+/app/assets/builds/*
+!/app/assets/builds/.keep
