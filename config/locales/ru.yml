@@ -1,0 +1,29 @@
+ru:
+  layouts:
+    application:
+      title: "Budinfo"
+      meta_description: "Интернет-магазин"
+  nav:
+    main_navigation: "Основная навигация"
+    home: "Главная"
+    catalog: "Каталог"
+    delivery: "Доставка"
+    contacts: "Контакты"
+    cart: "Корзина"
+    menu_toggle: "Открыть меню"
+    menu_close: "Закрыть меню"
+    locale_switch: "Язык"
+  pages:
+    delivery:
+      heading: "Доставка и оплата"
+      placeholder: "Здесь будет текст о доставке."
+  contacts:
+    heading: "Контакты"
+    placeholder: "Форма обратной связи появится на следующем этапе."
+    stub_submitted: "Заглушка: форма пока не отправляет письма."
+    email_label: "Электронная почта"
+    message_label: "Сообщение"
+    submit: "Отправить"
+  flash:
+    notice: "Сообщение"
+    alert: "Внимание"
