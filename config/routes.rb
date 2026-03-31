@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   resource :registration, only: %i[new create]
 
   resources :categories, only: %i[index show], param: :slug
+  resources :products, only: %i[index show], param: :slug
 
   root "home#index"
   get "delivery", to: "pages#delivery"

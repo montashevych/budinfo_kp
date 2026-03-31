@@ -67,6 +67,13 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 - [x] `docker compose run web rails db:create` succeeds.
 - [x] Browser opens app at the mapped host URL (see `docker-compose.yml`; e.g. `http://localhost:3001`).
 
+**Run Rails/DB tasks inside Compose (preferred on this project):** use one-off `web` containers so gems and Postgres match production-like dev.
+
+- Migrations: `docker compose run --rm web bin/rails db:migrate`
+- Seed: `docker compose run --rm web bin/rails db:seed`
+- Tests (needs test DB on `db`; URL must point at `app_test`):  
+  `docker compose run --rm -e RAILS_ENV=test -e DATABASE_URL=postgres://budinfo:budinfo_dev_password@db:5432/app_test web bin/rails db:test:prepare test`
+
 ### 0.3 Git hygiene
 
 - [x] `.gitignore` includes `/log`, `/tmp`, `/storage`, `.env`, `master.key` handling per Rails docs.
@@ -194,8 +201,8 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Checklist:**
 
-- [ ] Filters cannot inject SQL (use bound parameters / scopes only).
-- [ ] Inactive products not listed; direct slug access returns 404 or “unavailable” per your policy.
+- [x] Filters cannot inject SQL (use bound parameters / scopes only).
+- [x] Inactive products not listed; direct slug access returns 404 or “unavailable” per your policy.
 
 ### B.3 Turbo / Stimulus touches
 

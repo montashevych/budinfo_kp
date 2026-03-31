@@ -3,13 +3,29 @@
     <h2 class="sr-only"><%= t("categories.show.products_heading") %></h2>
     <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
       <% products.each do |product| %>
-        <article class="rounded-lg border border-stone-200 bg-white p-4 shadow-sm">
-          <p class="text-sm text-stone-600"><%= t("products.card_placeholder") %></p>
-          <p class="mt-1 text-xs text-stone-400">#<%= product.id %></p>
+        <article class="overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+          <%= link_to product_path(product), class: "block" do %>
+            <% if product.images.attached? %>
+              <%= image_tag product.images.first.variant(resize_to_limit: [400, 400]),
+                    class: "aspect-square w-full object-cover",
+                    alt: product.display_title %>
+            <% else %>
+              <div class="flex aspect-square items-center justify-center bg-stone-100 text-xs text-stone-500">
+                <%= t("products.no_image_short") %>
+              </div>
+            <% end %>
+            <div class="p-4">
+              <h3 class="font-semibold text-stone-900"><%= product.display_title %></h3>
+              <p class="mt-1 text-sm font-medium text-stone-800"><%= product_price(product) %></p>
+              <% unless product.stock.positive? %>
+                <p class="mt-1 text-xs text-amber-800"><%= t("products.out_of_stock") %></p>
+              <% end %>
+            </div>
+          <% end %>
         </article>
       <% end %>
     </div>
   <% else %>
-    <p class="text-stone-500"><%= t("categories.empty_products") %></p>
+    <p class="text-stone-500"><%= t("products.grid_empty") %></p>
   <% end %>
 </section>

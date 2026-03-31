@@ -1,0 +1,51 @@
+<% content_for :title, @product.display_title %>
+<% content_for :meta_description, truncate(strip_tags(@product.display_description.to_s), length: 160) if @product.display_description.present? %>
+
+<div class="max-w-5xl">
+  <nav class="text-sm text-stone-500" aria-label="breadcrumb">
+    <%= link_to t("categories.index.heading"), categories_path, class: "hover:text-stone-800" %>
+    <span class="mx-2" aria-hidden="true">/</span>
+    <%= link_to @product.category.display_name, category_path(@product.category), class: "hover:text-stone-800" %>
+    <span class="mx-2" aria-hidden="true">/</span>
+    <span class="text-stone-900"><%= @product.display_title %></span>
+  </nav>
+
+  <div class="mt-8 grid gap-10 md:grid-cols-2">
+    <div>
+      <% if @product.images.attached? %>
+        <div class="space-y-3">
+          <% @product.images.each do |image| %>
+            <%= image_tag image.variant(resize_to_limit: [800, 800]),
+                  class: "w-full rounded-lg border border-stone-200 bg-white object-contain",
+                  alt: @product.display_title %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="flex aspect-square items-center justify-center rounded-lg border border-dashed border-stone-300 bg-stone-100 text-sm text-stone-500">
+          <%= t("products.no_image") %>
+        </div>
+      <% end %>
+    </div>
+
+    <div>
+      <h1 class="text-3xl font-semibold tracking-tight text-stone-900"><%= @product.display_title %></h1>
+      <p class="mt-4 text-2xl font-semibold text-stone-900"><%= product_price(@product) %></p>
+
+      <% if @product.stock.positive? %>
+        <p class="mt-2 text-sm text-stone-600"><%= t("products.in_stock", count: @product.stock) %></p>
+      <% else %>
+        <p class="mt-2 text-sm font-medium text-amber-800"><%= t("products.out_of_stock") %></p>
+      <% end %>
+
+      <% if @product.sku.present? %>
+        <p class="mt-4 text-sm text-stone-500"><span class="font-medium text-stone-700"><%= t("products.sku") %>:</span> <%= @product.sku %></p>
+      <% end %>
+
+      <% if @product.display_description.present? %>
+        <div class="mt-8 whitespace-pre-wrap text-stone-700 leading-relaxed">
+          <%= @product.display_description %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
