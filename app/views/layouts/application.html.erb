@@ -36,6 +36,16 @@
             <span class="text-sm font-medium text-stone-400" aria-disabled="true"><%= t("nav.cart") %></span>
           </nav>
 
+          <div class="hidden items-center gap-3 md:flex">
+            <% if authenticated? %>
+              <%= link_to t("nav.sign_out"), session_path, data: { turbo_method: :delete },
+                    class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+            <% else %>
+              <%= link_to t("nav.sign_in"), new_session_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+              <%= link_to t("nav.sign_up"), new_registration_path, class: "text-sm font-medium text-stone-900 underline" %>
+            <% end %>
+          </div>
+
           <div class="hidden items-center gap-2 md:flex">
             <%= link_to "УК", set_locale_path(locale: :uk), class: locale_link_class(:uk) %>
             <%= link_to "RU", set_locale_path(locale: :ru), class: locale_link_class(:ru) %>
@@ -60,6 +70,12 @@
             <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <span class="text-sm font-medium text-stone-400"><%= t("nav.cart") %></span>
+            <% if authenticated? %>
+              <%= link_to t("nav.sign_out"), session_path, data: { turbo_method: :delete, action: "click->mobile-menu#close" }, class: "mt-2 text-sm font-medium text-stone-700" %>
+            <% else %>
+              <%= link_to t("nav.sign_in"), new_session_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+              <%= link_to t("nav.sign_up"), new_registration_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+            <% end %>
           </div>
         </nav>
       </header>

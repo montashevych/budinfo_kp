@@ -20,7 +20,7 @@ Roadmap for a small e-commerce site: Ruby on Rails, development in Docker on Win
 |-------|--------|--------|
 | App | Rails 7.x or 8 | Your pick when you `rails new` |
 | UI | **Hotwire** (Turbo + Stimulus) + **Tailwind CSS** (`cssbundling-rails` or `tailwindcss-rails`) | Good learning path: little custom JS, modern defaults |
-| Auth | **Devise** (or Rails 8 built-in auth) | Users + separating admins |
+| Auth | **Rails 8 native** (`rails generate authentication`) | Users + sessions; `role` for admin; see DEVELOPMENT_PLAN A.3 |
 | Admin | **[Administrate](https://github.com/thoughtbot/administrate)** | Cleaner, more “Rails app” look; easy to customize dashboards |
 | i18n | Rails **I18n** — `:uk` + `:ru` | See locale section below |
 | Filters | Scopes + optional **Ransack** | Elasticsearch only if you outgrow SQL |
@@ -74,7 +74,7 @@ Do **not** build these until the catalog, cart, and orders are stable:
 - **Category** — name, slug, optional parent.
 - **Product** — title, description, price, stock, `category_id`, `active`, optional `sku`.
 - **Images** — **Active Storage** (or `ProductImage` if you prefer explicit rows).
-- **User** — Devise; role `customer` / `admin` (or separate `AdminUser`).
+- **User** — `has_secure_password` + sessions; role `customer` / `admin` (same model for storefront and staff).
 - **Address** — delivery (linked to user or guest checkout).
 - **Order** — status, totals, optional user, shipping fields.
 - **OrderItem** — `order_id`, `product_id`, quantity, **unit price snapshot** at purchase time.
