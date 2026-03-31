@@ -22,6 +22,9 @@ gem "jbuilder"
 # Pagination [https://github.com/ddnexus/pagy]
 gem "pagy", "~> 43.0"
 
+# Admin CRUD [https://github.com/thoughtbot/administrate]
+gem "administrate", "~> 1.0"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
