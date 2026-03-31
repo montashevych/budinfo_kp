@@ -2,7 +2,10 @@ ru:
   layouts:
     application:
       title: "Budinfo"
-      meta_description: "Интернет-магазин"
+      meta_description: "Интернет-магазин строительных материалов"
+  home:
+    heading: "Строительные материалы"
+    intro: "Сухие смеси, утеплители, пиломатериалы и инструмент. Категории и товары наполняет администратор магазина."
   nav:
     main_navigation: "Основная навигация"
     home: "Главная"
@@ -66,3 +69,14 @@ ru:
   flash:
     notice: "Сообщение"
     alert: "Внимание"
+  categories:
+    index:
+      title: "Каталог"
+      heading: "Категории"
+      intro: "Выберите раздел строительных материалов."
+      empty: "Категорий пока нет."
+    show:
+      products_heading: "Товары в категории"
+    empty_products: "В этой категории пока нет товаров."
+  products:
+    card_placeholder: "Товар (название, цена — на следующем этапе)"

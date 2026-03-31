@@ -161,6 +161,8 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 ### B.1 Categories
 
+**Admin:** Categories (and later products) are intended to be **created and edited by staff in `/admin`** once **Phase C (Administrate)** is installed. Until then, use **`db/seeds.rb`** or Rails console. Demo seeds describe a **building materials** shop (сухі суміші, утеплення, пиломатеріали, інструмент).
+
 **Migration sketch:**
 
 - `categories`: `name_uk`, `name_ru` (or single `name` + JSON/translations later), `slug` (unique, indexed), `parent_id` (optional, self-referential).
@@ -174,7 +176,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Checklist:**
 
-- [ ] Slugs are unique; invalid slugs 404.
+- [x] Slugs are unique; invalid slugs 404.
 
 ### B.2 Products
 

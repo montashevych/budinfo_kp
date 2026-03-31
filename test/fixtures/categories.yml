@@ -1,0 +1,10 @@
+root:
+  name_uk: "Коренева категорія"
+  name_ru: "Корневая категория"
+  slug: root-fixture
+
+child:
+  name_uk: "Дочірня категорія"
+  name_ru: "Дочерняя категория"
+  slug: child-fixture
+  parent: root

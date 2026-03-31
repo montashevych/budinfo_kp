@@ -2,7 +2,10 @@ uk:
   layouts:
     application:
       title: "Budinfo"
-      meta_description: "Інтернет-магазин"
+      meta_description: "Інтернет-магазин будівельних матеріалів"
+  home:
+    heading: "Будівельні матеріали"
+    intro: "Підбір сухих сумішей, утеплення, пиломатеріалів та інструменту. Категорії та товари наповнюються адміністратором магазину."
   nav:
     main_navigation: "Головна навігація"
     home: "Головна"
@@ -66,3 +69,14 @@ uk:
   flash:
     notice: "Повідомлення"
     alert: "Увага"
+  categories:
+    index:
+      title: "Каталог"
+      heading: "Категорії"
+      intro: "Оберіть розділ будівельних матеріалів."
+      empty: "Категорій ще немає."
+    show:
+      products_heading: "Товари в категорії"
+    empty_products: "У цій категорії ще немає товарів."
+  products:
+    card_placeholder: "Товар (назва, ціна — на наступному етапі)"
