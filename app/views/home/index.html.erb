@@ -1,7 +1,8 @@
 <div class="max-w-2xl">
   <h1 class="text-3xl font-semibold tracking-tight text-stone-900"><%= t("home.heading") %></h1>
   <p class="mt-4 text-stone-600"><%= t("home.intro") %></p>
-  <p class="mt-6">
+  <p class="mt-6 flex flex-wrap gap-x-4 gap-y-2">
     <%= link_to t("categories.index.heading"), categories_path, class: "font-medium text-stone-900 underline hover:text-stone-600" %>
+    <%= link_to t("nav.products"), products_path, class: "font-medium text-stone-900 underline hover:text-stone-600" %>
   </p>
 </div>

@@ -3,6 +3,9 @@
 <div class="max-w-5xl">
   <h1 class="text-3xl font-semibold tracking-tight text-stone-900"><%= t("categories.index.heading") %></h1>
   <p class="mt-2 text-stone-600"><%= t("categories.index.intro") %></p>
+  <p class="mt-2 text-sm text-stone-600">
+    <%= link_to t("nav.products"), products_path, class: "font-medium text-stone-900 underline hover:text-stone-600" %>
+  </p>
 
   <ul class="mt-10 grid gap-6 sm:grid-cols-2">
     <% @categories.each do |category| %>

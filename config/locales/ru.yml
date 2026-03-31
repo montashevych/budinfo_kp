@@ -10,6 +10,7 @@ ru:
     main_navigation: "Основная навигация"
     home: "Главная"
     catalog: "Каталог"
+    products: "Все товары"
     delivery: "Доставка"
     contacts: "Контакты"
     cart: "Корзина"
@@ -79,4 +80,27 @@ ru:
       products_heading: "Товары в категории"
     empty_products: "В этой категории пока нет товаров."
   products:
-    card_placeholder: "Товар (название, цена — на следующем этапе)"
+    index:
+      title: "Товары"
+      heading: "Все товары"
+      intro: "Фильтры по категории и диапазону цен."
+      filter_category: "Категория"
+      any_category: "Все категории"
+      filter_min_price: "Цена от"
+      filter_max_price: "Цена до"
+      apply_filters: "Применить"
+      reset_filters: "Сбросить"
+    no_image: "Нет фото"
+    no_image_short: "Без фото"
+    grid_empty: "Товары не найдены."
+    out_of_stock: "Нет в наличии"
+    in_stock: "В наличии: %{count} шт."
+    sku: "Артикул"
+  activerecord:
+    errors:
+      models:
+        product:
+          attributes:
+            images:
+              invalid_type: "разрешены только изображения JPEG, PNG, WebP или GIF"
+              too_large: "размер файла не более 5 МБ"

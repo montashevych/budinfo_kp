@@ -31,6 +31,7 @@
           <nav class="hidden items-center gap-6 md:flex" aria-label="<%= t('nav.main_navigation') %>">
             <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
             <%= link_to t("nav.catalog"), categories_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+            <%= link_to t("nav.products"), products_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
             <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
             <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
             <span class="text-sm font-medium text-stone-400" aria-disabled="true"><%= t("nav.cart") %></span>
@@ -67,6 +68,7 @@
           <div class="mx-auto flex max-w-5xl flex-col gap-3">
             <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <%= link_to t("nav.catalog"), categories_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
+            <%= link_to t("nav.products"), products_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <span class="text-sm font-medium text-stone-400"><%= t("nav.cart") %></span>
@@ -98,6 +100,7 @@
           <%= link_to t("nav.delivery"), delivery_path, class: "hover:text-stone-800" %>
           <%= link_to t("nav.contacts"), new_contact_path, class: "hover:text-stone-800" %>
           <%= link_to t("nav.catalog"), categories_path, class: "hover:text-stone-800" %>
+          <%= link_to t("nav.products"), products_path, class: "hover:text-stone-800" %>
         </div>
       </div>
     </footer>

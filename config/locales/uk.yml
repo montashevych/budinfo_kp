@@ -10,6 +10,7 @@ uk:
     main_navigation: "Головна навігація"
     home: "Головна"
     catalog: "Каталог"
+    products: "Усі товари"
     delivery: "Доставка"
     contacts: "Контакти"
     cart: "Кошик"
@@ -79,4 +80,27 @@ uk:
       products_heading: "Товари в категорії"
     empty_products: "У цій категорії ще немає товарів."
   products:
-    card_placeholder: "Товар (назва, ціна — на наступному етапі)"
+    index:
+      title: "Товари"
+      heading: "Усі товари"
+      intro: "Фільтри за категорією та діапазоном цін."
+      filter_category: "Категорія"
+      any_category: "Усі категорії"
+      filter_min_price: "Ціна від"
+      filter_max_price: "Ціна до"
+      apply_filters: "Застосувати"
+      reset_filters: "Скинути"
+    no_image: "Немає фото"
+    no_image_short: "Без фото"
+    grid_empty: "Товарів не знайдено."
+    out_of_stock: "Немає в наявності"
+    in_stock: "В наявності: %{count} шт."
+    sku: "Артикул"
+  activerecord:
+    errors:
+      models:
+        product:
+          attributes:
+            images:
+              invalid_type: "дозволені лише зображення JPEG, PNG, WebP або GIF"
+              too_large: "розмір файлу не більше 5 МБ"

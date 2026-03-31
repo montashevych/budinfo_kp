@@ -1,0 +1,18 @@
+cement:
+  category: root
+  title_uk: "Цемент 50 кг"
+  title_ru: "Цемент 50 кг"
+  slug: cement-fixture
+  price: 250.00
+  stock: 10
+  active: true
+  sku: FIX-CEM-50
+
+hidden:
+  category: root
+  title_uk: "Прихований товар"
+  title_ru: "Скрытый товар"
+  slug: hidden-fixture
+  price: 99.00
+  stock: 1
+  active: false
