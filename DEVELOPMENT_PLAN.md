@@ -237,16 +237,16 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 Register resources:
 
 - [x] `Category`
-- [x] `Product` (images read-only on show; **upload** via custom Active Storage field or console — still open)
+- [x] `Product` — **`administrate-field-active_storage`** for `has_many_attached :images`; `Product#images=` appends new uploads so saves do not drop existing files; `Admin::ProductsController#scoped_resource` uses `with_attached_images`.
 - [x] `User` (no `password_digest` / sessions in UI; `password` + `password_confirmation` optional on edit via `Admin::UsersController#resource_params`)
-- [ ] `Order`, `OrderItem` (after Phase D—can stub routes after models exist)
+- [ ] `Order`, `OrderItem` (after Phase D — placeholder comment in `routes.rb`)
 
 **Checklist:**
 
 - [x] Non-admin users get 403/redirect from `/admin`. (Guests → sign-in; customers → root + flash.)
-- [x] Strong params in Administrate overrides match your model attributes. (`Admin::UsersController` permits safe user fields only.)
+- [x] Strong params in Administrate overrides match your model attributes. (`Admin::UsersController`, `ProductDashboard#permitted_attributes` for `images: []`.)
 
-**Phase C definition of done:** Admin can CRUD categories and products (including images) without touching the console.
+**Phase C definition of done:** Admin can CRUD categories and products (including images) without touching the console. **Met** (order admin deferred to D).
 
 ---
 

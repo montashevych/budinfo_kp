@@ -1,0 +1,35 @@
+uk:
+  administrate:
+    actions:
+      confirm: Ви впевнені?
+      destroy: Видалити
+      edit: Редагувати
+      edit_resource: "Редагувати: %{name}"
+      show_resource: "Перегляд: %{name}"
+      new_resource: "Нова %{name}"
+      back: Назад
+    controller:
+      create:
+        success: "%{resource} успішно створено."
+      destroy:
+        success: "%{resource} успішно видалено."
+      update:
+        success: "%{resource} успішно оновлено."
+    fields:
+      has_many:
+        more: "Показано %{count} з %{total_count}"
+        none: Немає
+      active_storage:
+        add: Додати файли
+        attachment: Вкладення
+        no_attachment: Немає файлу
+        remove: Прибрати
+        replace: Замінити
+    form:
+      error: помилка
+      errors: "%{pluralized_errors} не дозволяють зберегти %{resource_name}:"
+    navigation:
+      back_to_app: До вітрини
+    search:
+      clear: Очистити пошук
+      label: "Пошук: %{resource}"

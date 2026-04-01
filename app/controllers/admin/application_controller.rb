@@ -3,9 +3,14 @@ module Admin
   class ApplicationController < Administrate::ApplicationController
     include Authentication
 
+    before_action :set_admin_locale
     before_action :require_admin
 
     private
+
+    def set_admin_locale
+      I18n.locale = :uk
+    end
 
     def require_admin
       return if current_user&.admin?

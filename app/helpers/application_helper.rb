@@ -1,4 +1,19 @@
 module ApplicationHelper
+  # Use representation proxy URLs for disk-backed storage so img src never points at
+  # /representations/redirect (Turbo snapshots + DiskService URL generation caused 500s).
+  def product_variant_image_path(attachment, resize_to_limit)
+    variant = attachment.variant(resize_to_limit: resize_to_limit)
+    if ActiveStorage::Blob.service.is_a?(ActiveStorage::Service::DiskService)
+      rails_blob_representation_proxy_path(
+        variant.blob.signed_id,
+        variant.variation.key,
+        variant.blob.filename
+      )
+    else
+      url_for(variant)
+    end
+  end
+
   def product_price(product)
     number_to_currency(
       product.price,

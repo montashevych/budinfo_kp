@@ -1,4 +1,5 @@
 require "administrate/base_dashboard"
+require "administrate/field/active_storage"
 
 class ProductDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
@@ -7,8 +8,11 @@ class ProductDashboard < Administrate::BaseDashboard
     category: Field::BelongsTo,
     description_ru: Field::Text,
     description_uk: Field::Text,
-    images_attachments: Field::HasMany,
-    images_blobs: Field::HasMany,
+    images: Field::ActiveStorage.with_options(
+      index_display_preview: true,
+      index_preview_size: [ 72, 72 ],
+      show_preview_size: [ 480, 480 ]
+    ),
     price: Field::Number.with_options(decimals: 2, searchable: false),
     sku: Field::String,
     slug: Field::String,
@@ -25,6 +29,7 @@ class ProductDashboard < Administrate::BaseDashboard
     category
     price
     active
+    images
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -39,12 +44,11 @@ class ProductDashboard < Administrate::BaseDashboard
     active
     description_uk
     description_ru
-    images_attachments
+    images
     created_at
     updated_at
   ].freeze
 
-  # Image uploads: add a custom Active Storage field later (Phase C.2); avoid editing raw attachments here.
   FORM_ATTRIBUTES = %i[
     title_uk
     title_ru
@@ -56,7 +60,12 @@ class ProductDashboard < Administrate::BaseDashboard
     active
     description_uk
     description_ru
+    images
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze
+
+  def permitted_attributes(action = nil)
+    super + [ images: [] ]
+  end
 end
