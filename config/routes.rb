@@ -14,7 +14,8 @@ Rails.application.routes.draw do
     resources :categories
     resources :products
     resources :users
-    # Phase D: orders & order_items dashboards here
+    resources :orders
+    resources :order_items
     root to: "categories#index"
   end
 

@@ -3,6 +3,7 @@ require "administrate/base_dashboard"
 class UserDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
+    orders: Field::HasMany,
     email_address: Field::String,
     password: Field::Password,
     password_confirmation: Field::Password,
@@ -24,6 +25,7 @@ class UserDashboard < Administrate::BaseDashboard
     id
     email_address
     role
+    orders
     created_at
     updated_at
   ].freeze

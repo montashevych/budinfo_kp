@@ -5,6 +5,7 @@ class ProductDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     active: Field::Boolean,
+    order_items: Field::HasMany,
     category: Field::BelongsTo,
     description_ru: Field::Text,
     description_uk: Field::Text,
@@ -45,6 +46,7 @@ class ProductDashboard < Administrate::BaseDashboard
     description_uk
     description_ru
     images
+    order_items
     created_at
     updated_at
   ].freeze

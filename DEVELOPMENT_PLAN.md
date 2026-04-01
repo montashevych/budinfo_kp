@@ -237,16 +237,16 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 Register resources:
 
 - [x] `Category`
-- [x] `Product` — **`administrate-field-active_storage`** for `has_many_attached :images`; `Product#images=` appends new uploads so saves do not drop existing files; `Admin::ProductsController#scoped_resource` uses `with_attached_images`.
+- [x] `Product` — **`administrate-field-active_storage`** for `has_many_attached :images`; uploads handled in **`Admin::ProductsController`** (stash + attach after save — see *Operational notes — Product images & Active Storage*); `scoped_resource` uses `with_attached_images`.
 - [x] `User` (no `password_digest` / sessions in UI; `password` + `password_confirmation` optional on edit via `Admin::UsersController#resource_params`)
-- [ ] `Order`, `OrderItem` (after Phase D — placeholder comment in `routes.rb`)
+- [x] `Order`, `OrderItem` — models + migration; **`OrderDashboard`** / **`OrderItemDashboard`**; **`Admin::OrdersController`** / **`Admin::OrderItemsController`** (`scoped_resource` orders by `created_at` desc); routes `resources :orders`, `resources :order_items`. Storefront checkout/cart still **Phase D**.
 
 **Checklist:**
 
 - [x] Non-admin users get 403/redirect from `/admin`. (Guests → sign-in; customers → root + flash.)
 - [x] Strong params in Administrate overrides match your model attributes. (`Admin::UsersController`, `ProductDashboard#permitted_attributes` for `images: []`.)
 
-**Phase C definition of done:** Admin can CRUD categories and products (including images) without touching the console. **Met** (order admin deferred to D).
+**Phase C definition of done:** Admin can CRUD categories, products (including images), and **orders / order lines** without the console. **Met** for resources above; **Phase D** still adds cart, public checkout, and automations (totals, stock).
 
 ---
 
@@ -275,7 +275,9 @@ Register resources:
 
 ### D.2 Orders
 
-**Migration sketch:**
+**Schema (implemented for admin — see C.2):** `orders` and `order_items` tables exist with `total` / `unit_price` as `decimal`, string `status`, optional `user_id`, shipping fields, `email` on `orders`.
+
+**Migration sketch (historical):**
 
 - `orders`: `user_id` (optional), `status` (enum: pending, confirmed, shipped, cancelled, …), `total_cents` or `total` decimal, shipping name/phone/address fields, `email`, timestamps.
 - `order_items`: `order_id`, `product_id`, `quantity`, `unit_price` (**snapshot**), timestamps.
