@@ -1,8 +1,14 @@
 uk:
+  time:
+    formats:
+      default: "%d.%m.%Y %H:%M"
   layouts:
     application:
       title: "Budinfo"
       meta_description: "Інтернет-магазин будівельних матеріалів"
+  admin:
+    forbidden: "Потрібні права адміністратора."
+    link: "Панель керування"
   home:
     heading: "Будівельні матеріали"
     intro: "Підбір сухих сумішей, утеплення, пиломатеріалів та інструменту. Категорії та товари наповнюються адміністратором магазину."
@@ -103,6 +109,52 @@ uk:
       stub_hint: "Кошик і оформлення — на етапі D."
       stub_title: "Незабаром: додавання в кошик (фаза D)"
   activerecord:
+    models:
+      category:
+        one: Категорія
+        few: Категорії
+        many: Категорій
+        other: Категорії
+      product:
+        one: Товар
+        few: Товари
+        many: Товарів
+        other: Товари
+      user:
+        one: Користувач
+        few: Користувачі
+        many: Користувачів
+        other: Користувачі
+    attributes:
+      category:
+        name_uk: Назва (укр.)
+        name_ru: Назва (рос.)
+        parent: Батьківська категорія
+        slug: Слаг
+        children: Підкатегорії
+        products: Товари
+      product:
+        title_uk: Назва (укр.)
+        title_ru: Назва (рос.)
+        slug: Слаг
+        sku: Артикул
+        category: Категорія
+        price: Ціна
+        stock: Залишок
+        active: Активний
+        description_uk: Опис (укр.)
+        description_ru: Опис (рос.)
+        images: Зображення
+      user:
+        email_address: Електронна пошта
+        password: Пароль
+        password_confirmation: Підтвердження пароля
+        role: Роль
+    enums:
+      user:
+        role:
+          customer: Покупець
+          admin: Адміністратор
     errors:
       models:
         product:

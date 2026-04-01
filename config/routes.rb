@@ -10,6 +10,14 @@ Rails.application.routes.draw do
   resources :categories, only: %i[index show], param: :slug
   resources :products, only: %i[index show], param: :slug
 
+  namespace :admin do
+    resources :categories
+    resources :products
+    resources :users
+    # Phase D: orders & order_items dashboards here
+    root to: "categories#index"
+  end
+
   root "home#index"
   get "delivery", to: "pages#delivery"
   resources :contacts, only: %i[new create]

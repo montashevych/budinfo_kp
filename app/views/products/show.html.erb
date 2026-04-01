@@ -1,5 +1,8 @@
 <% content_for :title, @product.display_title %>
 <% content_for :meta_description, truncate(strip_tags(@product.display_description.to_s), length: 160) if @product.display_description.present? %>
+<% content_for :head do %>
+  <%= tag.meta name: "turbo-cache-control", content: "no-cache" %>
+<% end %>
 
 <div class="max-w-5xl">
   <nav class="text-sm text-stone-500" aria-label="breadcrumb">
@@ -15,9 +18,14 @@
       <% if @product.images.attached? %>
         <div class="space-y-3">
           <% @product.images.each do |image| %>
-            <%= image_tag image.variant(resize_to_limit: [800, 800]),
-                  class: "w-full rounded-lg border border-stone-200 bg-white object-contain",
-                  alt: @product.display_title %>
+            <%# Aspect box so the column keeps height if the request fails or is slow; object-contain alone can collapse to 0 height. %>
+            <div class="aspect-square w-full overflow-hidden rounded-lg border border-stone-200 bg-stone-50">
+              <%= image_tag product_variant_image_path(image, [800, 800]),
+                    class: "h-full w-full object-contain",
+                    loading: "eager",
+                    decoding: "async",
+                    alt: @product.display_title %>
+            </div>
           <% end %>
         </div>
       <% else %>

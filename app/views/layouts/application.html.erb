@@ -32,6 +32,9 @@
             <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
             <%= link_to t("nav.catalog"), categories_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
             <%= link_to t("nav.products"), products_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+            <% if current_user&.admin? %>
+              <%= link_to t("admin.link"), admin_root_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900", data: { turbo_frame: "_top" } %>
+            <% end %>
             <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
             <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
             <span class="text-sm font-medium text-stone-400" aria-disabled="true"><%= t("nav.cart") %></span>
@@ -69,6 +72,9 @@
             <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <%= link_to t("nav.catalog"), categories_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <%= link_to t("nav.products"), products_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
+            <% if current_user&.admin? %>
+              <%= link_to t("admin.link"), admin_root_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+            <% end %>
             <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
             <span class="text-sm font-medium text-stone-400"><%= t("nav.cart") %></span>

@@ -224,21 +224,29 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 3. **Authenticate**: `before_action` requiring `current_user.admin?` (same `User` model as storefront; no Devise).
 4. Consider **Pundit** for `Admin::ApplicationController` policies if you split permissions later.
 
+**Implemented (C.1):**
+
+- Gem `administrate ~> 1.0` (Rails 8–compatible); dashboards generated for `Category`, `Product`, `User`.
+- Routes: `namespace :admin` → `/admin`, `root` → categories index; **no** `Session` admin resource.
+- `Admin::ApplicationController` includes **`Authentication`** (must sign in) and **`require_admin`** → `current_user.admin?` or redirect to root with `t("admin.forbidden")`.
+- Storefront nav shows **Адмін** link when `current_user.admin?`.
+- **Pundit:** not added; revisit when splitting admin roles.
+
 ### C.2 Dashboards
 
 Register resources:
 
-- [ ] `Category`
-- [ ] `Product` (show image attachments in form or custom field)
-- [ ] `User` (read-only or limited fields—avoid exposing tokens)
-- [ ] `Order`, `OrderItem` (after Phase D—can stub routes after models exist)
+- [x] `Category`
+- [x] `Product` — **`administrate-field-active_storage`** for `has_many_attached :images`; `Product#images=` appends new uploads so saves do not drop existing files; `Admin::ProductsController#scoped_resource` uses `with_attached_images`.
+- [x] `User` (no `password_digest` / sessions in UI; `password` + `password_confirmation` optional on edit via `Admin::UsersController#resource_params`)
+- [ ] `Order`, `OrderItem` (after Phase D — placeholder comment in `routes.rb`)
 
 **Checklist:**
 
-- [ ] Non-admin users get 403/redirect from `/admin`.
-- [ ] Strong params in Administrate overrides match your model attributes.
+- [x] Non-admin users get 403/redirect from `/admin`. (Guests → sign-in; customers → root + flash.)
+- [x] Strong params in Administrate overrides match your model attributes. (`Admin::UsersController`, `ProductDashboard#permitted_attributes` for `images: []`.)
 
-**Phase C definition of done:** Admin can CRUD categories and products (including images) without touching the console.
+**Phase C definition of done:** Admin can CRUD categories and products (including images) without touching the console. **Met** (order admin deferred to D).
 
 ---
 

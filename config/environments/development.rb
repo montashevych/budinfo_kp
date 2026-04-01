@@ -31,6 +31,20 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # Stream blobs/variants through the app instead of redirecting to a signed /disk URL. The redirect
+  # path requires ActiveStorage::Current.url_options for DiskService; that breaks easily (wrong port,
+  # missing host) and raises ArgumentError → 500. Proxy URLs avoid that second hop entirely.
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
+
+  # Still used for mailers, url helpers, and any code that builds absolute URLs outside a request.
+  # docker-compose publishes 3001→3000 — set DEV_URL_OPTIONS_PORT=3001 on the web service.
+  dev_url_host = ENV.fetch("DEV_URL_OPTIONS_HOST", "localhost")
+  dev_url_port = (ENV["DEV_URL_OPTIONS_PORT"].presence || "3000").to_i
+  dev_url_opts = { host: dev_url_host, port: dev_url_port, protocol: "http" }
+
+  config.active_storage.default_url_options = dev_url_opts
+  config.action_controller.default_url_options = dev_url_opts
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -38,7 +52,7 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
   # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.default_url_options = { host: dev_url_host, port: dev_url_port }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
