@@ -106,8 +106,21 @@ ru:
       nav_label: "Страницы товаров"
     cart:
       add_to_cart: "В корзину"
-      stub_hint: "Корзина и оформление — на этапе D."
-      stub_title: "Скоро: добавление в корзину (фаза D)"
+  carts:
+    title: "Корзина"
+    heading: "Корзина"
+    empty: "Корзина пуста."
+    continue_shopping: "К каталогу товаров"
+    quantity: "Количество"
+    update: "Обновить"
+    remove: "Убрать"
+    total: "Итого"
+    checkout_hint: "Оформление заказа появится на следующем шаге."
+    added: "Товар добавлен в корзину."
+    updated: "Количество обновлено."
+    removed: "Товар убран из корзины."
+    out_of_stock: "Недостаточно товара на складе."
+    unavailable: "Товар недоступен."
   activerecord:
     errors:
       models:

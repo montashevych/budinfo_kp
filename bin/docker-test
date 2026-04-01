@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Run the test suite in Docker against app_test (same as: bin/docker-rails test …).
+set -e
+ROOT="$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)"
+exec "$ROOT/bin/docker-rails" test "$@"

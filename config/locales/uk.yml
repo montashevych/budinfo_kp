@@ -106,8 +106,21 @@ uk:
       nav_label: "Сторінки товарів"
     cart:
       add_to_cart: "У кошик"
-      stub_hint: "Кошик і оформлення — на етапі D."
-      stub_title: "Незабаром: додавання в кошик (фаза D)"
+  carts:
+    title: "Кошик"
+    heading: "Кошик"
+    empty: "Кошик порожній."
+    continue_shopping: "До каталогу товарів"
+    quantity: "Кількість"
+    update: "Оновити"
+    remove: "Прибрати"
+    total: "Разом"
+    checkout_hint: "Оформлення замовлення зʼявиться на наступному кроці."
+    added: "Товар додано до кошика."
+    updated: "Кількість оновлено."
+    removed: "Товар прибрано з кошика."
+    out_of_stock: "Недостатньо товару на складі."
+    unavailable: "Товар недоступний."
   activerecord:
     models:
       category:

@@ -46,9 +46,11 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "show by slug" do
-    get product_path(products(:cement))
+    cement = products(:cement)
+    get product_path(cement)
     assert_response :success
-    assert_match I18n.t("products.cart.stub_hint"), @response.body
+    assert_select "form.button_to[action=?]", add_cart_path
+    assert_select "input[name=product_id][value=?]", cement.id.to_s
   end
 
   test "inactive product returns not found" do

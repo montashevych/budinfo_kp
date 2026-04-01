@@ -2,6 +2,9 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    # Load session from cookie even when `allow_unauthenticated_access` skips `require_authentication`,
+    # so `current_user` / admin link / cart-for-user work on storefront pages.
+    before_action :resume_session
     before_action :require_authentication
     helper_method :authenticated?
     helper_method :current_user
@@ -23,7 +26,9 @@ module Authentication
     end
 
     def require_authentication
-      resume_session || request_authentication
+      return if Current.session
+
+      request_authentication
     end
 
     def resume_session
