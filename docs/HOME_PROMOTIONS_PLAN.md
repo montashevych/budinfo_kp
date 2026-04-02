@@ -1,6 +1,6 @@
 # Home promotions (hero carousel) — implementation plan
 
-**Status:** Phase 1 implemented (model + migration + tests). Phases 2+ pending.
+**Status:** Phases 1–2 implemented. Phases 3+ pending.
 
 **Goal:** A storefront-style promotional area on the home page: admin-managed slides (image + short text), auto-rotating carousel (10s), manual prev/next, and a dedicated detail page per slide (large image + long text). Admins customize content from the existing admin panel.
 
@@ -42,9 +42,11 @@
 
 ---
 
-## Phase 2 — Public detail page (“promotion page”)
+## Phase 2 — Public detail page (“promotion page”) ✅
 
 **Objective:** Clicking carousel image or text opens a full page: image on top, then structured content (title + body).
+
+**Done:** `PromotionsController#show`, `GET /promotions/:slug`, `app/views/promotions/show.html.erb`, `test/controllers/promotions_controller_test.rb`.
 
 **Tasks**
 

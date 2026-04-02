@@ -33,6 +33,19 @@ rescue OpenURI::HTTPError, SocketError, Net::OpenTimeout, Net::ReadTimeout, Errn
   warn "Demo images skipped for #{product.slug}: #{e.message}"
 end
 
+def attach_home_promotion_demo_image(home_promotion, url:, filename:)
+  return if home_promotion.image.attached?
+
+  io = URI(url).open(
+    "User-Agent" => "BudinfoSeeds/1.0 (+https://wikimedia.org)",
+    read_timeout: 30,
+    open_timeout: 15
+  )
+  home_promotion.image.attach(io:, filename:, content_type: "image/jpeg")
+rescue OpenURI::HTTPError, SocketError, Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNREFUSED => e
+  warn "Demo image skipped for home_promotion #{home_promotion.slug}: #{e.message}"
+end
+
 password = ENV.fetch("ADMIN_SEED_PASSWORD", "changeme_in_production")
 User.find_or_initialize_by(email_address: "admin@example.com").tap do |user|
   user.password = password
@@ -127,3 +140,46 @@ attach_open_license_demo_images(ruletka_product, sources: [
     filename: "demo-measuring-tape-wikimedia.jpg"
   }
 ])
+
+# Home page promotions (carousel + /promotions/:slug). Images attach before save — active rows require an image.
+promo_cement = HomePromotion.find_or_initialize_by(slug: "demo-cement-week")
+promo_cement.assign_attributes(
+  title: "Тиждень сухих сумішей",
+  teaser: "Підбірка цементу та сумішей для фасаду й підлоги.",
+  body: <<~TEXT.squish,
+    Умови акції діють у демо-режимі. Перегляньте каталог категорії «Сухі суміші»
+    та уточнюйте наявність у менеджера. Доставка — за тарифами магазину.
+  TEXT
+  position: 0,
+  active: true
+)
+attach_home_promotion_demo_image(promo_cement,
+  url: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Bolsa_de_cemento_Plasticor_40_kg.jpg",
+  filename: "demo-promo-cement-wikimedia.jpg")
+promo_cement.save!
+
+promo_insulation = HomePromotion.find_or_initialize_by(slug: "demo-insulation")
+promo_insulation.assign_attributes(
+  title: "Утеплення: старт сезону",
+  teaser: "Мінеральна вата та супутні матеріали.",
+  body: <<~TEXT.squish,
+    Короткий опис для демо-сторінки акції. Повний текст можна змінити в адмінці після підключення
+    керування промо (Administrate).
+  TEXT
+  position: 1,
+  active: true
+)
+attach_home_promotion_demo_image(promo_insulation,
+  url: "https://upload.wikimedia.org/wikipedia/commons/a/a1/Glass_wool_insulation.jpg",
+  filename: "demo-promo-insulation-wikimedia.jpg")
+promo_insulation.save!
+
+promo_draft = HomePromotion.find_or_initialize_by(slug: "demo-draft")
+promo_draft.assign_attributes(
+  title: "Чернетка (не на сайті)",
+  teaser: nil,
+  body: nil,
+  position: 100,
+  active: false
+)
+promo_draft.save!

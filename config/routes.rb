@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :categories, only: %i[index show], param: :slug
   resources :products, only: %i[index show], param: :slug
+  resources :promotions, only: :show, param: :slug
 
   resource :cart, only: :show do
     post :add, on: :member
