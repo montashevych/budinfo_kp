@@ -39,6 +39,9 @@ ru:
       heading: "Акции и предложения"
       region_label: "Акции и предложения"
       carousel_role: "карусель"
+      controls_label: "Управление каруселью"
+      prev_slide: "Предыдущий слайд"
+      next_slide: "Следующий слайд"
       read_more: "Подробнее"
   nav:
     main_navigation: "Основная навигация"

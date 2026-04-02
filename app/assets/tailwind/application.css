@@ -33,6 +33,13 @@
   .animate-cart-line-appear {
     animation: cart-line-appear 0.28s ease-out;
   }
+
+  /* Used on home promos; `aspect-video` may be absent from the compiled bundle if unused elsewhere. */
+  .home-promo-media-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
 }
 
 @layer components {

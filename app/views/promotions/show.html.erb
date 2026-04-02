@@ -6,8 +6,8 @@
   </nav>
 
   <% if @promotion.image.attached? %>
-    <div class="mt-8 overflow-hidden rounded-lg border border-stone-200 bg-stone-50">
-      <div class="aspect-[21/9] w-full max-h-[min(28rem,50vh)] md:aspect-[2/1]">
+    <div class="mt-8 overflow-hidden rounded-xl border border-stone-200 bg-stone-100 shadow-sm">
+      <div class="aspect-[16/9] w-full overflow-hidden">
         <%= image_tag product_variant_image_path(@promotion.image, [1600, 900]),
               class: "h-full w-full object-cover object-center",
               loading: "eager",
@@ -17,13 +17,13 @@
     </div>
   <% end %>
 
-  <div class="mt-8">
-    <h1 class="text-3xl font-semibold tracking-tight text-stone-900"><%= @promotion.title %></h1>
+  <div class="mt-8 max-w-3xl">
+    <h1 class="text-3xl font-semibold leading-snug tracking-tight text-stone-900"><%= @promotion.title %></h1>
     <% if @promotion.teaser.present? %>
-      <p class="mt-3 text-lg text-stone-600 leading-relaxed"><%= @promotion.teaser %></p>
+      <p class="mt-3 text-lg leading-relaxed text-stone-600"><%= @promotion.teaser %></p>
     <% end %>
     <% if @promotion.body.present? %>
-      <div class="mt-6 text-stone-700 leading-relaxed [&_p+p]:mt-4">
+      <div class="mt-6 text-base leading-relaxed text-stone-700 [&_p+p]:mt-4">
         <%= simple_format @promotion.body %>
       </div>
     <% end %>

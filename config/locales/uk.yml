@@ -39,6 +39,9 @@ uk:
       heading: "Акції та пропозиції"
       region_label: "Акції та пропозиції"
       carousel_role: "карусель"
+      controls_label: "Керування каруселлю"
+      prev_slide: "Попередній слайд"
+      next_slide: "Наступний слайд"
       read_more: "Детальніше"
   nav:
     main_navigation: "Головна навігація"

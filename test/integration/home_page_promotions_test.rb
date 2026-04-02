@@ -37,5 +37,18 @@ class HomePagePromotionsTest < ActionDispatch::IntegrationTest
     assert_select %(a[href="#{promotion_path("home-promo-a")}"])
     assert_match "Second", @response.body
     assert_match "Teaser B", @response.body
+    assert_select %(button[data-action="click->promotion-carousel#next"]), count: 1
+    assert_select %(button[data-action="click->promotion-carousel#prev"]), count: 1
+  end
+
+  test "single active promotion has no carousel prev or next controls" do
+    HomePromotion.delete_all
+    p = HomePromotion.new(title: "Only one", slug: "only-one-promo", active: true, position: 0, teaser: "Teaser")
+    p.image.attach(io: tiny_png_io, filename: "o.png", content_type: "image/png")
+    p.save!
+
+    get root_path
+    assert_response :success
+    assert_select %(button[data-action="click->promotion-carousel#next"]), count: 0
   end
 end
