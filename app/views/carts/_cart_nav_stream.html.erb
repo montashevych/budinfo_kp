@@ -1,0 +1,10 @@
+<%# locals: (count:) %>
+<%= turbo_stream.replace "cart-nav-badge-desktop" do %>
+  <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-desktop", count: count %>
+<% end %>
+<%= turbo_stream.replace "cart-nav-badge-mobile-panel" do %>
+  <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-panel", count: count %>
+<% end %>
+<%= turbo_stream.replace "cart-nav-badge-mobile-bar" do %>
+  <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-bar", count: count, variant: :overlay %>
+<% end %>

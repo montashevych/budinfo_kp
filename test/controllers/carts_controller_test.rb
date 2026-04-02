@@ -20,6 +20,34 @@ class CartsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.body, bolt.title_uk
   end
 
+  test "add as turbo_stream updates badges and product line UI" do
+    bolt = products(:bolt)
+    post add_cart_path, params: { product_id: bolt.id }, as: :turbo_stream
+    assert_response :success
+    assert_includes response.content_type, "turbo-stream"
+    assert_match "cart-nav-badge-desktop", response.body
+    assert_match "cart-nav-badge-mobile-bar", response.body
+    assert_match "add-to-cart-product-#{bolt.id}", response.body
+    assert_not_includes response.body, 'target="cart-toast"'
+  end
+
+  test "update_line as turbo_stream refreshes badges and line" do
+    bolt = products(:bolt)
+    post add_cart_path, params: { product_id: bolt.id }
+    patch update_line_cart_path, params: { product_id: bolt.id, quantity: 2 }, as: :turbo_stream
+    assert_response :success
+    assert_includes response.content_type, "turbo-stream"
+    assert_match "cart-nav-badge-desktop", response.body
+    assert_match "add-to-cart-product-#{bolt.id}", response.body
+  end
+
+  test "add inactive product as turbo_stream appends error toast" do
+    post add_cart_path, params: { product_id: products(:hidden).id }, as: :turbo_stream
+    assert_response :success
+    assert_includes response.content_type, "turbo-stream"
+    assert_match I18n.t("carts.unavailable", locale: :uk), response.body
+  end
+
   test "add inactive product flashes alert" do
     post add_cart_path, params: { product_id: products(:hidden).id }
     assert_redirected_to cart_path

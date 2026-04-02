@@ -10,12 +10,26 @@ class CartsController < ApplicationController
 
   def add
     result = current_cart.add(params[:product_id], add_quantity)
-    redirect_after_cart_change(result)
+    @add_result = result
+    @product_id = params[:product_id].to_i
+    @cart_count = cart_item_count
+
+    respond_to do |format|
+      format.turbo_stream { render :add }
+      format.html { redirect_after_cart_change(result) }
+    end
   end
 
   def update_line
+    @product_id = params[:product_id].to_i
     result = current_cart.set_quantity(params[:product_id], params[:quantity])
-    redirect_after_cart_change(result, success_message: t("carts.updated"))
+    @update_result = result
+    @cart_count = cart_item_count
+
+    respond_to do |format|
+      format.turbo_stream { render :update_line }
+      format.html { redirect_after_cart_change(result, success_message: t("carts.updated")) }
+    end
   end
 
   def remove_line

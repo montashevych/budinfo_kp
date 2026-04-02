@@ -143,6 +143,10 @@ uk:
       nav_label: "Сторінки товарів"
     cart:
       add_to_cart: "У кошик"
+      decrease: "Зменшити кількість"
+      increase: "Збільшити кількість"
+      in_cart: "У кошику"
+      max_stock: "Максимум на складі"
   carts:
     title: "Кошик"
     heading: "Кошик"

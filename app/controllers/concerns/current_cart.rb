@@ -4,11 +4,15 @@ module CurrentCart
   extend ActiveSupport::Concern
 
   included do
-    helper_method :current_cart, :cart_item_count
+    helper_method :current_cart, :cart_item_count, :cart_quantity_for
   end
 
   def cart_item_count
     current_cart.item_count
+  end
+
+  def cart_quantity_for(product)
+    current_cart.raw[product.id.to_s].to_i
   end
 
   private
