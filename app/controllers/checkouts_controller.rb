@@ -22,6 +22,7 @@ class CheckoutsController < ApplicationController
     result = ::Checkout.call(cart: current_cart, user: current_user, params: checkout_params.to_h.symbolize_keys)
 
     if result.success?
+      deliver_order_emails(result.order)
       redirect_to order_confirmation_path(result.order.public_token), notice: t("checkouts.success")
     elsif result.failure == :invalid
       @line_items = current_cart.line_items
@@ -37,5 +38,11 @@ class CheckoutsController < ApplicationController
 
   def checkout_params
     params.require(:order).permit(:email, :shipping_name, :shipping_phone, :shipping_address)
+  end
+
+  def deliver_order_emails(order)
+    OrderMailer.confirmation(order).deliver_later
+    admin_to = ENV["SHOP_NOTIFICATION_EMAIL"].presence
+    OrderMailer.notify_admin(order, to: admin_to).deliver_later if admin_to
   end
 end

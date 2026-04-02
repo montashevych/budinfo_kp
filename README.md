@@ -41,6 +41,14 @@ On **Windows**, use **Git Bash** or **WSL** so the `bin/docker-*` scripts run; o
 - **`db`** — PostgreSQL 16 (`app_development`; tests use **`app_test`** via URL above).
 - **`pgadmin`** — optional UI (see `docker-compose.yml` for port).
 
+### Email (orders)
+
+The **`web`** service loads **`env_file: .env`** — put **`MAILER_FROM`**, **`SMTP_*`**, and **`SHOP_NOTIFICATION_EMAIL`** there (see **`.env.example`**). If **`.env` is missing**, create an empty file or `docker compose` will fail on `env_file`.
+
+After checkout, **`OrderMailer#confirmation`** goes to the customer; if **`SHOP_NOTIFICATION_EMAIL`** is set, **`notify_admin`** goes to the shop. **Without `SMTP_ADDRESS`**, development uses the **`:test`** adapter: **no real delivery** (only **`ActionMailer::Base.deliveries`** after jobs run). Add Gmail SMTP variables to **`.env`** and restart **`web`** to send for real. Large **base64 / MIME blocks in logs** usually mean log level is **debug** or the mail body is being printed when the job runs — they are not proof the message reached an inbox.
+
+Mail previews: **`/rails/mailers`** (development).
+
 ### Without Docker
 
 Local Ruby is not documented for this repo; prefer Docker for consistency.
