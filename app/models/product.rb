@@ -3,6 +3,7 @@ class Product < ApplicationRecord
   MAX_IMAGE_SIZE = 5.megabytes
 
   belongs_to :category
+  has_many :order_items, dependent: :restrict_with_error
   has_many_attached :images
 
   validates :title_uk, presence: true

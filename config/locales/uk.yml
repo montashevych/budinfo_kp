@@ -125,6 +125,16 @@ uk:
         few: Користувачі
         many: Користувачів
         other: Користувачі
+      order:
+        one: Замовлення
+        few: Замовлення
+        many: Замовлень
+        other: Замовлення
+      order_item:
+        one: Рядок замовлення
+        few: Рядки замовлення
+        many: Рядків замовлення
+        other: Рядки замовлення
     attributes:
       category:
         name_uk: Назва (укр.)
@@ -145,16 +155,38 @@ uk:
         description_uk: Опис (укр.)
         description_ru: Опис (рос.)
         images: Зображення
+        order_items: Рядки замовлень
       user:
         email_address: Електронна пошта
         password: Пароль
         password_confirmation: Підтвердження пароля
         role: Роль
+        orders: Замовлення
+      order:
+        user: Користувач
+        status: Статус
+        total: Сума
+        email: Email замовника
+        shipping_name: Імʼя для доставки
+        shipping_phone: Телефон
+        shipping_address: Адреса доставки
+        order_items: Рядки замовлення
+      order_item:
+        order: Замовлення
+        product: Товар
+        quantity: Кількість
+        unit_price: Ціна за одиницю
     enums:
       user:
         role:
           customer: Покупець
           admin: Адміністратор
+      order:
+        status:
+          pending: Очікує
+          confirmed: Підтверджено
+          shipped: Відправлено
+          cancelled: Скасовано
     errors:
       models:
         product:
