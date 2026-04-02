@@ -19,6 +19,8 @@ Rails 8 storefront + Administrate admin. **Develop and run commands with Docker*
    bin/docker-rails db:prepare
    ```
 
+5. Optional demo data: **`bin/docker-rails db:seed`** loads demo categories, products (Wikimedia images when the network allows), **HomePromotion** slides, and an admin user **admin@example.com**. Set **`ADMIN_SEED_PASSWORD`** in **`.env`** for a non-default password; otherwise seeds use **`changeme_in_production`** (dev only — never use in real production).
+
 ### Common commands (always use these, not host `ruby` / `bin/rails`)
 
 Run these **on your machine** from the project root (they call `docker compose` for you). **Do not** run them inside the `web` container — Docker is not available there.
@@ -60,6 +62,13 @@ Local Ruby is not documented for this repo; prefer Docker for consistency.
 - **Demo data:** After **`bin/docker-rails db:seed`** (or `db:seed` in the `web` container), sample promos include **`demo-cement-week`** and **`demo-insulation`** (Wikimedia images; see comment block at the top of **`db/seeds.rb`**). Inactive **`demo-draft`** does not appear on the home page.
 
 See **`docs/HOME_PROMOTIONS_PLAN.md`** for the full feature checklist.
+
+## Production security (summary)
+
+- **HTTPS:** Production enables **`assume_ssl`** and **`force_ssl`** by default (TLS-terminated proxy). Override with **`RAILS_ASSUME_SSL`** / **`RAILS_FORCE_SSL`** only for special cases (see **`.env.example`**).
+- **Throttling:** **Rack::Attack** limits POST **`/checkout`** and **`/contacts`** per IP in production (`config/initializers/rack_attack.rb`).
+- **Headers:** Rails default security headers apply; tighten **CSP** via **`config/initializers/content_security_policy.rb`** after validating the storefront in-browser.
+- **Active Storage:** For cloud storage, use **`config/storage.yml`** (**`:amazon`** or S3-compatible). Prefer **non-public** buckets when uploads must not be world-readable; configure **CORS** if you add direct uploads.
 
 ## Further planning
 

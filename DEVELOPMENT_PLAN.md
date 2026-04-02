@@ -329,24 +329,24 @@ Register resources:
 ### E.1 SEO & errors
 
 - [x] **`meta-tags`** gem; default title/description in **`ApplicationController`**; per-page tags for home, catalog, product (**`og:image`** when images exist), category, delivery, contacts, cart/checkout/confirmation (**`noindex`**).
-- [x] Dynamic **I18n** error pages via **`config.exceptions_app`** → **`ErrorsController`** (`/404`, `/500`), **`Accept-Language`** hint for uk/ru; **`public/404.html` / `500.html`** remain as CDN/nginx fallbacks (English Rails defaults — replace if the edge proxy serves them).
+- [x] Dynamic **I18n** error pages via **`config.exceptions_app`** → **`ErrorsController`** (`/404`, `/500`), **`Accept-Language`** hint for uk/ru; static English fallbacks live at **`public/fallback_404.html`** / **`fallback_500.html`** (not `404.html` — that path is reserved by the static file server and would shadow the localized routes).
 - [x] **`/sitemap.xml`** (`SitemapsController` + **`show.xml.builder`**: root, catalog, products index, static pages, all categories/products); **`/robots.txt`** (`RobotsController`) with **`Disallow: /admin`** and **Sitemap** URL. Production: **`config.action_controller.default_url_options`** aligned with **`MAILER_HOST`** / **`MAILER_PROTOCOL`** for absolute URLs.
 
 ### E.2 Seeds & fixtures
 
-- [ ] `db/seeds.rb`: categories, products with images (placeholders), one admin user (document password in README **only for dev** or use env).
+- [x] `db/seeds.rb`: categories, products with images (placeholders), one admin user (document password in README **only for dev** or use env).
 
 ### E.3 Tests (minimum bar)
 
-- [ ] Model tests: validations, scopes, order creation + price snapshot.
-- [ ] System test (optional): browse + add to cart + checkout.
+- [x] Model tests: validations, scopes, order creation + price snapshot.
+- [x] System test (optional): browse + add to cart + checkout.
 
 ### E.4 Security pass
 
-- [ ] `force_ssl` in production.
-- [ ] Secure headers (Rails defaults + review).
-- [ ] Rate limit contact form / checkout (rack-attack optional).
-- [ ] Active Storage: private bucket if files must not be public; otherwise S3/R2 with sane CORS.
+- [x] `force_ssl` in production.
+- [x] Secure headers (Rails defaults + review).
+- [x] Rate limit contact form / checkout (rack-attack optional).
+- [x] Active Storage: private bucket if files must not be public; otherwise S3/R2 with sane CORS.
 
 **Phase E definition of done:** Demo-ready storefront; admin workflow complete; production config documented.
 

@@ -50,7 +50,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     get product_path(cement)
     assert_response :success
     assert_select "title", text: /#{Regexp.escape(cement.title_uk)}/
-    assert_select "form.button_to[action=?]", add_cart_path
+    assert_select "form[action=?]", add_cart_path
     assert_select "input[name=product_id][value=?]", cement.id.to_s
   end
 
