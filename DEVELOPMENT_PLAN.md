@@ -8,7 +8,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 1. Work **phases in order** (A → F). Later phases assume earlier ones exist.
 2. Check off **Definition of done** items before moving on.
-3. Run **`rails test`** (or RSpec) after each vertical slice when you add tests.
+3. Run **`bin/docker-test`** (or `bin/docker-rails test …`) after each vertical slice when you add tests.
 4. All **shop-facing strings** use I18n (`:uk` default, `:ru` optional)—see PLAN.md §3.
 
 ---
@@ -26,7 +26,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 ## Phase 0 — Project bootstrap
 
-**Phase 0 — status:** Successfully passed for this repository (Docker-first path: Rails 8, PostgreSQL 16, Tailwind + Hotwire, Compose services `web` / `db` / `pgadmin`, `Dockerfile.dev` for dev and generated `Dockerfile` for production/Kamal). Use the host port published in `docker-compose.yml` for the app (e.g. `http://localhost:3001` if `3001:3000` is set).
+**Phase 0 — status:** Successfully passed for this repository (Docker-first path: Rails 8, PostgreSQL 16, Tailwind + Hotwire, Compose services `web` / `db` / `pgadmin`, `Dockerfile.dev` for dev and generated `Dockerfile` for production/Kamal). Use the host port published in `docker-compose.yml` for the app (e.g. `http://localhost:3000`).
 
 ### 0.1 Create the Rails application
 
@@ -65,14 +65,14 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 - [x] `docker compose up` starts DB + web.
 - [x] `docker compose run web rails db:create` succeeds.
-- [x] Browser opens app at the mapped host URL (see `docker-compose.yml`; e.g. `http://localhost:3001`).
+- [x] Browser opens app at the mapped host URL (see `docker-compose.yml`; e.g. `http://localhost:3000`).
 
 **Run Rails/DB tasks inside Compose (preferred on this project):** use one-off `web` containers so gems and Postgres match production-like dev.
 
-- Migrations: `docker compose run --rm web bin/rails db:migrate`
-- Seed: `docker compose run --rm web bin/rails db:seed`
-- Tests (needs test DB on `db`; URL must point at `app_test`):  
-  `docker compose run --rm -e RAILS_ENV=test -e DATABASE_URL=postgres://budinfo:budinfo_dev_password@db:5432/app_test web bin/rails db:test:prepare test`
+- Migrations: `bin/docker-rails db:migrate`
+- Seed: `bin/docker-rails db:seed`
+- Tests: `bin/docker-test-prepare` once (or after schema changes), then **`bin/docker-test`**.  
+  (Wrapper sets `RAILS_ENV=test` and `DATABASE_URL` for `app_test`; override with **`DOCKER_TEST_DATABASE_URL`** if needed.)
 
 ### 0.3 Git hygiene
 
@@ -207,7 +207,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 ### B.3 Turbo / Stimulus touches
 
 - [x] Pagination: `turbo_frame` or full page—pick one and stay consistent. (**Implemented:** Pagy `:offset` + `<turbo-frame id="products">` for grid, filters, and page links; full document load without frame header; `data-turbo-action="advance"` on the frame for URL updates.)
-- [x] “Add to cart” button exists as stub (disabled or Phase D)—optional link to Phase D. (**Implemented:** disabled “У кошик” / “В корзину” on product cards and show page; copy references Phase D.)
+- [x] “Add to cart” on product cards and show page posts to **`CartsController#add`** (Phase D.1).
 
 **Phase B definition of done:** Full browse path: categories → filtered list → product detail with images; copy in Ukrainian/Russian per DB fields + I18n chrome.
 
@@ -273,6 +273,16 @@ Register resources:
 2. `CartsController` — show, update line qty, remove line.
 3. Turbo: update cart partial on change (optional).
 
+**Implemented (D.1):**
+
+- **`Cart`** PORO: `Rails.cache` keys `cart/g/<token>` (signed cookie `cart_token`, httponly, permanent) and `cart/u/<user_id>`; **`expires_in: 30.days`** on write; `add`, `set_quantity`, `remove`, `line_items`, `total`, `item_count`.
+- **`CurrentCart`** concern on **`ApplicationController`**: `current_cart`, **`cart_item_count`** (nav badge); guest token via **`ensure_guest_cart_token!`**.
+- **`Cart.merge_guest_into_user!`** after **`SessionsController#create`** and **`RegistrationsController#create`** (guest cookie cleared after merge).
+- **`CartsController`** (`allow_unauthenticated_access`): **`show`**, **`add`** (POST), **`update_line`** (PATCH), **`remove_line`** (DELETE); flash + `redirect_back` with fallback **`cart_path`**. Routes: **`resource :cart`** + member actions.
+- Views: **`carts/show`**, **`products/_add_to_cart`**; layout **Кошик** links to **`cart_path`** with optional count.
+- Tests: **`test/models/cart_test.rb`**, **`test/controllers/carts_controller_test.rb`**; **`config.cache_store = :memory_store`** in test so cart integration tests work. Run with **`bin/docker-test`** (see README).
+- Turbo live cart partial: not implemented (optional).
+
 ### D.2 Orders
 
 **Schema (implemented for admin — see C.2):** `orders` and `order_items` tables exist with `total` / `unit_price` as `decimal`, string `status`, optional `user_id`, shipping fields, `email` on `orders`.
@@ -287,6 +297,15 @@ Register resources:
 1. Checkout form: validate presence; create `Order` + `OrderItem` rows in a transaction; decrement `stock` (with row lock or `update_counters` to avoid races).
 2. Clear cart on success.
 3. Administrate: allow status updates; read-only financial fields if needed.
+
+**Implemented (D.2):**
+
+- Migration **`public_token`** on `orders` (unique); guest-safe confirmation URL **`/o/:public_token`**.
+- **`Checkout`** PORO (`app/models/checkout.rb`, same autoload pattern as **`Cart`**): pessimistic lock active products, validate `Order` with **`:checkout`** (email + shipping fields), snapshot **`unit_price`**, **`recalculate_total!`**, decrement stock, **`cart.clear`** on success; roll back on validation or stock errors.
+- **`CheckoutsController`** (`new` / `create`), **`OrderConfirmationsController#show`**; routes **`resource :checkout`**, **`order_confirmation_path`**.
+- Views: **`checkouts/new`**, **`order_confirmations/show`**; cart CTA **`carts.checkout_cta`** → **`new_checkout_path`**.
+- Administrate: **`total`** removed from order **form** (still on show); **`public_token`** on show.
+- Tests: **`test/services/checkout_test.rb`**, **`test/controllers/checkouts_controller_test.rb`**.
 
 ### D.3 Mailers (optional)
 
@@ -395,7 +414,7 @@ Only if you already run clusters—overkill for a mini shop unless org mandates 
 
 ### 5. CI/CD (recommended shape)
 
-1. **On push / PR:** `bundle exec rubocop` (if used), `rails test`.
+1. **On push / PR:** `bundle exec rubocop` (if used), `bin/rails test` inside the CI job’s Ruby image (same app as Docker), or mirror **`bin/docker-test`** locally.
 2. **On merge to main:** build image or trigger PaaS deploy; run migrations in a **release** step (not during asset compile only).
 
 ### 6. Post-deploy

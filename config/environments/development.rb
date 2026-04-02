@@ -37,13 +37,16 @@ Rails.application.configure do
   config.active_storage.resolve_model_to_route = :rails_storage_proxy
 
   # Still used for mailers, url helpers, and any code that builds absolute URLs outside a request.
-  # docker-compose publishes 3001→3000 — set DEV_URL_OPTIONS_PORT=3001 on the web service.
+  # docker-compose should set DEV_URL_OPTIONS_PORT to the host-mapped port (default 3000).
   dev_url_host = ENV.fetch("DEV_URL_OPTIONS_HOST", "localhost")
   dev_url_port = (ENV["DEV_URL_OPTIONS_PORT"].presence || "3000").to_i
   dev_url_opts = { host: dev_url_host, port: dev_url_port, protocol: "http" }
 
   config.active_storage.default_url_options = dev_url_opts
   config.action_controller.default_url_options = dev_url_opts
+
+  # web-console: requests come from Docker bridge IPs (e.g. 172.18.0.1), not 127.0.0.1.
+  config.web_console.permissions = %w[127.0.0.0/8 ::1 172.16.0.0/12 192.168.0.0/16 10.0.0.0/8]
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false

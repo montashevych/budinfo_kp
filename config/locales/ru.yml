@@ -106,9 +106,52 @@ ru:
       nav_label: "Страницы товаров"
     cart:
       add_to_cart: "В корзину"
-      stub_hint: "Корзина и оформление — на этапе D."
-      stub_title: "Скоро: добавление в корзину (фаза D)"
+  carts:
+    title: "Корзина"
+    heading: "Корзина"
+    empty: "Корзина пуста."
+    continue_shopping: "К каталогу товаров"
+    quantity: "Количество"
+    update: "Обновить"
+    remove: "Убрать"
+    total: "Итого"
+    checkout_cta: "Оформить заказ"
+    added: "Товар добавлен в корзину."
+    updated: "Количество обновлено."
+    removed: "Товар убран из корзины."
+    out_of_stock: "Недостаточно товара на складе."
+    unavailable: "Товар недоступен."
+  checkouts:
+    title: "Оформление заказа"
+    heading: "Оформление заказа"
+    intro: "Укажите контакты и адрес доставки. Оплата на этом этапе не требуется — заказ сохраняется в системе."
+    summary: "Ваш заказ"
+    email: "Электронная почта"
+    shipping_name: "ФИО / название получателя"
+    shipping_phone: "Телефон"
+    shipping_address: "Адрес доставки"
+    submit: "Подтвердить заказ"
+    back_to_cart: "Назад в корзину"
+    success: "Заказ принят."
+    empty_cart: "Корзина пуста."
+    stale_cart: "Не удалось оформить: обновите корзину и попробуйте снова."
+    fix_errors: "Исправьте ошибки в форме."
+  order_confirmations:
+    title: "Заказ оформлен"
+    heading: "Спасибо!"
+    intro: "Мы отправим подтверждение на %{email}, когда появится отправка писем (фаза D.3)."
+    number: "Номер заказа"
+    items: "Товары"
+    shipping: "Доставка"
+    continue: "На главную"
   activerecord:
+    enums:
+      order:
+        status:
+          pending: В ожидании
+          confirmed: Подтверждён
+          shipped: Отправлен
+          cancelled: Отменён
     errors:
       models:
         product:

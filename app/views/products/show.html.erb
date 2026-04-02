@@ -50,7 +50,7 @@
       <% end %>
 
       <div class="mt-6 max-w-sm">
-        <%= render "products/add_to_cart_stub" %>
+        <%= render "products/add_to_cart", product: @product %>
       </div>
 
       <% if @product.display_description.present? %>

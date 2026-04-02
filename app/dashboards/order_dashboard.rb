@@ -5,6 +5,7 @@ require "administrate/base_dashboard"
 class OrderDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
+    public_token: Field::String,
     user: Field::BelongsTo,
     status: Field::Select.with_options(
       searchable: false,
@@ -31,6 +32,7 @@ class OrderDashboard < Administrate::BaseDashboard
 
   SHOW_PAGE_ATTRIBUTES = %i[
     id
+    public_token
     status
     total
     email
@@ -46,7 +48,6 @@ class OrderDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = %i[
     user
     status
-    total
     email
     shipping_name
     shipping_phone

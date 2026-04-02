@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Load schema into app_test inside Docker (run after migrations or fresh clone).
+set -e
+ROOT="$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)"
+exec "$ROOT/bin/docker-rails" db:test:prepare

@@ -24,12 +24,12 @@ services:
       - .:/app
       - bundle_data:/usr/local/bundle
     ports:
-      - "3001:3000"
+      - "3000:3000"
     environment:
       DATABASE_URL: postgres://budinfo:budinfo_dev_password@db:5432/app_development
       RAILS_ENV: development
-      # Browser hits localhost:3001; Disk/redirect URLs must use the same port
-      DEV_URL_OPTIONS_PORT: "3001"
+      # Browser hits localhost:3000; must match host port for redirects / Active Storage URLs
+      DEV_URL_OPTIONS_PORT: "3000"
     depends_on:
       db:
         condition: service_healthy

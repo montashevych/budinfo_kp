@@ -10,6 +10,15 @@ Rails.application.routes.draw do
   resources :categories, only: %i[index show], param: :slug
   resources :products, only: %i[index show], param: :slug
 
+  resource :cart, only: :show do
+    post :add, on: :member
+    patch :update_line, on: :member
+    delete :remove_line, on: :member
+  end
+
+  resource :checkout, only: %i[new create]
+  get "/o/:public_token", to: "order_confirmations#show", as: :order_confirmation
+
   namespace :admin do
     resources :categories
     resources :products

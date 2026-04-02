@@ -6,8 +6,11 @@ class SessionsController < ApplicationController
   end
 
   def create
+    guest_cart_token = cookies.signed[Cart::COOKIE]
     if user = User.authenticate_by(params.permit(:email_address, :password))
       start_new_session_for user
+      Cart.merge_guest_into_user!(guest_token: guest_cart_token, user: user)
+      cookies.delete(Cart::COOKIE)
       redirect_to after_authentication_url, notice: t("auth.sessions.signed_in")
     else
       redirect_to new_session_path, alert: t("auth.sessions.invalid_credentials")
