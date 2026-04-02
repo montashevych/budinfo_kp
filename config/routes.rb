@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :categories, only: %i[index show], param: :slug
   resources :products, only: %i[index show], param: :slug
+  resources :promotions, only: :show, param: :slug
 
   resource :cart, only: :show do
     post :add, on: :member
@@ -22,6 +23,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :categories
     resources :products
+    resources :home_promotions
     resources :users
     resources :orders
     resources :order_items

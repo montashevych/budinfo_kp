@@ -35,6 +35,14 @@ uk:
   home:
     heading: "Будівельні матеріали"
     intro: "Підбір сухих сумішей, утеплення, пиломатеріалів та інструменту. Категорії та товари наповнюються адміністратором магазину."
+    promotions:
+      heading: "Акції та пропозиції"
+      region_label: "Акції та пропозиції"
+      carousel_role: "карусель"
+      controls_label: "Керування каруселлю"
+      prev_slide: "Попередній слайд"
+      next_slide: "Наступний слайд"
+      read_more: "Детальніше"
   nav:
     main_navigation: "Головна навігація"
     home: "Головна"
@@ -147,6 +155,8 @@ uk:
       increase: "Збільшити кількість"
       in_cart: "У кошику"
       max_stock: "Максимум на складі"
+      quantity_input: "Кількість у кошику"
+      quantity_input_hint: "Введіть кількість і натисніть Enter або клікніть поза полем"
   carts:
     title: "Кошик"
     heading: "Кошик"
@@ -212,6 +222,11 @@ uk:
         few: Рядки замовлення
         many: Рядків замовлення
         other: Рядки замовлення
+      home_promotion:
+        one: Акція на головній
+        few: Акції на головній
+        many: Акцій на головній
+        other: Акції на головній
     attributes:
       category:
         name_uk: Назва (укр.)
@@ -254,6 +269,14 @@ uk:
         product: Товар
         quantity: Кількість
         unit_price: Ціна за одиницю
+      home_promotion:
+        title: Заголовок
+        teaser: Короткий опис (карусель)
+        slug: "Слаг URL (адреса /promotions/…; латиниця, дефіси)"
+        body: Повний текст (сторінка акції)
+        position: Порядок
+        active: Активна
+        image: Зображення
     enums:
       user:
         role:
@@ -267,6 +290,11 @@ uk:
           cancelled: Скасовано
     errors:
       models:
+        home_promotion:
+          attributes:
+            image:
+              invalid_type: "дозволені лише зображення JPEG, PNG, WebP або GIF"
+              too_large: "розмір файлу не більше 5 МБ"
         product:
           attributes:
             images:

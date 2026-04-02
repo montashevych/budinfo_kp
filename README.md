@@ -53,6 +53,14 @@ Mail previews: **`/rails/mailers`** (development).
 
 Local Ruby is not documented for this repo; prefer Docker for consistency.
 
+## Home page promotions (carousel)
+
+- **Storefront:** Active slides render on **`/`** (below the intro); each links to **`/promotions/:slug`**. Carousel autoplay and arrows are handled by Stimulus (`promotion-carousel`).
+- **Admin:** Sign in as an **admin** user → **`/admin/home_promotions`** (Administrate). Create slides with **title**, **teaser**, **slug** (URL segment), **body** (detail page), **position**, **active**, and **image**. Active rows **require** an image.
+- **Demo data:** After **`bin/docker-rails db:seed`** (or `db:seed` in the `web` container), sample promos include **`demo-cement-week`** and **`demo-insulation`** (Wikimedia images; see comment block at the top of **`db/seeds.rb`**). Inactive **`demo-draft`** does not appear on the home page.
+
+See **`docs/HOME_PROMOTIONS_PLAN.md`** for the full feature checklist.
+
 ## Further planning
 
 See **`DEVELOPMENT_PLAN.md`** for phases, schema notes, and operational details.

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_02_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_03_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,6 +51,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_02_120000) do
     t.datetime "updated_at", null: false
     t.index ["parent_id"], name: "index_categories_on_parent_id"
     t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
+  create_table "home_promotions", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.integer "position", default: 0, null: false
+    t.string "slug", null: false
+    t.text "teaser"
+    t.string "title", null: false
+    t.datetime "updated_at", null: false
+    t.index ["active"], name: "index_home_promotions_on_active"
+    t.index ["position"], name: "index_home_promotions_on_position"
+    t.index ["slug"], name: "index_home_promotions_on_slug", unique: true
   end
 
   create_table "order_items", force: :cascade do |t|

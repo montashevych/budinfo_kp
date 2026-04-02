@@ -3,7 +3,7 @@
   <% product = Product.find_by(id: @product_id) %>
   <% if product %>
     <%= turbo_stream.replace "add-to-cart-product-#{product.id}" do %>
-      <%= render "products/add_to_cart", product: product %>
+      <%= render "products/add_to_cart", product: product, animate_line_enter: true %>
     <% end %>
   <% end %>
 <% else %>
