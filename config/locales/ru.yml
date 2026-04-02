@@ -143,6 +143,10 @@ ru:
       nav_label: "Страницы товаров"
     cart:
       add_to_cart: "В корзину"
+      decrease: "Уменьшить количество"
+      increase: "Увеличить количество"
+      in_cart: "В корзине"
+      max_stock: "Максимум на складе"
   carts:
     title: "Корзина"
     heading: "Корзина"

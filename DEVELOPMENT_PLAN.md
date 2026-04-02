@@ -281,7 +281,7 @@ Register resources:
 - **`CartsController`** (`allow_unauthenticated_access`): **`show`**, **`add`** (POST), **`update_line`** (PATCH), **`remove_line`** (DELETE); flash + `redirect_back` with fallback **`cart_path`**. Routes: **`resource :cart`** + member actions.
 - Views: **`carts/show`**, **`products/_add_to_cart`**; layout **Кошик** links to **`cart_path`** with optional count.
 - Tests: **`test/models/cart_test.rb`**, **`test/controllers/carts_controller_test.rb`**; **`config.cache_store = :memory_store`** in test so cart integration tests work. Run with **`bin/docker-test`** (see README).
-- Turbo live cart partial: not implemented (optional).
+- **Cart UX:** **`add`** / **`update_line`** respond to **`turbo_stream`**: sync nav badges (desktop **cart icon + label**, **mobile header** icon, **mobile menu** cart row), replace per-product **`#add-to-cart-product-{id}`**; **`−` / `+`** stepper in grey bar when qty &gt; 0; **`animate-cart-line-appear`** on line refresh; **`#cart-toast`** only for errors. HTML still **`redirect_back`**. No disabled-button “✓” (was dropping rapid clicks).
 
 ### D.2 Orders
 

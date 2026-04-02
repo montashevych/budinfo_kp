@@ -1,0 +1,17 @@
+<% if @add_result == :ok %>
+  <%= render partial: "carts/cart_nav_stream", formats: [ :html ], locals: { count: @cart_count } %>
+  <% product = Product.find_by(id: @product_id) %>
+  <% if product %>
+    <%= turbo_stream.replace "add-to-cart-product-#{product.id}" do %>
+      <%= render "products/add_to_cart", product: product %>
+    <% end %>
+  <% end %>
+<% else %>
+  <% msg = case @add_result
+           when :out_of_stock then t("carts.out_of_stock")
+           else t("carts.unavailable")
+           end %>
+  <%= turbo_stream.append "cart-toast" do %>
+    <%= render "carts/toast", message: msg, variant: :alert %>
+  <% end %>
+<% end %>
