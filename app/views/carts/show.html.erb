@@ -36,6 +36,8 @@
       <%= t("carts.total") %>: <%= number_to_currency(current_cart.total, unit: "₴", format: "%n %u", separator: ",", delimiter: " ") %>
     </p>
 
-    <p class="mt-6 text-sm text-stone-500"><%= t("carts.checkout_hint") %></p>
+    <p class="mt-6">
+      <%= link_to t("carts.checkout_cta"), new_checkout_path, class: "inline-flex rounded-md border border-stone-800 bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800" %>
+    </p>
   <% end %>
 </div>

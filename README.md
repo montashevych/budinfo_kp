@@ -11,7 +11,7 @@ Rails 8 storefront + Administrate admin. **Develop and run commands with Docker*
    docker compose up --build
    ```
 
-3. Open the app at **http://localhost:3001** (host port is mapped in `docker-compose.yml`).
+3. Open the app at **http://localhost:3000** (host port is mapped in `docker-compose.yml`).
 
 4. First-time database (if needed):
 
@@ -37,7 +37,7 @@ On **Windows**, use **Git Bash** or **WSL** so the `bin/docker-*` scripts run; o
 
 ### Compose services
 
-- **`web`** — Rails + Tailwind (port **3001** → container 3000).
+- **`web`** — Rails + Tailwind (port **3000** → container 3000).
 - **`db`** — PostgreSQL 16 (`app_development`; tests use **`app_test`** via URL above).
 - **`pgadmin`** — optional UI (see `docker-compose.yml` for port).
 

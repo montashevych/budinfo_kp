@@ -26,7 +26,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 ## Phase 0 — Project bootstrap
 
-**Phase 0 — status:** Successfully passed for this repository (Docker-first path: Rails 8, PostgreSQL 16, Tailwind + Hotwire, Compose services `web` / `db` / `pgadmin`, `Dockerfile.dev` for dev and generated `Dockerfile` for production/Kamal). Use the host port published in `docker-compose.yml` for the app (e.g. `http://localhost:3001` if `3001:3000` is set).
+**Phase 0 — status:** Successfully passed for this repository (Docker-first path: Rails 8, PostgreSQL 16, Tailwind + Hotwire, Compose services `web` / `db` / `pgadmin`, `Dockerfile.dev` for dev and generated `Dockerfile` for production/Kamal). Use the host port published in `docker-compose.yml` for the app (e.g. `http://localhost:3000`).
 
 ### 0.1 Create the Rails application
 
@@ -65,7 +65,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 - [x] `docker compose up` starts DB + web.
 - [x] `docker compose run web rails db:create` succeeds.
-- [x] Browser opens app at the mapped host URL (see `docker-compose.yml`; e.g. `http://localhost:3001`).
+- [x] Browser opens app at the mapped host URL (see `docker-compose.yml`; e.g. `http://localhost:3000`).
 
 **Run Rails/DB tasks inside Compose (preferred on this project):** use one-off `web` containers so gems and Postgres match production-like dev.
 
@@ -297,6 +297,15 @@ Register resources:
 1. Checkout form: validate presence; create `Order` + `OrderItem` rows in a transaction; decrement `stock` (with row lock or `update_counters` to avoid races).
 2. Clear cart on success.
 3. Administrate: allow status updates; read-only financial fields if needed.
+
+**Implemented (D.2):**
+
+- Migration **`public_token`** on `orders` (unique); guest-safe confirmation URL **`/o/:public_token`**.
+- **`Checkout`** PORO (`app/models/checkout.rb`, same autoload pattern as **`Cart`**): pessimistic lock active products, validate `Order` with **`:checkout`** (email + shipping fields), snapshot **`unit_price`**, **`recalculate_total!`**, decrement stock, **`cart.clear`** on success; roll back on validation or stock errors.
+- **`CheckoutsController`** (`new` / `create`), **`OrderConfirmationsController#show`**; routes **`resource :checkout`**, **`order_confirmation_path`**.
+- Views: **`checkouts/new`**, **`order_confirmations/show`**; cart CTA **`carts.checkout_cta`** → **`new_checkout_path`**.
+- Administrate: **`total`** removed from order **form** (still on show); **`public_token`** on show.
+- Tests: **`test/services/checkout_test.rb`**, **`test/controllers/checkouts_controller_test.rb`**.
 
 ### D.3 Mailers (optional)
 

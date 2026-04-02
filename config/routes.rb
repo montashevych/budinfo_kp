@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     delete :remove_line, on: :member
   end
 
+  resource :checkout, only: %i[new create]
+  get "/o/:public_token", to: "order_confirmations#show", as: :order_confirmation
+
   namespace :admin do
     resources :categories
     resources :products
