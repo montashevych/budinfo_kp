@@ -6,6 +6,29 @@ uk:
     application:
       title: "Budinfo"
       meta_description: "Інтернет-магазин будівельних матеріалів"
+  meta:
+    titles:
+      home: "Головна"
+      categories_index: "Каталог категорій"
+      products_index: "Усі товари"
+      delivery: "Доставка"
+      contacts: "Контакти"
+      cart: "Кошик"
+      checkout: "Оформлення замовлення"
+      order_confirmation: "Замовлення №%{id}"
+    descriptions:
+      category: "Товари в категорії «%{name}» — Budinfo"
+      delivery: "Умови та зони доставки будівельних матеріалів."
+      contacts: "Зв'яжіться з нами щодо замовлень та консультацій."
+  errors:
+    back_home: "На головну"
+    pages:
+      not_found:
+        title: "Сторінку не знайдено"
+        body: "Посилання застаріло або введено з помилкою."
+      internal_server_error:
+        title: "Технічна помилка"
+        body: "Спробуйте пізніше або оновіть сторінку."
   admin:
     forbidden: "Потрібні права адміністратора."
     link: "Панель керування"

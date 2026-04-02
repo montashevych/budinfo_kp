@@ -22,6 +22,10 @@ gem "jbuilder"
 # Pagination [https://github.com/ddnexus/pagy]
 gem "pagy", "~> 43.0"
 
+# SEO defaults, Open Graph helpers [https://github.com/kpumuk/meta-tags]
+# Bundler would require "meta-tags" by default; the gem loads from "meta_tags".
+gem "meta-tags", "~> 2.23", require: "meta_tags"
+
 # Admin CRUD [https://github.com/thoughtbot/administrate]
 gem "administrate", "~> 1.0"
 # Active Storage uploads in Administrate [https://github.com/Dreamersoul/administrate-field-active_storage]

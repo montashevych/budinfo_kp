@@ -11,6 +11,7 @@ class CheckoutsController < ApplicationController
 
     @line_items = current_cart.line_items
     @order = Order.new(email: current_user&.email_address)
+    set_checkout_meta_tags
   end
 
   def create
@@ -28,6 +29,7 @@ class CheckoutsController < ApplicationController
       @line_items = current_cart.line_items
       @order = result.order
       flash.now[:alert] = t("checkouts.fix_errors")
+      set_checkout_meta_tags
       render :new, status: :unprocessable_entity
     else
       redirect_to cart_path, alert: t("checkouts.stale_cart")
@@ -35,6 +37,10 @@ class CheckoutsController < ApplicationController
   end
 
   private
+
+  def set_checkout_meta_tags
+    set_meta_tags title: t("meta.titles.checkout"), robots: "noindex, nofollow"
+  end
 
   def checkout_params
     params.require(:order).permit(:email, :shipping_name, :shipping_phone, :shipping_address)
