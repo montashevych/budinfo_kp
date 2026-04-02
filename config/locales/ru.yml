@@ -6,6 +6,29 @@ ru:
     application:
       title: "Budinfo"
       meta_description: "Интернет-магазин строительных материалов"
+  meta:
+    titles:
+      home: "Главная"
+      categories_index: "Каталог категорий"
+      products_index: "Все товары"
+      delivery: "Доставка"
+      contacts: "Контакты"
+      cart: "Корзина"
+      checkout: "Оформление заказа"
+      order_confirmation: "Заказ №%{id}"
+    descriptions:
+      category: "Товары в категории «%{name}» — Budinfo"
+      delivery: "Условия и зоны доставки строительных материалов."
+      contacts: "Свяжитесь с нами по заказам и консультациям."
+  errors:
+    back_home: "На главную"
+    pages:
+      not_found:
+        title: "Страница не найдена"
+        body: "Ссылка устарела или введена с ошибкой."
+      internal_server_error:
+        title: "Техническая ошибка"
+        body: "Попробуйте позже или обновите страницу."
   admin:
     forbidden: "Нужны права администратора."
     link: "Панель управления"

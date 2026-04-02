@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Pagy::Method
+  include ::MetaTags::ControllerHelper
   include Authentication
   include CurrentCart
   allow_browser versions: :modern
@@ -7,8 +8,17 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   before_action :set_locale
+  before_action :set_default_meta_tags
 
   private
+
+  def set_default_meta_tags
+    set_meta_tags(
+      site: t("layouts.application.title"),
+      reverse: true,
+      description: t("layouts.application.meta_description")
+    )
+  end
 
   def set_locale
     if params[:locale].present?

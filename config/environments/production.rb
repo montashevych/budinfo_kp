@@ -53,11 +53,13 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  # Outgoing mail: set MAILER_HOST, SMTP_ADDRESS, SMTP_USERNAME, SMTP_PASSWORD (and optional SMTP_PORT).
-  config.action_mailer.default_url_options = {
+  # Canonical host for mailers, sitemap.xml, and absolute URLs (same vars as mailer).
+  app_url_opts = {
     host: ENV.fetch("MAILER_HOST", "example.com"),
     protocol: ENV.fetch("MAILER_PROTOCOL", "https")
   }
+  config.action_controller.default_url_options = app_url_opts
+  config.action_mailer.default_url_options = app_url_opts
 
   if ENV["SMTP_ADDRESS"].present?
     config.action_mailer.delivery_method = :smtp

@@ -327,9 +327,9 @@ Register resources:
 
 ### E.1 SEO & errors
 
-- [ ] `meta-tags` gem (or manual `<title>` / `description` per product/category).
-- [ ] `public/404.html`, `500.html` — localized static pages **or** dynamic errors with I18n.
-- [ ] `sitemap.xml` generator (gem or rake task) for products/categories.
+- [x] **`meta-tags`** gem; default title/description in **`ApplicationController`**; per-page tags for home, catalog, product (**`og:image`** when images exist), category, delivery, contacts, cart/checkout/confirmation (**`noindex`**).
+- [x] Dynamic **I18n** error pages via **`config.exceptions_app`** → **`ErrorsController`** (`/404`, `/500`), **`Accept-Language`** hint for uk/ru; **`public/404.html` / `500.html`** remain as CDN/nginx fallbacks (English Rails defaults — replace if the edge proxy serves them).
+- [x] **`/sitemap.xml`** (`SitemapsController` + **`show.xml.builder`**: root, catalog, products index, static pages, all categories/products); **`/robots.txt`** (`RobotsController`) with **`Disallow: /admin`** and **Sitemap** URL. Production: **`config.action_controller.default_url_options`** aligned with **`MAILER_HOST`** / **`MAILER_PROTOCOL`** for absolute URLs.
 
 ### E.2 Seeds & fixtures
 

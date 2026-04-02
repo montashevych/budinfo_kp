@@ -31,4 +31,11 @@ Rails.application.routes.draw do
   root "home#index"
   get "delivery", to: "pages#delivery"
   resources :contacts, only: %i[new create]
+
+  get "/sitemap.xml", to: "sitemaps#show", as: :sitemap, defaults: { format: :xml }
+  get "/robots.txt", to: "robots#show", as: :robots, defaults: { format: :text }
+
+  # Routed by config.exceptions_app when consider_all_requests_local is false (e.g. production).
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#internal_server_error", via: :all
 end

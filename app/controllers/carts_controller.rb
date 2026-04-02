@@ -5,6 +5,7 @@ class CartsController < ApplicationController
 
   def show
     @line_items = current_cart.line_items
+    set_meta_tags title: t("meta.titles.cart"), robots: "noindex, nofollow"
   end
 
   def add

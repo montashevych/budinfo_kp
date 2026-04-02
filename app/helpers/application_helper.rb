@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include ::MetaTags::ViewHelper
   # Use representation proxy URLs for disk-backed storage so img src never points at
   # /representations/redirect (Turbo snapshots + DiskService URL generation caused 500s).
   def product_variant_image_path(attachment, resize_to_limit)

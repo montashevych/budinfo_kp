@@ -4,8 +4,6 @@ require "rails/all"
 
 Bundler.require(*Rails.groups)
 
-# Pagy does not always load before controllers in all environments (e.g. Docker after Gemfile
-# changes). Require explicitly so `include Pagy::Method` in ApplicationController works.
 require "pagy"
 
 module App
@@ -17,5 +15,8 @@ module App
     config.i18n.default_locale = :uk
     config.i18n.available_locales = %i[uk ru]
     config.i18n.fallbacks = { ru: %i[uk] }
+
+    # Localized HTML error pages via ErrorsController (see config/routes.rb /404, /500).
+    config.exceptions_app = routes
   end
 end
