@@ -214,6 +214,11 @@ uk:
         few: Рядки замовлення
         many: Рядків замовлення
         other: Рядки замовлення
+      home_promotion:
+        one: Акція на головній
+        few: Акції на головній
+        many: Акцій на головній
+        other: Акції на головній
     attributes:
       category:
         name_uk: Назва (укр.)
@@ -259,7 +264,7 @@ uk:
       home_promotion:
         title: Заголовок
         teaser: Короткий опис (карусель)
-        slug: Слаг URL
+        slug: "Слаг URL (адреса /promotions/…; латиниця, дефіси)"
         body: Повний текст (сторінка акції)
         position: Порядок
         active: Активна

@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :categories
     resources :products
+    resources :home_promotions
     resources :users
     resources :orders
     resources :order_items

@@ -13,27 +13,29 @@
 require "open-uri"
 
 def attach_open_license_demo_images(product, sources:)
-  return if product.images.attached?
+  product.reload if product.persisted?
 
   sources.each do |src|
     url = src.fetch(:url)
     filename = src.fetch(:filename)
+    next if product.images.blobs.exists?(filename: filename)
+
     io = URI(url).open(
       "User-Agent" => "BudinfoSeeds/1.0 (+https://wikimedia.org)",
       read_timeout: 30,
       open_timeout: 15
     )
-    product.images.attach(
-      io:,
-      filename:,
-      content_type: "image/jpeg"
-    )
+    product.images.attach(io:, filename:, content_type: "image/jpeg")
+  rescue ActiveRecord::RecordNotUnique
+    # Same blob already linked (checksum dedupe) or race with a previous partial seed.
+    next
   end
 rescue OpenURI::HTTPError, SocketError, Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNREFUSED => e
   warn "Demo images skipped for #{product.slug}: #{e.message}"
 end
 
 def attach_home_promotion_demo_image(home_promotion, url:, filename:)
+  home_promotion.reload if home_promotion.persisted?
   return if home_promotion.image.attached?
 
   io = URI(url).open(
@@ -42,6 +44,9 @@ def attach_home_promotion_demo_image(home_promotion, url:, filename:)
     open_timeout: 15
   )
   home_promotion.image.attach(io:, filename:, content_type: "image/jpeg")
+rescue ActiveRecord::RecordNotUnique
+  # Blob already linked to this record (re-seed / checksum dedupe).
+  nil
 rescue OpenURI::HTTPError, SocketError, Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNREFUSED => e
   warn "Demo image skipped for home_promotion #{home_promotion.slug}: #{e.message}"
 end

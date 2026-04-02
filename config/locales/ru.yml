@@ -192,8 +192,8 @@ ru:
       home_promotion:
         title: Заголовок
         teaser: Краткий текст (карусель)
-        slug: Слаг URL
-        body: Полный текст (страниция акции)
+        slug: "Слаг URL (адрес /promotions/…; латиница, дефисы)"
+        body: Полный текст (страница акции)
         position: Порядок
         active: Активна
         image: Изображение
