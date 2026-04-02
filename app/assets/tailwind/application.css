@@ -34,11 +34,24 @@
     animation: cart-line-appear 0.28s ease-out;
   }
 
-  /* Used on home promos; `aspect-video` may be absent from the compiled bundle if unused elsewhere. */
+  /* Home + promo detail hero: taller than 16∶9 for more vertical presence; `aspect-*` utilities may be absent from the bundle. */
   .home-promo-media-box {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
+    min-height: 14rem;
+  }
+
+  @media (min-width: 40rem) {
+    .home-promo-media-box {
+      min-height: 17rem;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .home-promo-media-box {
+      min-height: 20rem;
+    }
   }
 }
 

@@ -7,9 +7,9 @@
 
   <% if @promotion.image.attached? %>
     <div class="mt-8 overflow-hidden rounded-xl border border-stone-200 bg-stone-100 shadow-sm">
-      <div class="aspect-[16/9] w-full overflow-hidden">
-        <%= image_tag product_variant_image_path(@promotion.image, [1600, 900]),
-              class: "h-full w-full object-cover object-center",
+      <div class="home-promo-media-box overflow-hidden">
+        <%= image_tag product_variant_image_path(@promotion.image, [1500, 1000]),
+              class: "absolute inset-0 h-full w-full object-cover object-center",
               loading: "eager",
               decoding: "async",
               alt: @promotion.title %>

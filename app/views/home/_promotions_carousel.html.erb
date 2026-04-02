@@ -19,7 +19,7 @@
 
   <p id="home-promotions-live" class="sr-only" aria-live="polite" aria-atomic="true" data-promotion-carousel-target="live"></p>
 
-  <%# Fixed 16∶9 viewport — every slide uses the same outer box; arrows sit on the image with opacity. %>
+  <%# Fixed 3∶2 viewport (+ responsive min-height); arrows sit on the image with opacity. %>
   <div class="relative overflow-hidden rounded-xl border border-stone-200 bg-stone-900 shadow-md ring-1 ring-black/5">
     <% if multi %>
       <div
@@ -56,10 +56,9 @@
       ) do %>
         <%= link_to promotion_path(promo),
               class: "group relative block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" do %>
-          <%# Fixed 16∶9 box (custom utility — aspect-video is not always present in built Tailwind CSS). %>
           <div class="home-promo-media-box bg-stone-800">
             <% if promo.image.attached? %>
-              <%= image_tag product_variant_image_path(promo.image, [1280, 720]),
+              <%= image_tag product_variant_image_path(promo.image, [1200, 800]),
                     class: "absolute inset-0 z-0 h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.03]",
                     loading: (index.zero? ? "eager" : "lazy"),
                     decoding: "async",
