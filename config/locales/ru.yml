@@ -188,6 +188,15 @@ ru:
     shipping: "Доставка"
     continue: "На главную"
   activerecord:
+    attributes:
+      home_promotion:
+        title: Заголовок
+        teaser: Краткий текст (карусель)
+        slug: Слаг URL
+        body: Полный текст (страниция акции)
+        position: Порядок
+        active: Активна
+        image: Изображение
     enums:
       order:
         status:
@@ -197,6 +206,11 @@ ru:
           cancelled: Отменён
     errors:
       models:
+        home_promotion:
+          attributes:
+            image:
+              invalid_type: "разрешены только изображения JPEG, PNG, WebP или GIF"
+              too_large: "размер файла не более 5 МБ"
         product:
           attributes:
             images:

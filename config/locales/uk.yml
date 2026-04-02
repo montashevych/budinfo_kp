@@ -256,6 +256,14 @@ uk:
         product: Товар
         quantity: Кількість
         unit_price: Ціна за одиницю
+      home_promotion:
+        title: Заголовок
+        teaser: Короткий опис (карусель)
+        slug: Слаг URL
+        body: Повний текст (сторінка акції)
+        position: Порядок
+        active: Активна
+        image: Зображення
     enums:
       user:
         role:
@@ -269,6 +277,11 @@ uk:
           cancelled: Скасовано
     errors:
       models:
+        home_promotion:
+          attributes:
+            image:
+              invalid_type: "дозволені лише зображення JPEG, PNG, WebP або GIF"
+              too_large: "розмір файлу не більше 5 МБ"
         product:
           attributes:
             images:
