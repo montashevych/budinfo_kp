@@ -62,6 +62,20 @@ uk:
       intro: "Щоб скинути пароль, перейдіть за посиланням:"
       link_label: "Сторінка скидання пароля"
       expiry: "Посилання діє ще %{duration}."
+  order_mailer:
+    confirmation:
+      subject: "Замовлення №%{order_id} — Budinfo"
+      greeting: "Вітаємо!"
+      intro: "Ваше замовлення №%{order_id} прийнято. Нижче — підсумок."
+      total: "Разом:"
+      view_order: "Переглянути замовлення онлайн"
+      shipping: "Доставка:"
+    notify_admin:
+      subject: "[Нове замовлення] №%{order_id}"
+      intro: "Нове замовлення №%{order_id} від %{email}."
+      total: "Разом:"
+      open_in_admin: "Відкрити в адмінці"
+      public_link: "Публічне посилання для клієнта"
   pages:
     delivery:
       heading: "Доставка та оплата"
@@ -139,7 +153,7 @@ uk:
   order_confirmations:
     title: "Замовлення оформлено"
     heading: "Дякуємо!"
-    intro: "Ми надішлемо підтвердження на %{email}, коли зʼявиться відправка листів (фаза D.3)."
+    intro: "Копію підсумку ми надіслали на %{email}."
     number: "Номер замовлення"
     items: "Товари"
     shipping: "Доставка"

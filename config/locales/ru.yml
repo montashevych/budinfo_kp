@@ -62,6 +62,20 @@ ru:
       intro: "Чтобы сбросить пароль, перейдите по ссылке:"
       link_label: "Страница сброса пароля"
       expiry: "Ссылка действительна ещё %{duration}."
+  order_mailer:
+    confirmation:
+      subject: "Заказ №%{order_id} — Budinfo"
+      greeting: "Здравствуйте!"
+      intro: "Ваш заказ №%{order_id} принят. Ниже — сводка."
+      total: "Итого:"
+      view_order: "Посмотреть заказ онлайн"
+      shipping: "Доставка:"
+    notify_admin:
+      subject: "[Новый заказ] №%{order_id}"
+      intro: "Новый заказ №%{order_id} от %{email}."
+      total: "Итого:"
+      open_in_admin: "Открыть в админке"
+      public_link: "Публичная ссылка для клиента"
   pages:
     delivery:
       heading: "Доставка и оплата"
@@ -139,7 +153,7 @@ ru:
   order_confirmations:
     title: "Заказ оформлен"
     heading: "Спасибо!"
-    intro: "Мы отправим подтверждение на %{email}, когда появится отправка писем (фаза D.3)."
+    intro: "Копию сводки мы отправили на %{email}."
     number: "Номер заказа"
     items: "Товары"
     shipping: "Доставка"

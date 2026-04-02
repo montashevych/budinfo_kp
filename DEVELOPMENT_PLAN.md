@@ -309,10 +309,15 @@ Register resources:
 
 ### D.3 Mailers (optional)
 
-- [ ] `OrderMailer#confirmation` to customer.
-- [ ] `OrderMailer#notify_admin` to shop email.
+- [x] `OrderMailer#confirmation` to customer (after successful checkout, `deliver_later`).
+- [x] `OrderMailer#notify_admin` to **`ENV["SHOP_NOTIFICATION_EMAIL"]`** when set (same hook).
+- [x] **`MAILER_FROM`** default on `ApplicationMailer`; development uses **`:test`** delivery unless **`SMTP_*`** set; production configures **SMTP** when **`SMTP_ADDRESS`** is present (**`MAILER_HOST`**, **`MAILER_PROTOCOL`** for URL helpers).
+- [x] Tests: **`test/mailers/order_mailer_test.rb`**, checkout controller asserts **`assert_emails`** + **`perform_enqueued_jobs`**; previews **`test/mailers/previews/order_mailer_preview.rb`**.
 
-Configure `config/environments/production.rb` SMTP or transactional provider (SendGrid, Mailgun, Postmark, etc.).
+**D.3 — deferred / ops (revisit later):**
+
+- **`From:` / `MAILER_FROM`:** Must be visible inside the **`web`** container (`docker compose exec web env | grep MAILER`). Compose uses **`env_file: .env`**; no `export` in `.env`, UTF‑8 BOM can break the value — strip in code. **`ApplicationMailer#mail`** merges **`**kwargs`** so `mail(to:, subject:)` is not lost; **`OrderMailer`** also passes **`from: mailer_from_address`** explicitly. If **`From`** still shows **`noreply@example.com`**, the variable is empty in the running container — fix env, then rebuild/restart **`web`**.
+- **Verbose MIME in logs:** Not fixable via `Mail.logger=` on mail 2.9. **`docker-compose`** sets **`RAILS_LOG_LEVEL`** default **`info`** for **`web`** (override with **`RAILS_LOG_LEVEL=debug`** in `.env` when you need SQL detail). Gmail SMTP: **`MAILER_FROM`** should match **`SMTP_USERNAME`** unless “Send mail as” is configured.
 
 **Phase D definition of done:** Happy-path purchase without payment; admin sees order; stock decreases; prices on line items frozen.
 
