@@ -1,3 +1,7 @@
+<% if @home_promotions.any? %>
+  <%= render "home/promotions_carousel", promotions: @home_promotions %>
+<% end %>
+
 <div class="max-w-2xl">
   <h1 class="text-3xl font-semibold tracking-tight text-stone-900"><%= t("home.heading") %></h1>
   <p class="mt-4 text-stone-600"><%= t("home.intro") %></p>

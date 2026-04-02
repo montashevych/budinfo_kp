@@ -1,6 +1,6 @@
 # Home promotions (hero carousel) — implementation plan
 
-**Status:** Phases 1–3 implemented. Phases 4+ pending.
+**Status:** Phases 1–4 implemented. Phases 5+ pending.
 
 **Goal:** A storefront-style promotional area on the home page: admin-managed slides (image + short text), auto-rotating carousel (10s), manual prev/next, and a dedicated detail page per slide (large image + long text). Admins customize content from the existing admin panel.
 
@@ -85,9 +85,11 @@
 
 ---
 
-## Phase 4 — Home page integration (data + markup)
+## Phase 4 — Home page integration (data + markup) ✅
 
 **Objective:** Home renders a promotion area driven by DB.
+
+**Done:** `HomeController#index` loads `@home_promotions`, `home/_promotions_carousel.html.erb`, `promotion_carousel_controller.js` (values stub for Phase 5), `test/integration/home_page_promotions_test.rb`.
 
 **Tasks**
 
