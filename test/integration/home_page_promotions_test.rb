@@ -39,6 +39,7 @@ class HomePagePromotionsTest < ActionDispatch::IntegrationTest
     assert_match "Teaser B", @response.body
     assert_select %(button[data-action="click->promotion-carousel#next"]), count: 1
     assert_select %(button[data-action="click->promotion-carousel#prev"]), count: 1
+    assert_match(/home-promo-media-box/, @response.body)
   end
 
   test "single active promotion has no carousel prev or next controls" do

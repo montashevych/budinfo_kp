@@ -1,6 +1,6 @@
 # Home promotions (hero carousel) — implementation plan
 
-**Status:** Phases 1–5 implemented. Phase 6+ pending.
+**Status:** Phases 1–6 complete.
 
 **Goal:** A storefront-style promotional area on the home page: admin-managed slides (image + short text), auto-rotating carousel (10s), manual prev/next, and a dedicated detail page per slide (large image + long text). Admins customize content from the existing admin panel.
 
@@ -131,9 +131,11 @@
 
 ---
 
-## Phase 6 — Tests, seeds, documentation
+## Phase 6 — Tests, seeds, documentation ✅
 
 **Objective:** Regression safety and onboarding.
+
+**Done:** Extra model tests (`active` scope, slug format), `fixtures []` on **`PromotionsControllerTest`**, home integration asserts carousel markup class, **`README.md`** (*Home page promotions*), **`DEVELOPMENT_PLAN.md`** Administrate bullet, demo seeds already in **`db/seeds.rb`**. System/browser test skipped (optional; Stimulus behaviour covered by integration + manual QA).
 
 **Tasks**
 

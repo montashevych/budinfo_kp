@@ -35,6 +35,24 @@ class HomePromotionTest < ActiveSupport::TestCase
     assert p.slug.present?
   end
 
+  test "active scope returns only active records" do
+    HomePromotion.delete_all
+    on = HomePromotion.new(title: "On", slug: "scope-on", active: true, position: 0)
+    on.image.attach(io: tiny_png_io, filename: "on.png", content_type: "image/png")
+    on.save!
+    HomePromotion.create!(title: "Off", slug: "scope-off", active: false, position: 1)
+
+    ids = HomePromotion.active.pluck(:id)
+    assert_includes ids, on.id
+    assert_equal 1, ids.size
+  end
+
+  test "slug must match allowed format" do
+    p = HomePromotion.new(title: "X", slug: "Invalid_Slug", active: false, position: 0)
+    assert_not p.valid?
+    assert p.errors[:slug].any?
+  end
+
   test "active ordered scope" do
     HomePromotion.destroy_all
     a = HomePromotion.new(title: "B", slug: "b", active: true, position: 2)

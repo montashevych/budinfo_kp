@@ -238,6 +238,7 @@ Register resources:
 
 - [x] `Category`
 - [x] `Product` — **`administrate-field-active_storage`** for `has_many_attached :images`; uploads handled in **`Admin::ProductsController`** (stash + attach after save — see *Operational notes — Product images & Active Storage*); `scoped_resource` uses `with_attached_images`.
+- [x] **`HomePromotion`** — home carousel + public **`/promotions/:slug`**; **`/admin/home_promotions`**; demo rows in **`db/seeds.rb`**. Details: **`docs/HOME_PROMOTIONS_PLAN.md`** and **README** (*Home page promotions*).
 - [x] `User` (no `password_digest` / sessions in UI; `password` + `password_confirmation` optional on edit via `Admin::UsersController#resource_params`)
 - [x] `Order`, `OrderItem` — models + migration; **`OrderDashboard`** / **`OrderItemDashboard`**; **`Admin::OrdersController`** / **`Admin::OrderItemsController`** (`scoped_resource` orders by `created_at` desc); routes `resources :orders`, `resources :order_items`. Storefront checkout/cart still **Phase D**.
 

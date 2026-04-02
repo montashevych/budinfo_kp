@@ -3,6 +3,8 @@
 require "test_helper"
 
 class PromotionsControllerTest < ActionDispatch::IntegrationTest
+  fixtures []
+
   def tiny_png_io
     StringIO.new(Base64.decode64(
       "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
