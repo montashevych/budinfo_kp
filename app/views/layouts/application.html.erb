@@ -18,10 +18,10 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen bg-stone-50 text-stone-900 antialiased">
+  <body class="flex min-h-screen flex-col bg-stone-50 text-stone-900 antialiased">
     <div id="cart-toast" class="pointer-events-none fixed right-4 top-16 z-[60] flex w-[min(100%-2rem,20rem)] flex-col gap-2 md:right-6 md:top-20" aria-live="polite"></div>
 
-    <div data-controller="mobile-menu">
+    <div class="flex flex-1 flex-col" data-controller="mobile-menu">
       <header class="border-b border-stone-200 bg-white">
         <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
           <%= link_to root_path, class: "text-lg font-semibold tracking-tight text-stone-800" do %>
@@ -103,9 +103,8 @@
           </div>
         </nav>
       </header>
-    </div>
 
-    <main class="mx-auto max-w-5xl px-4 py-10">
+    <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
       <% if notice.present? %>
         <p class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900" role="status"><%= notice %></p>
       <% end %>
@@ -114,6 +113,7 @@
       <% end %>
       <%= yield %>
     </main>
+    </div>
 
     <footer class="mt-auto border-t border-stone-200 bg-white py-8">
       <div class="mx-auto flex max-w-5xl flex-col gap-4 px-4 text-sm text-stone-500 md:flex-row md:items-center md:justify-between">

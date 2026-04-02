@@ -147,6 +147,8 @@ uk:
       increase: "Збільшити кількість"
       in_cart: "У кошику"
       max_stock: "Максимум на складі"
+      quantity_input: "Кількість у кошику"
+      quantity_input_hint: "Введіть кількість і натисніть Enter або клікніть поза полем"
   carts:
     title: "Кошик"
     heading: "Кошик"

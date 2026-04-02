@@ -147,6 +147,8 @@ ru:
       increase: "Увеличить количество"
       in_cart: "В корзине"
       max_stock: "Максимум на складе"
+      quantity_input: "Количество в корзине"
+      quantity_input_hint: "Введите количество и нажмите Enter или кликните вне поля"
   carts:
     title: "Корзина"
     heading: "Корзина"
