@@ -75,13 +75,17 @@ Admin (`app/views/admin/**`, Administrate) — **phase 2 optional**.
 
 **Pause:** Next session → **Phase B** (shell polish: logo treatment, nav hierarchy, footer columns, full-bleed sections if needed).
 
-### Phase B — Shell: header, footer, main width (1–2 days)
+### Phase B — Shell: header, footer, main width (1–2 days) ✅ **Done**
 
 - Rebuild header: logo area, primary nav, cart CTA (prominent), locale, auth — match Figma hierarchy; keep all existing links and Turbo behaviour.
 - Footer: multi-column links (delivery, contacts, catalog, products), copyright, optional short tagline.
 - Decide **full-bleed vs boxed** sections; use `w-full` sections with inner `mx-auto max-w-*` where the design shows edge-to-edge backgrounds.
 
 **Exit criteria:** Keyboard nav + mobile menu work; cart badge updates unchanged.
+
+**Implemented:** `app/views/shared/_header.html.erb` — sticky bar (`backdrop-blur`), brand + `layouts.application.tagline`, centered desktop nav with `.nav-link` / `.nav-link-active`, locale + auth + **`.nav-cart-cta`** cart button; mobile **brand-filled** cart chip + menu. `app/views/shared/_footer.html.erb` — four-column grid (brand blurb, shop, customers, account), bottom bar with copyright + `layouts.footer.rights`. New I18n under `layouts.application.tagline` and `layouts.footer.*` (`uk` / `ru`). Component classes in `application.css`: `.nav-link`, `.nav-cart-cta`, `.footer-heading`, `.footer-link`. `application.html.erb` renders partials; cart toast `top` offset adjusted for sticky header.
+
+**Pause:** Next → **Phase C** (home hero refinement + promotions carousel styling).
 
 ### Phase C — Home & promotions (1–2 days)
 

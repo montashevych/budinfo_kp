@@ -40,5 +40,6 @@ Defined in `@layer components` in `application.css`:
 - `.section-title` — page hero H1
 - `.section-intro` — supporting copy under hero
 - `.card` — elevated surface
+- **Phase B — shell:** `.nav-link`, `.nav-link-active`, `.nav-cart-cta`, `.footer-heading`, `.footer-link`
 
-See **`docs/FIGMA_UI_UX_PLAN.md`** for phased rollout (Phase B+).
+See **`docs/FIGMA_UI_UX_PLAN.md`** for phased rollout (Phase C+).

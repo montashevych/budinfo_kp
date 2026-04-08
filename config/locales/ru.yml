@@ -6,6 +6,13 @@ ru:
     application:
       title: "Budinfo"
       meta_description: "Интернет-магазин строительных материалов"
+      tagline: "Стройматериалы с доставкой"
+    footer:
+      blurb: "Сухие смеси, утеплители, пиломатериалы и инструмент. Оформление заказа онлайн."
+      shop_heading: "Магазин"
+      customers_heading: "Клиентам"
+      account_heading: "Учётная запись"
+      rights: "Все права защищены."
   meta:
     titles:
       home: "Главная"

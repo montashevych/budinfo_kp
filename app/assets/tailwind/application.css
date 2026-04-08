@@ -122,6 +122,27 @@
     @apply rounded-xl border border-border bg-surface-card shadow-card;
   }
 
+  /* Phase B — shell: header nav + cart CTA */
+  .nav-link {
+    @apply rounded-lg px-3 py-2 text-sm font-medium text-ink-muted transition hover:bg-surface-muted hover:text-ink;
+  }
+
+  .nav-link-active {
+    @apply bg-surface-muted text-ink;
+  }
+
+  .nav-cart-cta {
+    @apply inline-flex items-center gap-2 rounded-lg bg-brand px-3 py-2 text-sm font-semibold text-on-brand shadow-sm transition hover:bg-brand-hover focus-visible:outline-none;
+  }
+
+  .footer-heading {
+    @apply text-xs font-semibold uppercase tracking-wider text-ink-subtle;
+  }
+
+  .footer-link {
+    @apply text-sm font-medium text-ink-muted transition hover:text-brand;
+  }
+
   .pagy-nav-wrap nav.pagy.series-nav {
     @apply flex flex-wrap items-center justify-center gap-1;
   }
