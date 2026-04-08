@@ -37,6 +37,14 @@
     @apply font-sans antialiased;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .animate-cart-badge-pop,
+    .animate-cart-line-appear {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+
   :where(a):focus-visible,
   :where(button):focus-visible,
   :where(input):focus-visible,
@@ -141,6 +149,55 @@
 
   .footer-link {
     @apply text-sm font-medium text-ink-muted transition hover:text-brand;
+  }
+
+  /* Phases C–G — pages: headings, forms, breadcrumbs */
+  .section-heading-lg {
+    @apply text-3xl font-bold tracking-tight text-ink;
+  }
+
+  .section-heading-md {
+    @apply text-2xl font-bold tracking-tight text-ink;
+  }
+
+  .section-heading-sm {
+    @apply text-xl font-bold tracking-tight text-ink;
+  }
+
+  .section-lead {
+    @apply mt-2 text-ink-muted;
+  }
+
+  .section-lead-tight {
+    @apply mt-1 text-sm text-ink-muted;
+  }
+
+  .breadcrumb {
+    @apply text-sm text-ink-muted;
+  }
+
+  .breadcrumb :where(a) {
+    @apply transition hover:text-brand;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-ink;
+  }
+
+  .form-control {
+    @apply mt-1 w-full rounded-lg border border-border-strong bg-surface-card px-3 py-2 text-sm text-ink shadow-sm transition placeholder:text-ink-subtle focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20;
+  }
+
+  .form-error {
+    @apply mt-1 text-sm text-red-700;
+  }
+
+  .auth-panel {
+    @apply rounded-2xl border border-border bg-surface-card p-6 shadow-card sm:p-8;
+  }
+
+  .product-card {
+    @apply flex flex-col overflow-hidden rounded-xl border border-border bg-surface-card shadow-card transition-shadow duration-200 hover:shadow-card-hover;
   }
 
   .pagy-nav-wrap nav.pagy.series-nav {

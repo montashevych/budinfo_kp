@@ -8,7 +8,8 @@
 </section>
 
 <% if @home_promotions.any? %>
-  <div class="mt-12 w-full">
+  <div class="mt-14 w-full">
+    <h2 id="home-promotions-heading" class="section-heading-lg mb-6"><%= t("home.promotions.heading") %></h2>
     <%= render "home/promotions_carousel", promotions: @home_promotions %>
   </div>
 <% end %>

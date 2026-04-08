@@ -1,22 +1,23 @@
 <div class="mx-auto w-full max-w-md">
-  <% if alert = flash[:alert] %>
-    <p class="mb-5 inline-block rounded-lg bg-red-50 px-3 py-2 font-medium text-red-600" id="alert"><%= alert %></p>
-  <% end %>
+  <div class="auth-panel">
+    <% if alert = flash[:alert] %>
+      <p class="mb-5 inline-block rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-700" id="alert"><%= alert %></p>
+    <% end %>
 
-  <h1 class="text-3xl font-bold tracking-tight text-stone-900"><%= t("auth.passwords.edit_title") %></h1>
+    <h1 class="section-heading-lg"><%= t("auth.passwords.edit_title") %></h1>
 
-  <%= form_with url: password_path(params[:token]), method: :put, class: "mt-6 space-y-5" do |form| %>
-    <div>
-      <%= form.password_field :password, required: true, autocomplete: "new-password",
-            placeholder: t("auth.sessions.password_placeholder"), maxlength: 72,
-            class: "mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500" %>
-    </div>
-    <div>
-      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password",
-            placeholder: t("auth.registration.password_confirmation_placeholder"), maxlength: 72,
-            class: "mt-1 block w-full rounded-md border border-stone-300 px-3 py-2 shadow-sm focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-500" %>
-    </div>
-    <%= form.submit t("auth.passwords.submit_reset"),
-          class: "rounded-md bg-stone-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2" %>
-  <% end %>
+    <%= form_with url: password_path(params[:token]), method: :put, class: "mt-6 space-y-5" do |form| %>
+      <div>
+        <%= form.password_field :password, required: true, autocomplete: "new-password",
+              placeholder: t("auth.sessions.password_placeholder"), maxlength: 72,
+              class: "form-control mt-0" %>
+      </div>
+      <div>
+        <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password",
+              placeholder: t("auth.registration.password_confirmation_placeholder"), maxlength: 72,
+              class: "form-control mt-0" %>
+      </div>
+      <%= form.submit t("auth.passwords.submit_reset"), class: "btn-primary cursor-pointer border-0" %>
+    <% end %>
+  </div>
 </div>

@@ -1,9 +1,9 @@
 <section class="mt-10" aria-label="<%= t('categories.show.products_heading') %>">
   <% if products.any? %>
     <h2 class="sr-only"><%= t("categories.show.products_heading") %></h2>
-    <div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       <% products.each do |product| %>
-        <article class="flex flex-col overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+        <article class="product-card">
           <%= link_to product_path(product), class: "block flex-1", data: { turbo_frame: "_top" } do %>
             <% if product.images.attached? %>
               <%= image_tag product_variant_image_path(product.images.first, [400, 400]),
@@ -12,25 +12,25 @@
                     decoding: "async",
                     alt: product.display_title %>
             <% else %>
-              <div class="flex aspect-square items-center justify-center bg-stone-100 text-xs text-stone-500">
+              <div class="flex aspect-square items-center justify-center bg-surface-muted text-xs text-ink-subtle">
                 <%= t("products.no_image_short") %>
               </div>
             <% end %>
             <div class="p-4">
-              <h3 class="font-semibold text-stone-900"><%= product.display_title %></h3>
-              <p class="mt-1 text-sm font-medium text-stone-800"><%= product_price(product) %></p>
+              <h3 class="font-semibold text-ink"><%= product.display_title %></h3>
+              <p class="mt-1 text-sm font-bold text-brand"><%= product_price(product) %></p>
               <% unless product.stock.positive? %>
-                <p class="mt-1 text-xs text-amber-800"><%= t("products.out_of_stock") %></p>
+                <p class="mt-1 text-xs font-medium text-amber-800"><%= t("products.out_of_stock") %></p>
               <% end %>
             </div>
           <% end %>
-          <div class="mt-auto border-t border-stone-100 px-4 pb-4 pt-2">
+          <div class="mt-auto border-t border-border px-4 pb-4 pt-2">
             <%= render "products/add_to_cart", product: product %>
           </div>
         </article>
       <% end %>
     </div>
   <% else %>
-    <p class="text-stone-500"><%= t("products.grid_empty") %></p>
+    <p class="text-ink-muted"><%= t("products.grid_empty") %></p>
   <% end %>
 </section>

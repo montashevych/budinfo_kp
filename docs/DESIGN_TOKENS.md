@@ -41,5 +41,6 @@ Defined in `@layer components` in `application.css`:
 - `.section-intro` — supporting copy under hero
 - `.card` — elevated surface
 - **Phase B — shell:** `.nav-link`, `.nav-link-active`, `.nav-cart-cta`, `.footer-heading`, `.footer-link`
+- **Phases C–G — pages:** `.section-heading-lg`, `.section-heading-md`, `.section-heading-sm`, `.section-lead`, `.section-lead-tight`, `.breadcrumb`, `.form-label`, `.form-control`, `.form-error`, `.auth-panel`, `.product-card`
 
-See **`docs/FIGMA_UI_UX_PLAN.md`** for phased rollout (Phase C+).
+See **`docs/FIGMA_UI_UX_PLAN.md`** for status (MVP refresh complete; Administrate optional later).

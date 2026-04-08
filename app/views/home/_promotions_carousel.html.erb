@@ -4,7 +4,7 @@
 <% multi = promotions.size > 1 %>
 
 <%= tag.section(
-  class: "mb-10 w-full max-w-5xl outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-50",
+  class: "w-full max-w-6xl outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-surface-page",
   data: {
     controller: "promotion-carousel",
     promotion_carousel_interval_ms_value: 10_000
@@ -15,12 +15,10 @@
     labelledby: "home-promotions-heading"
   }
 ) do %>
-  <h2 id="home-promotions-heading" class="sr-only"><%= t("home.promotions.heading") %></h2>
-
   <p id="home-promotions-live" class="sr-only" aria-live="polite" aria-atomic="true" data-promotion-carousel-target="live"></p>
 
   <%# Fixed 3∶2 viewport (+ responsive min-height); arrows sit on the image with opacity. %>
-  <div class="relative overflow-hidden rounded-xl border border-stone-200 bg-stone-900 shadow-md ring-1 ring-black/5">
+  <div class="relative overflow-hidden rounded-2xl border border-border bg-ink shadow-card ring-1 ring-black/5">
     <% if multi %>
       <div
         class="pointer-events-none absolute inset-0 z-30 flex items-center justify-between px-1 sm:px-2"
@@ -28,7 +26,7 @@
         aria-label="<%= t("home.promotions.controls_label") %>">
         <button
           type="button"
-          class="pointer-events-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/35 text-stone-900 shadow-sm backdrop-blur-sm transition hover:border-white/50 hover:bg-white/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12"
+          class="pointer-events-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/35 bg-white/40 text-ink shadow-sm backdrop-blur-sm transition hover:border-white/55 hover:bg-white/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-brand sm:h-12 sm:w-12"
           data-promotion-carousel-target="prev"
           data-action="click->promotion-carousel#prev"
           aria-label="<%= t("home.promotions.prev_slide") %>">
@@ -36,7 +34,7 @@
         </button>
         <button
           type="button"
-          class="pointer-events-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/35 text-stone-900 shadow-sm backdrop-blur-sm transition hover:border-white/50 hover:bg-white/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:h-12 sm:w-12"
+          class="pointer-events-auto inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/35 bg-white/40 text-ink shadow-sm backdrop-blur-sm transition hover:border-white/55 hover:bg-white/65 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-on-brand sm:h-12 sm:w-12"
           data-promotion-carousel-target="next"
           data-action="click->promotion-carousel#next"
           aria-label="<%= t("home.promotions.next_slide") %>">
@@ -55,8 +53,8 @@
         **(multi && index.positive? ? { aria: { hidden: true } } : {})
       ) do %>
         <%= link_to promotion_path(promo),
-              class: "group relative block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white" do %>
-          <div class="home-promo-media-box bg-stone-800">
+              class: "group relative block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand" do %>
+          <div class="home-promo-media-box bg-ink">
             <% if promo.image.attached? %>
               <%= image_tag product_variant_image_path(promo.image, [1200, 800]),
                     class: "absolute inset-0 z-0 h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.03]",
@@ -64,22 +62,22 @@
                     decoding: "async",
                     alt: "" %>
             <% else %>
-              <div class="absolute inset-0 flex items-center justify-center bg-stone-700 text-sm text-stone-400">
+              <div class="absolute inset-0 flex items-center justify-center bg-surface-muted text-sm text-ink-subtle">
                 <%= t("products.no_image_short") %>
               </div>
             <% end %>
 
             <%# Bottom caption: semi-opaque frame over the image %>
-            <div class="absolute inset-x-0 bottom-0 z-10 border-t border-white/15 bg-stone-950/60 px-4 py-3 backdrop-blur-md sm:px-5 sm:py-4">
-              <p class="text-base font-semibold leading-snug tracking-tight text-white drop-shadow-sm line-clamp-2 sm:text-lg">
+            <div class="absolute inset-x-0 bottom-0 z-10 border-t border-white/15 bg-ink/65 px-4 py-3 backdrop-blur-md sm:px-5 sm:py-4">
+              <p class="text-base font-semibold leading-snug tracking-tight text-on-brand drop-shadow-sm line-clamp-2 sm:text-lg">
                 <%= promo.title %>
               </p>
               <% if promo.teaser.present? %>
-                <p class="mt-1.5 text-sm leading-relaxed text-white/90 line-clamp-2 drop-shadow-sm">
+                <p class="mt-1.5 text-sm leading-relaxed text-on-brand/90 line-clamp-2 drop-shadow-sm">
                   <%= promo.teaser %>
                 </p>
               <% end %>
-              <p class="mt-2.5 text-sm font-medium text-white underline decoration-white/70 underline-offset-4 group-hover:decoration-white">
+              <p class="mt-2.5 text-sm font-semibold text-on-brand underline decoration-on-brand/60 underline-offset-4 group-hover:decoration-on-brand">
                 <%= t("home.promotions.read_more") %>
               </p>
             </div>

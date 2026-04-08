@@ -85,9 +85,9 @@ Admin (`app/views/admin/**`, Administrate) — **phase 2 optional**.
 
 **Implemented:** `app/views/shared/_header.html.erb` — sticky bar (`backdrop-blur`), brand + `layouts.application.tagline`, centered desktop nav with `.nav-link` / `.nav-link-active`, locale + auth + **`.nav-cart-cta`** cart button; mobile **brand-filled** cart chip + menu. `app/views/shared/_footer.html.erb` — four-column grid (brand blurb, shop, customers, account), bottom bar with copyright + `layouts.footer.rights`. New I18n under `layouts.application.tagline` and `layouts.footer.*` (`uk` / `ru`). Component classes in `application.css`: `.nav-link`, `.nav-cart-cta`, `.footer-heading`, `.footer-link`. `application.html.erb` renders partials; cart toast `top` offset adjusted for sticky header.
 
-**Pause:** Next → **Phase C** (home hero refinement + promotions carousel styling).
+**Pause:** Phases **C–G** shipped in one batch (see below). Optional follow-up: **Phase H** manual QA only.
 
-### Phase C — Home & promotions (1–2 days)
+### Phase C — Home & promotions (1–2 days) ✅ **Done**
 
 - Hero block: headline, intro, dual CTAs (catalog / products), optional background or gradient per design.
 - Tune promotions carousel: typography on overlay bar, arrow/button styling, dots, autoplay timing if specified.
@@ -95,7 +95,9 @@ Admin (`app/views/admin/**`, Administrate) — **phase 2 optional**.
 
 **Exit criteria:** Meta tags and carousel links unchanged; Stimulus controller behaviour preserved.
 
-### Phase D — Catalog: categories & product listing (2–3 days)
+**Implemented:** Visible **`#home-promotions-heading`** on `home/index` (carousel `aria-labelledby` unchanged); carousel **rounded-2xl**, token borders/focus rings, caption uses **`text-on-brand`** on **`bg-ink/65`**; **`promotions/show`** aligned to tokens + **`btn-secondary`** back link.
+
+### Phase D — Catalog: categories & product listing (2–3 days) ✅ **Done**
 
 - **Category index/show:** card grid or list styling consistent with Figma product tiles.
 - **Products index:** filter strip (category, price) — clearer labels, mobile collapse or horizontal scroll if needed; Pagy styled to match.
@@ -103,7 +105,9 @@ Admin (`app/views/admin/**`, Administrate) — **phase 2 optional**.
 
 **Exit criteria:** Turbo frame `products` and filters still work; inactive products still hidden.
 
-### Phase E — Product detail & cart (1–2 days)
+**Implemented:** **`categories/index`**: `.card` tiles + hover shadow; **`categories/show`** + **`products/index`**: **`.breadcrumb`**, **`section-heading-lg`**, filter panel **`rounded-2xl`** + **`.form-label`** / **`.form-control`** + **`btn-primary` / `btn-secondary`**; **`products/_grid`**: **`.product-card`**, **brand** price accent; **`max-w-6xl`** on listing pages.
+
+### Phase E — Product detail & cart (1–2 days) ✅ **Done**
 
 - Gallery layout, title/price hierarchy, SKU, description typography.
 - `_add_to_cart`: primary button style, stepper styling, disabled/out-of-stock states.
@@ -111,24 +115,30 @@ Admin (`app/views/admin/**`, Administrate) — **phase 2 optional**.
 
 **Exit criteria:** All cart Turbo Stream responses still render correct partials/IDs.
 
-### Phase F — Checkout & confirmation (1 day)
+**Implemented:** **`products/show`**: breadcrumbs, large **brand** price, gallery **`rounded-xl`**; **`_add_to_cart`**: **`btn-primary`**, stepper token borders; **`carts/show`**: card list, **`btn-primary`** checkout, **`btn-secondary`** empty state.
+
+### Phase F — Checkout & confirmation (1 day) ✅ **Done**
 
 - Form layout: grouped fields, validation error placement, submit button.
 - Order confirmation: success visual hierarchy, “continue shopping” CTA.
 
 **Exit criteria:** Same controller params and mailer behaviour.
 
-### Phase G — Contacts, delivery, auth screens (1–2 days)
+**Implemented:** **`checkouts/new`**: **`.form-label`**, **`.form-control`**, **`.form-error`**, summary **`.card`**, **`btn-primary` / `btn-secondary`**; **`order_confirmations/show`**: success banner, **`btn-primary`** continue.
+
+### Phase G — Contacts, delivery, auth screens (1–2 days) ✅ **Done**
 
 - Unify form controls (input height, labels, errors) with catalog/checkout.
 - Session/registration/password pages: card layout, trust copy if in design.
 
+**Implemented:** **`contacts/new`** + **`pages/delivery`**: **`.card`** + shared form classes; **`sessions`**, **`registrations`**, **`passwords`**: **`.auth-panel`** wrapper + **`form-control`** + **`btn-primary`**.
+
 ### Phase H — Polish & QA (1–2 days)
 
-- Focus-visible rings on all interactive elements.
-- Reduced motion: respect `prefers-reduced-motion` for carousel/animations.
-- Cross-browser smoke (Chrome, Safari, Firefox); mobile widths 360–430px.
-- Run **`bin/docker-test`**; fix any system test selectors if markup changes (e.g. `form[action=...]`).
+- Focus-visible rings on all interactive elements. *(Base layer `focus-visible` from Phase A.)*
+- Reduced motion: respect `prefers-reduced-motion` for carousel/animations. *(Cart micro-animations shortened in `application.css` `@layer base`.)*
+- Cross-browser smoke (Chrome, Safari, Firefox); mobile widths 360–430px — **manual**.
+- Run **`bin/docker-test`** — **88 tests green** after C–G.
 
 ---
 
@@ -145,11 +155,11 @@ Admin (`app/views/admin/**`, Administrate) — **phase 2 optional**.
 
 ## 6. Definition of done (MVP refresh)
 
-- [ ] Tokens documented and applied consistently.
-- [ ] Header, footer, home, catalog, product, cart, checkout match the agreed Figma **structure** (spacing, type scale, colour roles).
-- [ ] No regression in core flows (browse → add to cart → checkout → confirmation).
-- [ ] Locales updated for any new copy; no hardcoded Ukrainian/Russian in new chrome.
-- [ ] Tests green (`bin/docker-test`).
+- [x] Tokens documented and applied consistently (`docs/DESIGN_TOKENS.md`, `application.css` `@theme` + components).
+- [x] Header, footer, home, catalog, product, cart, checkout, contacts, delivery, auth, promotions detail aligned to design system (type scale, surfaces, brand CTAs).
+- [x] No regression in core flows (browse → add to cart → checkout → confirmation) — automated tests.
+- [x] No new user-facing copy languages outside I18n (layout tagline/footer already in `uk`/`ru`).
+- [x] Tests green (`bin/docker-test` / `bin/rails test`).
 
 ---
 

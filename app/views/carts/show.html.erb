@@ -1,43 +1,43 @@
 <% content_for :title, t("carts.title") %>
 
 <div class="max-w-3xl">
-  <h1 class="text-2xl font-semibold tracking-tight text-stone-900"><%= t("carts.heading") %></h1>
+  <h1 class="section-heading-md"><%= t("carts.heading") %></h1>
 
   <% if @line_items.empty? %>
-    <p class="mt-6 text-stone-600"><%= t("carts.empty") %></p>
+    <p class="mt-6 text-ink-muted"><%= t("carts.empty") %></p>
     <p class="mt-4">
-      <%= link_to t("carts.continue_shopping"), products_path, class: "text-sm font-medium text-stone-900 underline" %>
+      <%= link_to t("carts.continue_shopping"), products_path, class: "btn-secondary inline-flex" %>
     </p>
   <% else %>
-    <ul class="mt-8 divide-y divide-stone-200 rounded-lg border border-stone-200 bg-white">
+    <ul class="mt-8 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface-card shadow-card">
       <% @line_items.each do |line| %>
         <li class="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div class="min-w-0 flex-1">
-            <%= link_to line.product.display_title, product_path(line.product), class: "font-medium text-stone-900 hover:underline" %>
-            <p class="mt-1 text-sm text-stone-600"><%= product_price(line.product) %> × <%= line.quantity %></p>
+            <%= link_to line.product.display_title, product_path(line.product), class: "font-semibold text-ink transition hover:text-brand" %>
+            <p class="mt-1 text-sm text-ink-muted"><%= product_price(line.product) %> × <%= line.quantity %></p>
           </div>
           <div class="flex flex-wrap items-center gap-3">
             <%= form_with url: update_line_cart_path, method: :patch, class: "flex items-center gap-2" do |f| %>
               <%= hidden_field_tag :product_id, line.product.id %>
               <%= label_tag "quantity_#{line.product.id}", t("carts.quantity"), class: "sr-only" %>
               <%= number_field_tag :quantity, line.quantity, min: 1, max: line.product.stock, id: "quantity_#{line.product.id}",
-                    class: "w-20 rounded-md border border-stone-300 px-2 py-1 text-sm" %>
-              <%= f.submit t("carts.update"), class: "rounded-md border border-stone-300 bg-white px-3 py-1 text-sm font-medium text-stone-800 hover:bg-stone-50" %>
+                    class: "form-control mt-0 w-20 py-1.5" %>
+              <%= f.submit t("carts.update"), class: "rounded-lg border border-border-strong bg-surface-muted px-3 py-1.5 text-sm font-medium text-ink transition hover:bg-surface-page" %>
             <% end %>
             <%= button_to t("carts.remove"), remove_line_cart_path(product_id: line.product.id),
                   method: :delete,
-                  class: "rounded-md border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-900 hover:bg-red-100" %>
+                  class: "rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-900 transition hover:bg-red-100" %>
           </div>
         </li>
       <% end %>
     </ul>
 
-    <p class="mt-8 text-lg font-semibold text-stone-900">
+    <p class="mt-8 text-lg font-bold text-ink">
       <%= t("carts.total") %>: <%= number_to_currency(current_cart.total, unit: "₴", format: "%n %u", separator: ",", delimiter: " ") %>
     </p>
 
     <p class="mt-6">
-      <%= link_to t("carts.checkout_cta"), new_checkout_path, class: "inline-flex rounded-md border border-stone-800 bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800" %>
+      <%= link_to t("carts.checkout_cta"), new_checkout_path, class: "btn-primary inline-flex" %>
     </p>
   <% end %>
 </div>
