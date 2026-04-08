@@ -17,4 +17,17 @@ class OrderTest < ActiveSupport::TestCase
     order = Order.new(email: "", total: 0)
     assert_not order.valid?
   end
+
+  test "line item unit_price stays fixed when product price changes later" do
+    product = products(:bolt)
+    snapshot = product.price
+    order = Order.create!(email: "snap@example.com", total: 0)
+    order.order_items.create!(product: product, quantity: 1, unit_price: snapshot)
+    order.recalculate_total!
+    product.update!(price: snapshot + 50)
+    order.reload
+    li = order.order_items.find_by(product: product)
+    assert_equal snapshot, li.unit_price
+    assert_equal snapshot, order.total
+  end
 end
