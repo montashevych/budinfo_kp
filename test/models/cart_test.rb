@@ -27,6 +27,35 @@ class CartTest < ActiveSupport::TestCase
     assert_equal BigDecimal("7.0"), cart.total
   end
 
+  test "item_count ignores missing product ids prunes cache" do
+    key = "cart/t/ghost"
+    Rails.cache.write(key, { "999999001" => 45 }, expires_in: Cart::CACHE_TTL)
+    cart = Cart.new(key)
+    assert_equal 0, cart.item_count
+    assert_predicate cart, :empty?
+    assert_nil Rails.cache.read(key)
+  end
+
+  test "item_count ignores inactive products and prunes cache" do
+    key = "cart/t/inactive_only"
+    hidden = products(:hidden)
+    Rails.cache.write(key, { hidden.id.to_s => 3 }, expires_in: Cart::CACHE_TTL)
+    cart = Cart.new(key)
+    assert_equal 0, cart.item_count
+    assert_predicate cart, :empty?
+    assert_nil Rails.cache.read(key)
+  end
+
+  test "item_count drops stale ids keeps active lines" do
+    key = "cart/t/mixed"
+    bolt = products(:bolt)
+    Rails.cache.write(key, { bolt.id.to_s => 2, "999888777" => 100 }, expires_in: Cart::CACHE_TTL)
+    cart = Cart.new(key)
+    assert_equal 2, cart.item_count
+    assert_equal({ bolt.id.to_s => 2 }, Rails.cache.read(key))
+    assert_equal 1, cart.line_items.size
+  end
+
   test "merge_guest_into_user combines quantities and drops guest key" do
     guest_key = Cart.cache_key_guest("tok")
     user_key = Cart.cache_key_user(users(:one).id)

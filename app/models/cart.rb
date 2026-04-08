@@ -51,25 +51,19 @@ class Cart
   end
 
   def line_items
-    data = raw
-    return [] if data.empty?
-
-    ids = data.keys.map(&:to_i)
-    products = Product.active.with_attached_images.where(id: ids).index_by(&:id)
-    data.filter_map do |pid, qty|
-      p = products[pid.to_i]
-      next unless p
-
-      Line.new(product: p, quantity: qty)
-    end.sort_by { |li| li.product.title_uk }
+    @line_items ||= build_line_items
   end
 
   def item_count
-    raw.values.sum
+    qty_by_active_id.values.sum
   end
 
   def empty?
-    raw.empty?
+    qty_by_active_id.empty?
+  end
+
+  def quantity_for(product_id)
+    qty_by_active_id[product_id.to_i] || 0
   end
 
   def total
@@ -123,12 +117,55 @@ class Cart
   end
 
   def clear
+    reset_derived!
     Rails.cache.delete(@storage_key)
   end
 
   private
 
+  def qty_by_active_id
+    @qty_by_active_id ||= build_qty_by_active_id
+  end
+
+  def reset_derived!
+    @line_items = nil
+    @qty_by_active_id = nil
+  end
+
+  def build_qty_by_active_id
+    data = raw
+    return {} if data.empty?
+
+    ids = data.keys.map(&:to_i)
+    active_ids = Product.active.where(id: ids).pluck(:id).to_set
+    result = {}
+    data.each do |pid, qty|
+      id = pid.to_i
+      result[id] = qty.to_i if active_ids.include?(id)
+    end
+
+    pruned = result.transform_keys(&:to_s)
+    normalized = data.stringify_keys
+    persist(pruned) if pruned != normalized
+
+    result
+  end
+
+  def build_line_items
+    qty_map = qty_by_active_id
+    return [] if qty_map.empty?
+
+    products = Product.active.with_attached_images.where(id: qty_map.keys).index_by(&:id)
+    qty_map.filter_map do |pid, qty|
+      p = products[pid]
+      next unless p
+
+      Line.new(product: p, quantity: qty)
+    end.sort_by { |li| li.product.title_uk }
+  end
+
   def persist(data)
+    reset_derived!
     if data.empty?
       Rails.cache.delete(@storage_key)
     else

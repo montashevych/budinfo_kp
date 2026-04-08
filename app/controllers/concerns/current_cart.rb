@@ -12,7 +12,7 @@ module CurrentCart
   end
 
   def cart_quantity_for(product)
-    current_cart.raw[product.id.to_s].to_i
+    current_cart.quantity_for(product.id)
   end
 
   private
