@@ -17,8 +17,10 @@
 ) do %>
   <p id="home-promotions-live" class="sr-only" aria-live="polite" aria-atomic="true" data-promotion-carousel-target="live"></p>
 
-  <%# Fixed 3∶2 viewport (+ responsive min-height); arrows sit on the image with opacity. %>
-  <div class="relative overflow-hidden rounded-2xl border border-border bg-ink shadow-card ring-1 ring-black/5">
+  <%# Fixed 3∶2 viewport; swipe/drag on the image changes slides (see promotion-carousel). %>
+  <div
+    class="relative overflow-hidden rounded-2xl border border-border bg-ink shadow-card ring-1 ring-black/5 [touch-action:none]"
+    data-promotion-carousel-target="viewport">
     <% if multi %>
       <div
         class="pointer-events-none absolute inset-0 z-30 flex items-center justify-between px-1 sm:px-2"
