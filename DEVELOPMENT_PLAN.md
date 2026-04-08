@@ -368,6 +368,50 @@ Register resources:
 
 ## Deployment
 
+### Current readiness & next steps
+
+This subsection summarizes **what the repo already provides** for going live, **what is still configuration work**, and a **concrete order of operations**. Phases **A–E** in this document are largely implemented; **Phase F** (payments, Telegram) remains deferred per [PLAN.md](./PLAN.md).
+
+#### Repository snapshot
+
+| Area | Status |
+|------|--------|
+| **Storefront** | Catalog (filters, Turbo frame), product detail, cart (cache + long-lived guest cookie), checkout, order confirmation, guest and logged-in flows. |
+| **Admin** | Administrate: categories, products (Active Storage images), orders, users, home promotions; public `/promotions/:slug`. |
+| **Mail** | Order confirmation + optional shop alert; production SMTP via env (`SMTP_*`, `MAILER_HOST`, `MAILER_PROTOCOL`). |
+| **SEO & errors** | Meta tags, sitemap, robots, localized `/404` and `/500`; static English fallbacks: `public/fallback_404.html`, `public/fallback_500.html` (for CDN/nginx — do not use `404.html` on URL `/404`, see Phase E.1). |
+| **Security (prod)** | `assume_ssl` / `force_ssl` (env toggles), Rack::Attack on POST `/checkout` and `/contacts`. |
+| **Tests & CI** | Minitest suite; GitHub Actions: Brakeman, bundler-audit, importmap audit, RuboCop, `bin/rails test`, `test:system`. |
+| **Containers** | `Dockerfile` (production build, assets, Thruster); dev via `docker-compose.yml` / `Dockerfile.dev`. |
+| **Kamal** | `config/deploy.yml` is a **template** (placeholder hosts/registry) — not production-ready until you replace servers, registry, proxy, and `.kamal/secrets`. |
+| **Deferred** | Payment gateways and Telegram bot (Phase F) — design orders accordingly before adding providers. |
+
+#### Gaps before a real production cutover
+
+| Topic | Notes |
+|-------|--------|
+| **PostgreSQL (multi-DB)** | `config/database.yml` production defines **primary**, **cache**, **queue**, and **cable** databases. Create all four (or equivalent URLs) and run **all** required migrations in release — not only `db:migrate` for primary. Single-URL PaaS Postgres may need env alignment with Rails multi-DB docs. |
+| **Active Storage** | Production defaults to **`:local`**; Kamal template mounts `app_storage`. For multiple app instances or ephemeral disks, switch to **S3/R2** in `config/storage.yml` and env. |
+| **`config.hosts`** | Set real hostnames in `config/environments/production.rb` (or env-driven allowlist) to avoid `HostAuthorization` errors. |
+| **Secrets / env** | At minimum: `RAILS_MASTER_KEY`, `SECRET_KEY_BASE` (if required by host), database credentials or `DATABASE_URL`, `MAILER_*` and `SMTP_*` for real mail, production admin credentials. See `.env.example` and README *Production security*. |
+| **Seeds** | `db:seed` is appropriate for **dev/staging**. In **production**, prefer creating an admin via console or a controlled task — avoid default seed passwords and optional network image fetches unless intended. |
+| **Static assets** | Either serve via the app (e.g. Thruster / `RAILS_SERVE_STATIC_FILES`) or offload `public/` to nginx/CDN — match your host’s recommendation. |
+| **Background jobs** | Mail uses `deliver_later`; Solid Queue uses the **queue** DB. Ensure queue migrations ran and the host runs workers or **SOLID_QUEUE_IN_PUMA** (as in Kamal template) consistently with your topology. |
+
+#### Recommended sequence
+
+1. **Choose one path first:** managed **PaaS** (Render, Fly.io, Railway, etc.) for speed, or **VPS + Kamal** for full control — avoid splitting attention on the first deploy.
+2. **Staging:** New app + DB, set `config.hosts`, mail env (or accept no outbound mail initially), run migrations for **all** DB roles, deploy (e.g. repo `Dockerfile`), smoke: `/`, product, cart → checkout, `/admin`, `/up`, `/sitemap.xml`.
+3. **Hardening:** Production admin user, rotate any seed-related passwords, confirm job processing for mail.
+4. **Production:** DNS, TLS, backups on Postgres, optional error tracking (Sentry, AppSignal, etc.).
+5. **Product:** When you need online payment, plan **Phase F** (provider, webhooks, idempotent order updates).
+
+#### Should you try to deploy?
+
+**Yes — on staging first.** The application is **feature-complete for a non-payment storefront**; remaining work is mostly **host-specific configuration**. A first deploy on a PaaS free/staging tier or a single VPS surfaces DB, env, and TLS issues early without committing to production DNS.
+
+---
+
 ### 1. Production principles
 
 | Topic | Guidance |

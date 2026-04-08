@@ -72,4 +72,4 @@ See **`docs/HOME_PROMOTIONS_PLAN.md`** for the full feature checklist.
 
 ## Further planning
 
-See **`DEVELOPMENT_PLAN.md`** for phases, schema notes, and operational details.
+See **`DEVELOPMENT_PLAN.md`** for phases, schema notes, and operational details. For **deploy readiness** (what is done vs what to configure), **multi-DB / Active Storage / hosts**, and a **recommended staging-first sequence**, read the **Deployment → Current readiness & next steps** section there.
