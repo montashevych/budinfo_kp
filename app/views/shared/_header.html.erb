@@ -45,28 +45,42 @@
         <% end %>
       </div>
 
-      <%# Mobile: УК / RU → menu → cart → (spacer) → logo %>
-      <div class="flex w-full min-w-0 items-center justify-between gap-2 md:hidden">
-        <div class="flex shrink-0 items-center gap-1">
-          <%= link_to "УК", set_locale_path(locale: :uk), class: "#{locale_link_class(:uk)} text-xs" %>
-          <%= link_to "RU", set_locale_path(locale: :ru), class: "#{locale_link_class(:ru)} text-xs" %>
-          <button type="button" class="rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="openButton" data-action="click->mobile-menu#open" aria-label="<%= t("nav.menu_toggle") %>">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-          <button type="button" class="hidden rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="closeButton" data-action="click->mobile-menu#close" aria-label="<%= t("nav.menu_close") %>">
-            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
+      <%# Mobile: text logo → UA/RU · centered PNG · cart → burger %>
+      <% mobile_home_reload = current_page?(root_path) ? "event.preventDefault(); window.location.reload(); return false;" : nil %>
+      <div class="relative flex min-h-10 w-full items-center md:hidden">
+        <div class="relative z-10 flex min-w-0 max-w-[min(100%,calc(50%-2.75rem))] flex-1 items-center gap-2 pr-2 sm:max-w-[calc(50%-3rem)]">
+          <%= link_to root_path, class: "group min-w-0 shrink", data: { turbo: false }, onclick: mobile_home_reload, aria: { label: t("layouts.application.title") } do %>
+            <span class="block truncate text-sm font-bold tracking-tight text-ink transition group-hover:text-brand sm:text-base"><%= t("layouts.application.title") %></span>
+          <% end %>
+          <div class="flex shrink-0 items-center gap-1 border-l border-border pl-2">
+            <%= link_to "УК", set_locale_path(locale: :uk), class: "#{locale_link_class(:uk)} text-xs" %>
+            <%= link_to "RU", set_locale_path(locale: :ru), class: "#{locale_link_class(:ru)} text-xs" %>
+          </div>
+        </div>
+
+        <div class="pointer-events-none absolute inset-x-0 top-1/2 flex -translate-y-1/2 justify-center">
+          <%= link_to root_path,
+                class: "pointer-events-auto rounded-full shadow-sm ring-1 ring-border transition hover:ring-brand/40 hover:opacity-90",
+                data: { turbo: false },
+                onclick: mobile_home_reload,
+                aria: { label: t("layouts.application.title") } do %>
+            <%= image_tag "/icon.png", alt: "", class: "h-9 w-9 rounded-full object-cover", width: 36, height: 36, decoding: "async" %>
+          <% end %>
+        </div>
+
+        <div class="relative z-10 flex shrink-0 items-center gap-1">
           <%= link_to cart_path,
                 class: "relative inline-flex h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-on-brand shadow-sm transition hover:bg-brand-hover",
                 aria: { label: t("nav.cart") } do %>
             <%= render "shared/cart_icon_svg", extra_class: "h-5 w-5 shrink-0" %>
             <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-bar", count: cart_item_count, variant: :overlay %>
           <% end %>
-        </div>
-        <div class="min-w-0 max-w-[58%] text-right">
-          <%= link_to root_path, class: "group block min-w-0" do %>
-            <span class="block truncate text-base font-bold tracking-tight text-ink transition group-hover:text-brand"><%= t("layouts.application.title") %></span>
-          <% end %>
+          <button type="button" class="rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="openButton" data-action="click->mobile-menu#open" aria-label="<%= t("nav.menu_toggle") %>">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <button type="button" class="hidden rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="closeButton" data-action="click->mobile-menu#close" aria-label="<%= t("nav.menu_close") %>">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
         </div>
       </div>
     </div>
