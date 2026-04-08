@@ -6,3 +6,9 @@
     <%= link_to t("nav.products"), products_path, class: "font-medium text-stone-900 underline hover:text-stone-600" %>
   </p>
 </div>
+
+<% if @home_promotions.any? %>
+  <div class="mt-12 w-full">
+    <%= render "home/promotions_carousel", promotions: @home_promotions %>
+  </div>
+<% end %>

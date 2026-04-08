@@ -35,6 +35,14 @@ ru:
   home:
     heading: "Строительные материалы"
     intro: "Сухие смеси, утеплители, пиломатериалы и инструмент. Категории и товары наполняет администратор магазина."
+    promotions:
+      heading: "Акции и предложения"
+      region_label: "Акции и предложения"
+      carousel_role: "карусель"
+      controls_label: "Управление каруселью"
+      prev_slide: "Предыдущий слайд"
+      next_slide: "Следующий слайд"
+      read_more: "Подробнее"
   nav:
     main_navigation: "Основная навигация"
     home: "Главная"
@@ -147,6 +155,8 @@ ru:
       increase: "Увеличить количество"
       in_cart: "В корзине"
       max_stock: "Максимум на складе"
+      quantity_input: "Количество в корзине"
+      quantity_input_hint: "Введите количество и нажмите Enter или кликните вне поля"
   carts:
     title: "Корзина"
     heading: "Корзина"
@@ -186,6 +196,15 @@ ru:
     shipping: "Доставка"
     continue: "На главную"
   activerecord:
+    attributes:
+      home_promotion:
+        title: Заголовок
+        teaser: Краткий текст (карусель)
+        slug: "Слаг URL (адрес /promotions/…; латиница, дефисы)"
+        body: Полный текст (страница акции)
+        position: Порядок
+        active: Активна
+        image: Изображение
     enums:
       order:
         status:
@@ -195,6 +214,11 @@ ru:
           cancelled: Отменён
     errors:
       models:
+        home_promotion:
+          attributes:
+            image:
+              invalid_type: "разрешены только изображения JPEG, PNG, WebP или GIF"
+              too_large: "размер файла не более 5 МБ"
         product:
           attributes:
             images:

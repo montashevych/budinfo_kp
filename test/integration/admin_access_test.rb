@@ -24,4 +24,28 @@ class AdminAccessTest < ActionDispatch::IntegrationTest
     get admin_category_url(categories(:root))
     assert_response :success
   end
+
+  test "customer cannot open home promotions admin" do
+    sign_in_as(users(:one))
+    get admin_home_promotions_url
+    assert_redirected_to root_url
+  end
+
+  test "admin can open home promotions index" do
+    sign_in_as(users(:admin))
+    get admin_home_promotions_url
+    assert_response :success
+  end
+
+  test "admin home promotion show resolves slug from to_param" do
+    promo = HomePromotion.create!(
+      title: "Admin slug lookup",
+      slug: "admin-slug-lookup",
+      active: false,
+      position: 0
+    )
+    sign_in_as(users(:admin))
+    get admin_home_promotion_url(promo)
+    assert_response :success
+  end
 end
