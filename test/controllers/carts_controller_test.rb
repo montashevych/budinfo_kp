@@ -39,6 +39,9 @@ class CartsControllerTest < ActionDispatch::IntegrationTest
     assert_includes response.content_type, "turbo-stream"
     assert_match "cart-nav-badge-desktop", response.body
     assert_match "add-to-cart-product-#{bolt.id}", response.body
+    assert_match 'action="update"', response.body
+    assert_match 'target="cart-page-body"', response.body
+    assert_match I18n.t("carts.updated", locale: :uk), response.body
   end
 
   test "add inactive product as turbo_stream appends error toast" do

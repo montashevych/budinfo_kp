@@ -1,0 +1,82 @@
+<%# locals: (line:) %>
+<% product = line.product %>
+<% qty = line.quantity %>
+<% stream_form = { data: { turbo_stream: true }, class: "contents" } %>
+<% at_max = qty >= product.stock %>
+<li id="cart-line-<%= product.id %>" class="p-4 sm:p-5">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+    <div class="shrink-0 self-start sm:self-center" aria-hidden="true">
+      <% if product.images.attached? %>
+        <%= image_tag product_variant_image_path(product.images.first, [160, 160]),
+              class: "h-20 w-20 rounded-xl border border-border object-cover sm:h-24 sm:w-24",
+              loading: "lazy",
+              decoding: "async",
+              alt: "" %>
+      <% else %>
+        <div class="flex h-20 w-20 items-center justify-center rounded-xl border border-dashed border-border bg-surface-muted text-center text-[0.65rem] font-medium leading-tight text-ink-subtle sm:h-24 sm:w-24">
+          <%= t("products.no_image_short") %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="min-w-0 flex-1">
+      <%= link_to product.display_title, product_path(product), class: "text-base font-semibold text-ink transition hover:text-brand sm:text-lg", data: { turbo_frame: "_top" } %>
+      <p class="mt-1 text-sm text-ink-muted">
+        <%= t("carts.unit_price") %>: <%= product_price(product) %>
+      </p>
+      <p class="mt-1 text-sm font-semibold text-ink">
+        <%= t("carts.line_subtotal") %>:
+        <%= number_to_currency(qty * product.price, unit: "₴", format: "%n %u", separator: ",", delimiter: " ") %>
+        <span class="font-normal text-ink-subtle">(<%= qty %> × <%= product_price(product) %>)</span>
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3 sm:shrink-0 sm:justify-end">
+      <div class="flex w-full max-w-[11rem] items-stretch gap-1 rounded-xl border border-border-strong bg-surface-muted p-1 shadow-inner sm:w-auto sm:max-w-none">
+        <%= button_to update_line_cart_path,
+              method: :patch,
+              params: { product_id: product.id, quantity: [qty - 1, 0].max },
+              form: stream_form,
+              class: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-card text-lg font-medium leading-none text-ink shadow-sm transition hover:bg-surface-muted",
+              aria: { label: t("products.cart.decrease") } do %>
+          −
+        <% end %>
+
+        <%= form_with url: update_line_cart_path, method: :patch,
+              html: { class: "flex min-w-0 flex-1 items-center justify-center", id: "cart-page-qty-form-#{product.id}" },
+              data: { turbo_stream: true } do %>
+          <%= hidden_field_tag :product_id, product.id %>
+          <%= number_field_tag :quantity, qty,
+                min: 0,
+                max: product.stock,
+                inputmode: "numeric",
+                class: "h-10 w-full min-w-[2.5rem] max-w-[4rem] rounded-lg border border-border bg-surface-card py-0 text-center text-sm font-semibold tabular-nums leading-none text-ink shadow-sm [appearance:textfield] focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
+                aria: { label: t("carts.quantity"), describedby: "cart-qty-hint" },
+                data: {
+                  controller: "cart-qty-input",
+                  cart_qty_input_max_value: product.stock,
+                  action: "keydown->cart-qty-input#submitOnEnter blur->cart-qty-input#commitOnBlur"
+                } %>
+        <% end %>
+
+        <% if at_max %>
+          <span class="flex h-10 w-10 shrink-0 cursor-not-allowed items-center justify-center rounded-lg border border-border bg-surface-muted text-lg font-medium leading-none text-ink-subtle" aria-disabled="true" title="<%= t("products.cart.max_stock") %>">+</span>
+        <% else %>
+          <%= button_to update_line_cart_path,
+                method: :patch,
+                params: { product_id: product.id, quantity: qty + 1 },
+                form: stream_form,
+                class: "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-card text-lg font-medium leading-none text-ink shadow-sm transition hover:bg-surface-muted",
+                aria: { label: t("products.cart.increase") } do %>
+            +
+          <% end %>
+        <% end %>
+      </div>
+
+      <%= button_to t("carts.remove"), remove_line_cart_path(product_id: product.id),
+            method: :delete,
+            form: { data: { turbo_stream: true } },
+            class: "rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-900 transition hover:bg-red-100" %>
+    </div>
+  </div>
+</li>

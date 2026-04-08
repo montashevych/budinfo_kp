@@ -1,8 +1,8 @@
 <header class="sticky top-0 z-50 border-b border-border bg-surface-card/90 shadow-sm backdrop-blur-md">
   <div class="mx-auto max-w-6xl px-4 py-3">
-    <div class="flex items-center gap-4">
-      <%# Brand %>
-      <div class="flex min-w-0 flex-shrink-0 flex-col justify-center">
+    <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
+      <%# Brand — desktop only (left) %>
+      <div class="hidden min-w-0 flex-shrink-0 flex-col justify-center md:flex">
         <%= link_to root_path, class: "group min-w-0" do %>
           <span class="block truncate text-lg font-bold tracking-tight text-ink transition group-hover:text-brand"><%= t("layouts.application.title") %></span>
           <span class="mt-0.5 hidden truncate text-[0.6875rem] font-medium uppercase tracking-wide text-ink-subtle sm:block"><%= t("layouts.application.tagline") %></span>
@@ -45,22 +45,29 @@
         <% end %>
       </div>
 
-      <%# Mobile bar %>
-      <div class="ml-auto flex items-center gap-1.5 md:hidden">
-        <%= link_to cart_path,
-              class: "relative inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-brand px-3 text-sm font-semibold text-on-brand shadow-sm transition hover:bg-brand-hover",
-              aria: { label: t("nav.cart") } do %>
-          <%= render "shared/cart_icon_svg", extra_class: "h-5 w-5 shrink-0" %>
-          <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-bar", count: cart_item_count, variant: :overlay %>
-        <% end %>
-        <%= link_to "УК", set_locale_path(locale: :uk), class: "#{locale_link_class(:uk)} text-xs" %>
-        <%= link_to "RU", set_locale_path(locale: :ru), class: "#{locale_link_class(:ru)} text-xs" %>
-        <button type="button" class="rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="openButton" data-action="click->mobile-menu#open" aria-label="<%= t("nav.menu_toggle") %>">
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-        <button type="button" class="hidden rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="closeButton" data-action="click->mobile-menu#close" aria-label="<%= t("nav.menu_close") %>">
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
+      <%# Mobile: УК / RU → menu → cart → (spacer) → logo %>
+      <div class="flex w-full min-w-0 items-center justify-between gap-2 md:hidden">
+        <div class="flex shrink-0 items-center gap-1">
+          <%= link_to "УК", set_locale_path(locale: :uk), class: "#{locale_link_class(:uk)} text-xs" %>
+          <%= link_to "RU", set_locale_path(locale: :ru), class: "#{locale_link_class(:ru)} text-xs" %>
+          <button type="button" class="rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="openButton" data-action="click->mobile-menu#open" aria-label="<%= t("nav.menu_toggle") %>">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <button type="button" class="hidden rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="closeButton" data-action="click->mobile-menu#close" aria-label="<%= t("nav.menu_close") %>">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+          <%= link_to cart_path,
+                class: "relative inline-flex h-9 items-center justify-center rounded-lg bg-brand px-2.5 text-on-brand shadow-sm transition hover:bg-brand-hover",
+                aria: { label: t("nav.cart") } do %>
+            <%= render "shared/cart_icon_svg", extra_class: "h-5 w-5 shrink-0" %>
+            <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-bar", count: cart_item_count, variant: :overlay %>
+          <% end %>
+        </div>
+        <div class="min-w-0 max-w-[58%] text-right">
+          <%= link_to root_path, class: "group block min-w-0" do %>
+            <span class="block truncate text-base font-bold tracking-tight text-ink transition group-hover:text-brand"><%= t("layouts.application.title") %></span>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

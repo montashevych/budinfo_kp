@@ -33,8 +33,14 @@ class CartsController < ApplicationController
   end
 
   def remove_line
+    @removed_product_id = params[:product_id].to_i
     current_cart.remove(params[:product_id])
-    redirect_to cart_path, notice: t("carts.removed"), status: :see_other
+    @cart_count = cart_item_count
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to cart_path, notice: t("carts.removed"), status: :see_other }
+    end
   end
 
   private

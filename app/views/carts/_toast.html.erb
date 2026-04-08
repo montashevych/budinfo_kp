@@ -1,5 +1,10 @@
 <%# locals: (message:, variant: :success) %>
-<% colors = variant == :success ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-amber-200 bg-amber-50 text-amber-950" %>
-<div role="status" data-controller="cart-toast" class="pointer-events-auto rounded-lg border px-4 py-3 text-sm font-medium shadow-lg <%= colors %>">
-  <%= message %>
-</div>
+<% if variant == :success %>
+  <div role="status" data-controller="cart-toast" class="cart-toast-enter pointer-events-auto rounded-xl border border-emerald-500/30 bg-emerald-950/90 px-4 py-3 text-sm font-medium text-emerald-50 shadow-lg backdrop-blur-sm">
+    <%= message %>
+  </div>
+<% else %>
+  <div role="alert" data-controller="cart-toast" class="cart-toast-enter pointer-events-auto rounded-xl border border-amber-500/40 bg-amber-950/90 px-4 py-3 text-sm font-medium text-amber-50 shadow-lg backdrop-blur-sm">
+    <%= message %>
+  </div>
+<% end %>

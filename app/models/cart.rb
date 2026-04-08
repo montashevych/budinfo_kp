@@ -55,7 +55,7 @@ class Cart
     return [] if data.empty?
 
     ids = data.keys.map(&:to_i)
-    products = Product.active.where(id: ids).index_by(&:id)
+    products = Product.active.with_attached_images.where(id: ids).index_by(&:id)
     data.filter_map do |pid, qty|
       p = products[pid.to_i]
       next unless p

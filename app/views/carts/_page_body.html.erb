@@ -1,0 +1,20 @@
+<% line_items = current_cart.line_items %>
+<% if line_items.empty? %>
+  <p class="mt-6 text-ink-muted"><%= t("carts.empty") %></p>
+  <p class="mt-4">
+    <%= link_to t("carts.continue_shopping"), products_path, class: "btn-secondary inline-flex" %>
+  </p>
+<% else %>
+  <p id="cart-qty-hint" class="sr-only"><%= t("carts.quantity_auto_apply") %></p>
+  <ul class="mt-8 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-surface-card shadow-card">
+    <%= render partial: "carts/line_item", collection: line_items, as: :line %>
+  </ul>
+
+  <p class="mt-8 text-lg font-bold text-ink" id="cart-order-total">
+    <%= t("carts.total") %>: <%= number_to_currency(current_cart.total, unit: "₴", format: "%n %u", separator: ",", delimiter: " ") %>
+  </p>
+
+  <p class="mt-6">
+    <%= link_to t("carts.checkout_cta"), new_checkout_path, class: "btn-primary inline-flex" %>
+  </p>
+<% end %>

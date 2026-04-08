@@ -1,0 +1,16 @@
+<%= render partial: "carts/cart_nav_stream", formats: [ :html ], locals: { count: @cart_count } %>
+
+<%= turbo_stream.update "cart-page-body" do %>
+  <%= render partial: "carts/page_body", formats: [ :html ] %>
+<% end %>
+
+<% product = Product.with_attached_images.find_by(id: @removed_product_id) %>
+<% if product %>
+  <%= turbo_stream.replace "add-to-cart-product-#{product.id}" do %>
+    <%= render "products/add_to_cart", product: product %>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.append "cart-toast" do %>
+  <%= render "carts/toast", message: t("carts.removed"), variant: :success %>
+<% end %>
