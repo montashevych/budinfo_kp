@@ -11,6 +11,10 @@
 
     <%= yield :head %>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
     <link rel="icon" href="/icon.png" type="image/png" sizes="148x148">
     <link rel="apple-touch-icon" href="/icon.png">
 
@@ -18,27 +22,27 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="flex min-h-screen flex-col bg-stone-50 text-stone-900 antialiased">
+  <body class="flex min-h-screen flex-col bg-surface-page text-ink antialiased">
     <div id="cart-toast" class="pointer-events-none fixed right-4 top-16 z-[60] flex w-[min(100%-2rem,20rem)] flex-col gap-2 md:right-6 md:top-20" aria-live="polite"></div>
 
     <div class="flex flex-1 flex-col" data-controller="mobile-menu">
-      <header class="border-b border-stone-200 bg-white">
-        <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
-          <%= link_to root_path, class: "text-lg font-semibold tracking-tight text-stone-800" do %>
+      <header class="border-b border-border bg-surface-card shadow-sm">
+        <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+          <%= link_to root_path, class: "text-lg font-bold tracking-tight text-ink" do %>
             <%= t("layouts.application.title") %>
           <% end %>
 
           <nav class="hidden items-center gap-6 md:flex" aria-label="<%= t('nav.main_navigation') %>">
-            <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
-            <%= link_to t("nav.catalog"), categories_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
-            <%= link_to t("nav.products"), products_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+            <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-ink-muted transition hover:text-ink" %>
+            <%= link_to t("nav.catalog"), categories_path, class: "text-sm font-medium text-ink-muted transition hover:text-ink" %>
+            <%= link_to t("nav.products"), products_path, class: "text-sm font-medium text-ink-muted transition hover:text-ink" %>
             <% if current_user&.admin? %>
-              <%= link_to t("admin.link"), admin_root_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900", data: { turbo_frame: "_top" } %>
+              <%= link_to t("admin.link"), admin_root_path, class: "text-sm font-medium text-ink-muted transition hover:text-ink", data: { turbo_frame: "_top" } %>
             <% end %>
-            <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
-            <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
-            <%= link_to cart_path, class: "inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-stone-600 transition hover:bg-stone-100 hover:text-stone-900" do %>
-              <%= render "shared/cart_icon_svg", extra_class: "h-5 w-5 shrink-0 text-stone-500" %>
+            <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-ink-muted transition hover:text-ink" %>
+            <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-ink-muted transition hover:text-ink" %>
+            <%= link_to cart_path, class: "inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-ink-muted transition hover:bg-surface-muted hover:text-ink" do %>
+              <%= render "shared/cart_icon_svg", extra_class: "h-5 w-5 shrink-0 text-ink-subtle" %>
               <span><%= t("nav.cart") %></span>
               <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-desktop", count: cart_item_count %>
             <% end %>
@@ -47,10 +51,10 @@
           <div class="hidden items-center gap-3 md:flex">
             <% if authenticated? %>
               <%= link_to t("nav.sign_out"), session_path, data: { turbo_method: :delete },
-                    class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
+                    class: "text-sm font-medium text-ink-muted transition hover:text-ink" %>
             <% else %>
-              <%= link_to t("nav.sign_in"), new_session_path, class: "text-sm font-medium text-stone-600 hover:text-stone-900" %>
-              <%= link_to t("nav.sign_up"), new_registration_path, class: "text-sm font-medium text-stone-900 underline" %>
+              <%= link_to t("nav.sign_in"), new_session_path, class: "text-sm font-medium text-ink-muted transition hover:text-ink" %>
+              <%= link_to t("nav.sign_up"), new_registration_path, class: "text-sm font-semibold text-brand transition hover:text-brand-hover" %>
             <% end %>
           </div>
 
@@ -60,51 +64,51 @@
           </div>
 
           <div class="flex items-center gap-2 md:hidden">
-            <%= link_to cart_path, class: "relative -mr-0.5 rounded-lg p-2 text-stone-600 transition hover:bg-stone-100", aria: { label: t("nav.cart") } do %>
+            <%= link_to cart_path, class: "relative -mr-0.5 rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted", aria: { label: t("nav.cart") } do %>
               <%= render "shared/cart_icon_svg", extra_class: "h-6 w-6" %>
               <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-bar", count: cart_item_count, variant: :overlay %>
             <% end %>
             <%= link_to "УК", set_locale_path(locale: :uk), class: "#{locale_link_class(:uk)} text-sm" %>
             <%= link_to "RU", set_locale_path(locale: :ru), class: "#{locale_link_class(:ru)} text-sm" %>
-            <button type="button" class="rounded-md p-2 text-stone-600 hover:bg-stone-100" data-mobile-menu-target="openButton" data-action="click->mobile-menu#open" aria-label="<%= t('nav.menu_toggle') %>">
+            <button type="button" class="rounded-md p-2 text-ink-muted hover:bg-surface-muted" data-mobile-menu-target="openButton" data-action="click->mobile-menu#open" aria-label="<%= t('nav.menu_toggle') %>">
               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
-            <button type="button" class="hidden rounded-md p-2 text-stone-600 hover:bg-stone-100" data-mobile-menu-target="closeButton" data-action="click->mobile-menu#close" aria-label="<%= t('nav.menu_close') %>">
+            <button type="button" class="hidden rounded-md p-2 text-ink-muted hover:bg-surface-muted" data-mobile-menu-target="closeButton" data-action="click->mobile-menu#close" aria-label="<%= t('nav.menu_close') %>">
               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
         </div>
 
-        <nav class="hidden border-t border-stone-100 bg-white px-4 py-3 md:hidden" data-mobile-menu-target="panel" aria-label="Mobile">
-          <div class="mx-auto flex max-w-5xl flex-col gap-3">
-            <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
-            <%= link_to t("nav.catalog"), categories_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
-            <%= link_to t("nav.products"), products_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
+        <nav class="hidden border-t border-border bg-surface-card px-4 py-3 md:hidden" data-mobile-menu-target="panel" aria-label="Mobile">
+          <div class="mx-auto flex max-w-6xl flex-col gap-3">
+            <%= link_to t("nav.home"), root_path, class: "text-sm font-medium text-ink", data: { action: "click->mobile-menu#close" } %>
+            <%= link_to t("nav.catalog"), categories_path, class: "text-sm font-medium text-ink", data: { action: "click->mobile-menu#close" } %>
+            <%= link_to t("nav.products"), products_path, class: "text-sm font-medium text-ink", data: { action: "click->mobile-menu#close" } %>
             <% if current_user&.admin? %>
-              <%= link_to t("admin.link"), admin_root_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+              <%= link_to t("admin.link"), admin_root_path, class: "text-sm font-medium text-ink", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
             <% end %>
-            <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
-            <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close" } %>
+            <%= link_to t("nav.delivery"), delivery_path, class: "text-sm font-medium text-ink", data: { action: "click->mobile-menu#close" } %>
+            <%= link_to t("nav.contacts"), new_contact_path, class: "text-sm font-medium text-ink", data: { action: "click->mobile-menu#close" } %>
             <%= link_to cart_path,
-                  class: "flex items-center gap-3 rounded-xl border border-stone-200 bg-stone-50 px-3 py-3 text-stone-900 shadow-sm transition hover:border-stone-300 hover:bg-white",
+                  class: "flex items-center gap-3 rounded-xl border border-border bg-surface-muted px-3 py-3 text-ink shadow-card transition hover:border-border-strong hover:bg-surface-card",
                   data: { action: "click->mobile-menu#close" } do %>
-              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-stone-600 ring-1 ring-stone-200">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-surface-card text-ink-muted ring-1 ring-border">
                 <%= render "shared/cart_icon_svg", extra_class: "h-6 w-6" %>
               </span>
               <span class="min-w-0 flex-1 font-semibold"><%= t("nav.cart") %></span>
               <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-panel", count: cart_item_count, wrapper_class: "ml-auto shrink-0 self-center" %>
             <% end %>
             <% if authenticated? %>
-              <%= link_to t("nav.sign_out"), session_path, data: { turbo_method: :delete, action: "click->mobile-menu#close" }, class: "mt-2 text-sm font-medium text-stone-700" %>
+              <%= link_to t("nav.sign_out"), session_path, data: { turbo_method: :delete, action: "click->mobile-menu#close" }, class: "mt-2 text-sm font-medium text-ink-muted" %>
             <% else %>
-              <%= link_to t("nav.sign_in"), new_session_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
-              <%= link_to t("nav.sign_up"), new_registration_path, class: "text-sm font-medium text-stone-700", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+              <%= link_to t("nav.sign_in"), new_session_path, class: "text-sm font-medium text-ink-muted", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+              <%= link_to t("nav.sign_up"), new_registration_path, class: "text-sm font-semibold text-brand", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
             <% end %>
           </div>
         </nav>
       </header>
 
-    <main class="mx-auto w-full max-w-5xl flex-1 px-4 py-10">
+    <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-10 md:py-12">
       <% if notice.present? %>
         <p class="mb-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900" role="status"><%= notice %></p>
       <% end %>
@@ -115,14 +119,14 @@
     </main>
     </div>
 
-    <footer class="mt-auto border-t border-stone-200 bg-white py-8">
-      <div class="mx-auto flex max-w-5xl flex-col gap-4 px-4 text-sm text-stone-500 md:flex-row md:items-center md:justify-between">
+    <footer class="mt-auto border-t border-border bg-surface-card py-8">
+      <div class="mx-auto flex max-w-6xl flex-col gap-4 px-4 text-sm text-ink-muted md:flex-row md:items-center md:justify-between">
         <span>&copy; <%= Time.current.year %> <%= t("layouts.application.title") %></span>
         <div class="flex flex-wrap gap-4">
-          <%= link_to t("nav.delivery"), delivery_path, class: "hover:text-stone-800" %>
-          <%= link_to t("nav.contacts"), new_contact_path, class: "hover:text-stone-800" %>
-          <%= link_to t("nav.catalog"), categories_path, class: "hover:text-stone-800" %>
-          <%= link_to t("nav.products"), products_path, class: "hover:text-stone-800" %>
+          <%= link_to t("nav.delivery"), delivery_path, class: "transition hover:text-ink" %>
+          <%= link_to t("nav.contacts"), new_contact_path, class: "transition hover:text-ink" %>
+          <%= link_to t("nav.catalog"), categories_path, class: "transition hover:text-ink" %>
+          <%= link_to t("nav.products"), products_path, class: "transition hover:text-ink" %>
         </div>
       </div>
     </footer>
