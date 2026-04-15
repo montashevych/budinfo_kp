@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= content_for?(:title) ? yield(:title) : t("layouts.application.title") %></title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  </head>
+  <body class="min-h-screen bg-surface-page text-ink antialiased font-sans">
+    <main class="mx-auto flex max-w-lg flex-col gap-6 px-4 py-20">
+      <%= yield %>
+      <p>
+        <%= link_to t("errors.back_home"), root_path, class: "font-semibold text-brand underline-offset-2 hover:text-brand-hover hover:underline" %>
+      </p>
+    </main>
+  </body>
+</html>

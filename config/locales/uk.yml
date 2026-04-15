@@ -1,0 +1,309 @@
+uk:
+  time:
+    formats:
+      default: "%d.%m.%Y %H:%M"
+  layouts:
+    application:
+      title: "Budinfo"
+      meta_description: "Інтернет-магазин будівельних матеріалів"
+      tagline: "Будматеріали з доставкою"
+    footer:
+      blurb: "Сухі суміші, утеплення, пиломатеріали та інструмент. Оформлення замовлення онлайн."
+      shop_heading: "Магазин"
+      customers_heading: "Клієнтам"
+      account_heading: "Обліковий запис"
+      rights: "Усі права захищено."
+  meta:
+    titles:
+      home: "Головна"
+      categories_index: "Каталог категорій"
+      products_index: "Усі товари"
+      delivery: "Доставка"
+      contacts: "Контакти"
+      cart: "Кошик"
+      checkout: "Оформлення замовлення"
+      order_confirmation: "Замовлення №%{id}"
+    descriptions:
+      category: "Товари в категорії «%{name}» — Budinfo"
+      delivery: "Умови та зони доставки будівельних матеріалів."
+      contacts: "Зв'яжіться з нами щодо замовлень та консультацій."
+  errors:
+    back_home: "На головну"
+    pages:
+      not_found:
+        title: "Сторінку не знайдено"
+        body: "Посилання застаріло або введено з помилкою."
+      internal_server_error:
+        title: "Технічна помилка"
+        body: "Спробуйте пізніше або оновіть сторінку."
+  admin:
+    forbidden: "Потрібні права адміністратора."
+    link: "Панель керування"
+  home:
+    heading: "Будівельні матеріали"
+    intro: "Підбір сухих сумішей, утеплення, пиломатеріалів та інструменту. Категорії та товари наповнюються адміністратором магазину."
+    promotions:
+      heading: "Акції та пропозиції"
+      region_label: "Акції та пропозиції"
+      carousel_role: "карусель"
+      controls_label: "Керування каруселлю"
+      prev_slide: "Попередній слайд"
+      next_slide: "Наступний слайд"
+      read_more: "Детальніше"
+  nav:
+    main_navigation: "Головна навігація"
+    home: "Головна"
+    catalog: "Каталог"
+    products: "Усі товари"
+    delivery: "Доставка"
+    contacts: "Контакти"
+    cart: "Кошик"
+    menu_toggle: "Відкрити меню"
+    menu_close: "Закрити меню"
+    locale_switch: "Мова"
+    sign_in: "Увійти"
+    sign_up: "Реєстрація"
+    sign_out: "Вийти"
+  auth:
+    sessions:
+      title: "Вхід"
+      email_placeholder: "Електронна пошта"
+      password_placeholder: "Пароль"
+      submit: "Увійти"
+      forgot_password: "Забули пароль?"
+      signed_in: "Ви увійшли."
+      signed_out: "Ви вийшли."
+      invalid_credentials: "Невірна пошта або пароль."
+      rate_limited: "Забагато спроб. Спробуйте пізніше."
+      no_account: "Немає акаунту?"
+    registration:
+      title: "Реєстрація"
+      password_confirmation_placeholder: "Повторіть пароль"
+      submit: "Створити обліковий запис"
+      success: "Обліковий запис створено."
+      has_account: "Вже є акаунт?"
+    passwords:
+      new_title: "Скинути пароль"
+      edit_title: "Новий пароль"
+      email_placeholder: "Електронна пошта"
+      submit_request: "Надіслати інструкції"
+      submit_reset: "Зберегти пароль"
+      back_to_sign_in: "Повернутися до входу"
+      instructions_sent: "Якщо такий акаунт існує, ми надіслали лист з інструкціями."
+      reset_success: "Пароль оновлено."
+      mismatch: "Паролі не збігаються."
+      invalid_token: "Посилання недійсне або прострочене."
+      rate_limited: "Забагато спроб. Спробуйте пізніше."
+  passwords_mailer:
+    reset:
+      subject: "Скидання пароля"
+      intro: "Щоб скинути пароль, перейдіть за посиланням:"
+      link_label: "Сторінка скидання пароля"
+      expiry: "Посилання діє ще %{duration}."
+  order_mailer:
+    confirmation:
+      subject: "Замовлення №%{order_id} — Budinfo"
+      greeting: "Вітаємо!"
+      intro: "Ваше замовлення №%{order_id} прийнято. Нижче — підсумок."
+      total: "Разом:"
+      view_order: "Переглянути замовлення онлайн"
+      shipping: "Доставка:"
+    notify_admin:
+      subject: "[Нове замовлення] №%{order_id}"
+      intro: "Нове замовлення №%{order_id} від %{email}."
+      total: "Разом:"
+      open_in_admin: "Відкрити в адмінці"
+      public_link: "Публічне посилання для клієнта"
+  pages:
+    delivery:
+      heading: "Доставка та оплата"
+      placeholder: "Тут буде текст про доставку."
+  contacts:
+    heading: "Контакти"
+    placeholder: "Форма зворотного звʼязку зʼявиться на наступному етапі."
+    stub_submitted: "Заглушка: форма ще не надсилає листи."
+    email_label: "Електронна пошта"
+    message_label: "Повідомлення"
+    submit: "Надіслати"
+  flash:
+    notice: "Повідомлення"
+    alert: "Увага"
+  categories:
+    index:
+      title: "Каталог"
+      heading: "Категорії"
+      intro: "Оберіть розділ будівельних матеріалів."
+      empty: "Категорій ще немає."
+    show:
+      products_heading: "Товари в категорії"
+    empty_products: "У цій категорії ще немає товарів."
+  products:
+    index:
+      title: "Товари"
+      heading: "Усі товари"
+      intro: "Фільтри за категорією та діапазоном цін."
+      filter_category: "Категорія"
+      any_category: "Усі категорії"
+      filter_min_price: "Ціна від"
+      filter_max_price: "Ціна до"
+      apply_filters: "Застосувати"
+      reset_filters: "Скинути"
+    no_image: "Немає фото"
+    no_image_short: "Без фото"
+    grid_empty: "Товарів не знайдено."
+    out_of_stock: "Немає в наявності"
+    in_stock: "В наявності: %{count} шт."
+    sku: "Артикул"
+    pagination:
+      nav_label: "Сторінки товарів"
+    cart:
+      add_to_cart: "У кошик"
+      decrease: "Зменшити кількість"
+      increase: "Збільшити кількість"
+      in_cart: "У кошику"
+      max_stock: "Максимум на складі"
+      quantity_input: "Кількість у кошику"
+      quantity_input_hint: "Введіть кількість і натисніть Enter або клікніть поза полем"
+  carts:
+    title: "Кошик"
+    heading: "Кошик"
+    empty: "Кошик порожній."
+    continue_shopping: "До каталогу товарів"
+    quantity: "Кількість"
+    update: "Оновити"
+    remove: "Прибрати"
+    total: "Разом"
+    checkout_cta: "Оформити замовлення"
+    added: "Товар додано до кошика."
+    updated: "Кількість оновлено."
+    removed: "Товар прибрано з кошика."
+    out_of_stock: "Недостатньо товару на складі."
+    unavailable: "Товар недоступний."
+  checkouts:
+    title: "Оформлення замовлення"
+    heading: "Оформлення замовлення"
+    intro: "Вкажіть контакти та адресу доставки. Оплата на наступному етапі не потрібна — замовлення зберігається в системі."
+    summary: "Ваше замовлення"
+    email: "Електронна пошта"
+    shipping_name: "ПІБ / назва отримувача"
+    shipping_phone: "Телефон"
+    shipping_address: "Адреса доставки"
+    submit: "Підтвердити замовлення"
+    back_to_cart: "Назад до кошика"
+    success: "Замовлення прийнято."
+    empty_cart: "Кошик порожній."
+    stale_cart: "Не вдалося оформити: оновіть кошик і спробуйте ще раз."
+    fix_errors: "Виправте помилки у формі."
+  order_confirmations:
+    title: "Замовлення оформлено"
+    heading: "Дякуємо!"
+    intro: "Копію підсумку ми надіслали на %{email}."
+    number: "Номер замовлення"
+    items: "Товари"
+    shipping: "Доставка"
+    continue: "На головну"
+  activerecord:
+    models:
+      category:
+        one: Категорія
+        few: Категорії
+        many: Категорій
+        other: Категорії
+      product:
+        one: Товар
+        few: Товари
+        many: Товарів
+        other: Товари
+      user:
+        one: Користувач
+        few: Користувачі
+        many: Користувачів
+        other: Користувачі
+      order:
+        one: Замовлення
+        few: Замовлення
+        many: Замовлень
+        other: Замовлення
+      order_item:
+        one: Рядок замовлення
+        few: Рядки замовлення
+        many: Рядків замовлення
+        other: Рядки замовлення
+      home_promotion:
+        one: Акція на головній
+        few: Акції на головній
+        many: Акцій на головній
+        other: Акції на головній
+    attributes:
+      category:
+        name_uk: Назва (укр.)
+        name_ru: Назва (рос.)
+        parent: Батьківська категорія
+        slug: Слаг
+        children: Підкатегорії
+        products: Товари
+      product:
+        title_uk: Назва (укр.)
+        title_ru: Назва (рос.)
+        slug: Слаг
+        sku: Артикул
+        category: Категорія
+        price: Ціна
+        stock: Залишок
+        active: Активний
+        description_uk: Опис (укр.)
+        description_ru: Опис (рос.)
+        images: Зображення
+        order_items: Рядки замовлень
+      user:
+        email_address: Електронна пошта
+        password: Пароль
+        password_confirmation: Підтвердження пароля
+        role: Роль
+        orders: Замовлення
+      order:
+        user: Користувач
+        public_token: Публічне посилання
+        status: Статус
+        total: Сума
+        email: Email замовника
+        shipping_name: Імʼя для доставки
+        shipping_phone: Телефон
+        shipping_address: Адреса доставки
+        order_items: Рядки замовлення
+      order_item:
+        order: Замовлення
+        product: Товар
+        quantity: Кількість
+        unit_price: Ціна за одиницю
+      home_promotion:
+        title: Заголовок
+        teaser: Короткий опис (карусель)
+        slug: "Слаг URL (адреса /promotions/…; латиниця, дефіси)"
+        body: Повний текст (сторінка акції)
+        position: Порядок
+        active: Активна
+        image: Зображення
+    enums:
+      user:
+        role:
+          customer: Покупець
+          admin: Адміністратор
+      order:
+        status:
+          pending: Очікує
+          confirmed: Підтверджено
+          shipped: Відправлено
+          cancelled: Скасовано
+    errors:
+      models:
+        home_promotion:
+          attributes:
+            image:
+              invalid_type: "дозволені лише зображення JPEG, PNG, WebP або GIF"
+              too_large: "розмір файлу не більше 5 МБ"
+        product:
+          attributes:
+            images:
+              invalid_type: "дозволені лише зображення JPEG, PNG, WebP або GIF"
+              too_large: "розмір файлу не більше 5 МБ"

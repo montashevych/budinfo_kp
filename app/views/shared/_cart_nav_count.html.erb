@@ -1,0 +1,5 @@
+<%# locals: (count:, compact: false) %>
+<% if count.positive? %>
+  <% badge_class = compact ? "flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-emerald-100 px-1 text-[0.65rem] font-bold leading-none text-emerald-900 ring-1 ring-emerald-600/40 animate-cart-badge-pop" : "ml-1 inline-flex min-w-[1.25rem] justify-center rounded-full bg-emerald-100 px-1.5 py-0.5 text-xs font-semibold text-emerald-900 ring-1 ring-emerald-600/30 animate-cart-badge-pop tabular-nums" %>
+  <span class="<%= badge_class %>" aria-hidden="true"><%= count %></span>
+<% end %>

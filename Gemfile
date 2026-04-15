@@ -19,8 +19,20 @@ gem "tailwindcss-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# Pagination [https://github.com/ddnexus/pagy]
+gem "pagy", "~> 43.0"
+
+# SEO defaults, Open Graph helpers [https://github.com/kpumuk/meta-tags]
+# Bundler would require "meta-tags" by default; the gem loads from "meta_tags".
+gem "meta-tags", "~> 2.23", require: "meta_tags"
+
+# Admin CRUD [https://github.com/thoughtbot/administrate]
+gem "administrate", "~> 1.0"
+# Active Storage uploads in Administrate [https://github.com/Dreamersoul/administrate-field-active_storage]
+gem "administrate-field-active_storage", "~> 1.0"
+
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
-# gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
@@ -41,6 +53,9 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
+
+# Throttle abusive requests (contact + checkout POST) in production [https://github.com/rack/rack-attack]
+gem "rack-attack", "~> 6.7"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

@@ -1,0 +1,49 @@
+<footer class="mt-auto border-t border-border bg-surface-muted">
+  <div class="mx-auto max-w-6xl px-4 py-12 md:py-14">
+    <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+      <div class="sm:col-span-2 lg:col-span-1">
+        <%= link_to root_path, class: "inline-block text-lg font-bold tracking-tight text-ink transition hover:text-brand" do %>
+          <%= t("layouts.application.title") %>
+        <% end %>
+        <p class="mt-3 max-w-xs text-sm leading-relaxed text-ink-muted"><%= t("layouts.footer.blurb") %></p>
+      </div>
+
+      <div>
+        <p class="footer-heading"><%= t("layouts.footer.shop_heading") %></p>
+        <ul class="mt-4 flex flex-col gap-3">
+          <li><%= link_to t("nav.catalog"), categories_path, class: "footer-link" %></li>
+          <li><%= link_to t("nav.products"), products_path, class: "footer-link" %></li>
+          <li><%= link_to t("nav.home"), root_path, class: "footer-link" %></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-heading"><%= t("layouts.footer.customers_heading") %></p>
+        <ul class="mt-4 flex flex-col gap-3">
+          <li><%= link_to t("nav.delivery"), delivery_path, class: "footer-link" %></li>
+          <li><%= link_to t("nav.contacts"), new_contact_path, class: "footer-link" %></li>
+          <li><%= link_to t("nav.cart"), cart_path, class: "footer-link" %></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="footer-heading"><%= t("layouts.footer.account_heading") %></p>
+        <ul class="mt-4 flex flex-col gap-3">
+          <% if authenticated? %>
+            <li><%= link_to t("nav.sign_out"), session_path, data: { turbo_method: :delete }, class: "footer-link" %></li>
+          <% else %>
+            <li><%= link_to t("nav.sign_in"), new_session_path, class: "footer-link" %></li>
+            <li><%= link_to t("nav.sign_up"), new_registration_path, class: "footer-link" %></li>
+          <% end %>
+          <% if current_user&.admin? %>
+            <li><%= link_to t("admin.link"), admin_root_path, class: "footer-link", data: { turbo_frame: "_top" } %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col gap-3 border-t border-border pt-8 text-sm text-ink-subtle sm:flex-row sm:items-center sm:justify-between">
+      <span>&copy; <%= Time.current.year %> <%= t("layouts.application.title") %>. <%= t("layouts.footer.rights") %></span>
+    </div>
+  </div>
+</footer>

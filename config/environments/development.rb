@@ -31,14 +31,49 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # Stream blobs/variants through the app instead of redirecting to a signed /disk URL. The redirect
+  # path requires ActiveStorage::Current.url_options for DiskService; that breaks easily (wrong port,
+  # missing host) and raises ArgumentError → 500. Proxy URLs avoid that second hop entirely.
+  config.active_storage.resolve_model_to_route = :rails_storage_proxy
+
+  # Still used for mailers, url helpers, and any code that builds absolute URLs outside a request.
+  # docker-compose should set DEV_URL_OPTIONS_PORT to the host-mapped port (default 3000).
+  dev_url_host = ENV.fetch("DEV_URL_OPTIONS_HOST", "localhost")
+  dev_url_port = (ENV["DEV_URL_OPTIONS_PORT"].presence || "3000").to_i
+  dev_url_opts = { host: dev_url_host, port: dev_url_port, protocol: "http" }
+
+  config.active_storage.default_url_options = dev_url_opts
+  config.action_controller.default_url_options = dev_url_opts
+
+  # web-console: requests come from Docker bridge IPs (e.g. 172.18.0.1), not 127.0.0.1.
+  config.web_console.permissions = %w[127.0.0.0/8 ::1 172.16.0.0/12 192.168.0.0/16 10.0.0.0/8]
+
+  # Don't care if the mailer can't send (set true when debugging SMTP).
+  config.action_mailer.raise_delivery_errors = ENV["SMTP_ADDRESS"].present?
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
 
   # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  config.action_mailer.default_url_options = { host: dev_url_host, port: dev_url_port }
+
+  # Without SMTP, accumulate in ActionMailer::Base.deliveries (inspect after perform_enqueued_jobs).
+  if ENV["SMTP_ADDRESS"].present?
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: ENV["SMTP_ADDRESS"],
+      port: ENV.fetch("SMTP_PORT", 587).to_i,
+      user_name: ENV["SMTP_USERNAME"],
+      password: ENV["SMTP_PASSWORD"],
+      authentication: :plain,
+      enable_starttls_auto: true
+    }
+  else
+    config.action_mailer.delivery_method = :test
+  end
+
+  # mail 2.9 has no `Mail.logger=`; full MIME may appear in logs at DEBUG when jobs deliver.
+  # To quiet globally: RAILS_LOG_LEVEL=info (or tune your process logger).
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

@@ -1,0 +1,13 @@
+<p><%= t(".greeting") %></p>
+<p><%= t(".intro", order_id: @order.id) %></p>
+<ul>
+  <% @order.order_items.each do |item| %>
+    <li><%= item.product.title_uk %> × <%= item.quantity %> — <%= number_to_currency(item.quantity * item.unit_price, unit: "₴", format: "%n %u", separator: ",", delimiter: " ") %></li>
+  <% end %>
+</ul>
+<p><strong><%= t(".total") %></strong> <%= number_to_currency(@order.total, unit: "₴", format: "%n %u", separator: ",", delimiter: " ") %></p>
+<p><%= link_to t(".view_order"), @confirmation_url %></p>
+<p><%= t(".shipping") %></p>
+<pre style="font-family: sans-serif; white-space: pre-wrap;"><%= @order.shipping_name %>
+<%= @order.shipping_phone %>
+<%= @order.shipping_address %></pre>

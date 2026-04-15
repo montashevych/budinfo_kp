@@ -1,0 +1,5 @@
+<%# locals: (message:, variant: :success) %>
+<% colors = variant == :success ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-amber-200 bg-amber-50 text-amber-950" %>
+<div role="status" data-controller="cart-toast" class="pointer-events-auto rounded-lg border px-4 py-3 text-sm font-medium shadow-lg <%= colors %>">
+  <%= message %>
+</div>

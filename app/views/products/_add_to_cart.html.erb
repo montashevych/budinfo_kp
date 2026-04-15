@@ -1,0 +1,57 @@
+<%# locals: (product:, animate_line_enter: false) %>
+<% qty = cart_quantity_for(product) %>
+<% stream_form = { data: { turbo_stream: true }, class: "contents" } %>
+<% line_anim = local_assigns.fetch(:animate_line_enter, false) %>
+<div id="add-to-cart-product-<%= product.id %>" class="add-to-cart w-full<%= " animate-cart-line-appear" if line_anim %>">
+  <% if !product.stock.positive? %>
+    <button type="button" disabled class="w-full cursor-not-allowed rounded-md border border-stone-200 bg-stone-100 px-3 py-2 text-sm font-medium text-stone-400" aria-disabled="true">
+      <%= t("products.cart.add_to_cart") %>
+    </button>
+  <% elsif qty.zero? %>
+    <%= button_to t("products.cart.add_to_cart"), add_cart_path,
+          params: { product_id: product.id },
+          form: { class: "block w-full", data: { turbo_stream: true } },
+          class: "w-full rounded-md border border-stone-800 bg-stone-900 px-3 py-2 text-sm font-medium text-white transition hover:bg-stone-800" %>
+  <% else %>
+    <div class="flex w-full items-stretch gap-1 rounded-lg border border-stone-300 bg-stone-200 p-1 shadow-inner">
+      <%= button_to update_line_cart_path,
+            method: :patch,
+            params: { product_id: product.id, quantity: [ qty - 1, 0 ].max },
+            form: stream_form,
+            class: "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-stone-300 bg-white text-lg font-medium leading-none text-stone-800 shadow-sm hover:bg-stone-50",
+            aria: { label: t("products.cart.decrease") } do %>
+        −
+      <% end %>
+      <%= form_with url: update_line_cart_path, method: :patch,
+            html: { class: "flex min-w-0 flex-1 items-center justify-center", id: "cart-qty-form-#{product.id}" },
+            data: { turbo_stream: true } do %>
+        <%= hidden_field_tag :product_id, product.id %>
+        <%= number_field_tag :quantity, qty,
+              min: 0,
+              max: product.stock,
+              inputmode: "numeric",
+              class: "h-9 w-full min-w-[3rem] max-w-[5.5rem] rounded-md border border-stone-300 bg-white py-0 text-center text-sm font-semibold tabular-nums leading-none text-stone-900 shadow-sm [appearance:textfield] focus:border-stone-500 focus:outline-none focus:ring-1 focus:ring-stone-400 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
+              aria: { label: t("products.cart.quantity_input") },
+              title: t("products.cart.quantity_input_hint"),
+              data: {
+                controller: "cart-qty-input",
+                cart_qty_input_max_value: product.stock,
+                action: "keydown->cart-qty-input#submitOnEnter blur->cart-qty-input#commitOnBlur"
+              } %>
+      <% end %>
+      <% at_max = qty >= product.stock %>
+      <% if at_max %>
+        <span class="flex h-9 w-9 shrink-0 cursor-not-allowed items-center justify-center rounded-md border border-stone-200 bg-stone-100 text-lg font-medium leading-none text-stone-400" aria-disabled="true" title="<%= t('products.cart.max_stock') %>">+</span>
+      <% else %>
+        <%= button_to update_line_cart_path,
+              method: :patch,
+              params: { product_id: product.id, quantity: qty + 1 },
+              form: stream_form,
+              class: "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-stone-300 bg-white text-lg font-medium leading-none text-stone-800 shadow-sm hover:bg-stone-50",
+              aria: { label: t("products.cart.increase") } do %>
+          +
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

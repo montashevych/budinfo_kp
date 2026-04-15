@@ -1,14 +1,43 @@
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
-  # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get "locale/:locale", to: "locales#update", as: :set_locale, constraints: { locale: /uk|ru/ }
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  resource :session, only: %i[new create destroy]
+  resources :passwords, param: :token
+  resource :registration, only: %i[new create]
+
+  resources :categories, only: %i[index show], param: :slug
+  resources :products, only: %i[index show], param: :slug
+  resources :promotions, only: :show, param: :slug
+
+  resource :cart, only: :show do
+    post :add, on: :member
+    patch :update_line, on: :member
+    delete :remove_line, on: :member
+  end
+
+  resource :checkout, only: %i[new create]
+  get "/o/:public_token", to: "order_confirmations#show", as: :order_confirmation
+
+  namespace :admin do
+    resources :categories
+    resources :products
+    resources :home_promotions
+    resources :users
+    resources :orders
+    resources :order_items
+    root to: "categories#index"
+  end
+
+  root "home#index"
+  get "delivery", to: "pages#delivery"
+  resources :contacts, only: %i[new create]
+
+  get "/sitemap.xml", to: "sitemaps#show", as: :sitemap, defaults: { format: :xml }
+  get "/robots.txt", to: "robots#show", as: :robots, defaults: { format: :text }
+
+  # Routed by config.exceptions_app when consider_all_requests_local is false (e.g. production).
+  match "/404", to: "errors#not_found", via: :all
+  match "/500", to: "errors#internal_server_error", via: :all
 end

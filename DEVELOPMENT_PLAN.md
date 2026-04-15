@@ -8,7 +8,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 1. Work **phases in order** (A → F). Later phases assume earlier ones exist.
 2. Check off **Definition of done** items before moving on.
-3. Run **`rails test`** (or RSpec) after each vertical slice when you add tests.
+3. Run **`bin/docker-test`** (or `bin/docker-rails test …`) after each vertical slice when you add tests.
 4. All **shop-facing strings** use I18n (`:uk` default, `:ru` optional)—see PLAN.md §3.
 
 ---
@@ -26,6 +26,8 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 ## Phase 0 — Project bootstrap
 
+**Phase 0 — status:** Successfully passed for this repository (Docker-first path: Rails 8, PostgreSQL 16, Tailwind + Hotwire, Compose services `web` / `db` / `pgadmin`, `Dockerfile.dev` for dev and generated `Dockerfile` for production/Kamal). Use the host port published in `docker-compose.yml` for the app (e.g. `http://localhost:3000`).
+
 ### 0.1 Create the Rails application
 
 **Options (pick one path and stay consistent):**
@@ -41,9 +43,9 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Deliverables:**
 
-- [ ] `Gemfile` includes `pg`, Hotwire defaults (`turbo-rails`, `stimulus-rails`), Tailwind setup per chosen gem.
-- [ ] `config/database.yml` uses `ENV['DATABASE_URL']` or host `db` for Docker.
-- [ ] `.env.example` lists `DATABASE_URL`, `RAILS_MASTER_KEY`, `SECRET_KEY_BASE` (for production), `RAILS_ENV`.
+- [x] `Gemfile` includes `pg`, Hotwire defaults (`turbo-rails`, `stimulus-rails`), Tailwind setup per chosen gem.
+- [x] `config/database.yml` uses `ENV['DATABASE_URL']` or host `db` for Docker.
+- [x] `.env.example` lists `DATABASE_URL`, `RAILS_MASTER_KEY`, `SECRET_KEY_BASE` (for production), `RAILS_ENV`.
 
 ### 0.2 Docker Compose (development)
 
@@ -61,20 +63,29 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Deliverables:**
 
-- [ ] `docker compose up` starts DB + web.
-- [ ] `docker compose run web rails db:create` succeeds.
-- [ ] Browser opens app at `http://localhost:3000`.
+- [x] `docker compose up` starts DB + web.
+- [x] `docker compose run web rails db:create` succeeds.
+- [x] Browser opens app at the mapped host URL (see `docker-compose.yml`; e.g. `http://localhost:3000`).
+
+**Run Rails/DB tasks inside Compose (preferred on this project):** use one-off `web` containers so gems and Postgres match production-like dev.
+
+- Migrations: `bin/docker-rails db:migrate`
+- Seed: `bin/docker-rails db:seed`
+- Tests: `bin/docker-test-prepare` once (or after schema changes), then **`bin/docker-test`**.  
+  (Wrapper sets `RAILS_ENV=test` and `DATABASE_URL` for `app_test`; override with **`DOCKER_TEST_DATABASE_URL`** if needed.)
 
 ### 0.3 Git hygiene
 
-- [ ] `.gitignore` includes `/log`, `/tmp`, `/storage`, `.env`, `master.key` handling per Rails docs.
-- [ ] `config/master.key` **not** committed; use `RAILS_MASTER_KEY` in production.
+- [x] `.gitignore` includes `/log`, `/tmp`, `/storage`, `.env`, `master.key` handling per Rails docs.
+- [x] `config/master.key` **not** committed; use `RAILS_MASTER_KEY` in production.
 
-**Phase 0 definition of done:** App boots in Docker; DB connects; Tailwind builds; Hotwire loads on a smoke page.
+**Phase 0 definition of done:** App boots in Docker; DB connects; Tailwind builds; Hotwire loads on a smoke page. **Done for this repo.**
 
 ---
 
 ## Phase A — Foundation
+
+**Phase A — status:** A.1–A.3 done: I18n (`uk` / `ru`), layout shell, **Rails 8 native authentication** (`bin/rails generate authentication`), `User` roles `customer` / `admin`, localized auth views, seeds admin (`db/seeds.rb`, optional `ADMIN_SEED_PASSWORD`).
 
 ### A.1 Internationalization
 
@@ -97,8 +108,8 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Checklist:**
 
-- [ ] No Ukrainian/Russian shopper copy hardcoded in English in main layout.
-- [ ] Switching locale updates nav and shared strings.
+- [x] No Ukrainian/Russian shopper copy hardcoded in English in main layout.
+- [x] Switching locale updates nav and shared strings.
 
 ### A.2 Base layout & static skeleton
 
@@ -116,28 +127,48 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Checklist:**
 
-- [ ] Root renders with Tailwind styling.
-- [ ] Footer has placeholder links (policy pages can wait until Phase E).
+- [x] Root renders with Tailwind styling.
+- [x] Footer has placeholder links (policy pages can wait until Phase E).
 
-### A.3 Devise (or Rails 8 native auth)
+### A.3 Authentication (Rails 8 native — chosen)
 
-**Tasks:**
+**Why native instead of Devise (shop + admins):**
 
-1. Add **Devise**; `rails g devise User`.
-2. Add **role** to `users`: `enum :role, { customer: 0, admin: 1 }` (or string enum—pick one convention).
-3. First user seed or console: promote one admin.
+| Topic | Rails 8 `generate authentication` | Devise |
+|-------|-------------------------------------|--------|
+| Footprint | Small: `User`, `Session`, cookie, `Authentication` concern — matches app code | Larger DSL, more generators, more “magic” |
+| Upgrades | Stays aligned with Rails releases | Extra gem compatibility work per Rails major |
+| Admin (`/admin`) | Same `User` + `current_user.admin?` + `before_action` in `Admin::ApplicationController` | `authenticate_user!` + role check — same idea, different API |
+| Customization | You own every line (password reset mail, rate limits already in generated controllers) | Often `devise_scope`, overridden controllers, I18n YAML for devise views |
+| Features | Covers sign-in, session cookie, password reset; **registration** added as `RegistrationsController` | Registration, confirmable, lockable, OAuth plugins, etc. out of the box |
+
+**Product rules tracked here:**
+
+- **Guest checkout:** placing an order must **not** require registration. Phase **D** `OrdersController` / checkout flow will use `allow_unauthenticated_access` (and optional `user_id` when logged in). Registered users are optional.
+- **Cart persistence (30 days):** guest cart should survive return visits ~**30 days** — implement in Phase **D** with **`Rails.cache`** (or Solid Cache) keyed by signed cookie / `guest_cart_id`, `expires_in: 30.days`, not only the default session cookie. Documented under Phase D.1 below.
+
+**Implemented tasks:**
+
+1. `bin/rails generate authentication` + `bcrypt`; migration **`role`** on `users` (`enum`: `customer`, `admin`).
+2. **`RegistrationsController`** — public sign-up always creates **`customer`** (never `admin` from params).
+3. **`db/seeds.rb`** — `admin@example.com` (password from `ADMIN_SEED_PASSWORD` or dev default; change in production).
+4. I18n for sessions, registration, passwords, mailer (`uk` / `ru`); layout links **Увійти / Реєстрація / Вийти**.
+5. Public controllers use **`allow_unauthenticated_access`** so the storefront stays open without login.
 
 **Checklist:**
 
-- [ ] Sign up / sign in / sign out work in `:uk` / `:ru` Devise views (generate views + translate or use I18n YAML).
+- [x] Sign up / sign in / sign out + password reset flow; strings in `:uk` / `:ru`.
+- [x] `current_user` / `authenticated?` available in views (via `Authentication`).
 
-**Phase A definition of done:** Localized shell of the site; auth works; Docker workflow is routine.
+**Phase A definition of done:** Localized shell of the site; auth works; Docker workflow is routine. **Met for A.1–A.3.**
 
 ---
 
 ## Phase B — Catalog
 
 ### B.1 Categories
+
+**Admin:** Categories (and later products) are intended to be **created and edited by staff in `/admin`** once **Phase C (Administrate)** is installed. Until then, use **`db/seeds.rb`** or Rails console. Demo seeds describe a **building materials** shop (сухі суміші, утеплення, пиломатеріали, інструмент).
 
 **Migration sketch:**
 
@@ -152,7 +183,7 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Checklist:**
 
-- [ ] Slugs are unique; invalid slugs 404.
+- [x] Slugs are unique; invalid slugs 404.
 
 ### B.2 Products
 
@@ -170,13 +201,13 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 **Checklist:**
 
-- [ ] Filters cannot inject SQL (use bound parameters / scopes only).
-- [ ] Inactive products not listed; direct slug access returns 404 or “unavailable” per your policy.
+- [x] Filters cannot inject SQL (use bound parameters / scopes only).
+- [x] Inactive products not listed; direct slug access returns 404 or “unavailable” per your policy.
 
 ### B.3 Turbo / Stimulus touches
 
-- [ ] Pagination: `turbo_frame` or full page—pick one and stay consistent.
-- [ ] “Add to cart” button exists as stub (disabled or Phase D)—optional link to Phase D.
+- [x] Pagination: `turbo_frame` or full page—pick one and stay consistent. (**Implemented:** Pagy `:offset` + `<turbo-frame id="products">` for grid, filters, and page links; full document load without frame header; `data-turbo-action="advance"` on the frame for URL updates.)
+- [x] “Add to cart” on product cards and show page posts to **`CartsController#add`** (Phase D.1).
 
 **Phase B definition of done:** Full browse path: categories → filtered list → product detail with images; copy in Ukrainian/Russian per DB fields + I18n chrome.
 
@@ -190,24 +221,33 @@ This document expands [PLAN.md](./PLAN.md) into **actionable tasks**, **checklis
 
 1. Add `administrate` gem; run install generator.
 2. Mount dashboards under `/admin`.
-3. **Authenticate**: `before_action` requiring `current_user.admin?` (or Devise `authenticate_user!` + role check).
+3. **Authenticate**: `before_action` requiring `current_user.admin?` (same `User` model as storefront; no Devise).
 4. Consider **Pundit** for `Admin::ApplicationController` policies if you split permissions later.
+
+**Implemented (C.1):**
+
+- Gem `administrate ~> 1.0` (Rails 8–compatible); dashboards generated for `Category`, `Product`, `User`.
+- Routes: `namespace :admin` → `/admin`, `root` → categories index; **no** `Session` admin resource.
+- `Admin::ApplicationController` includes **`Authentication`** (must sign in) and **`require_admin`** → `current_user.admin?` or redirect to root with `t("admin.forbidden")`.
+- Storefront nav shows **Адмін** link when `current_user.admin?`.
+- **Pundit:** not added; revisit when splitting admin roles.
 
 ### C.2 Dashboards
 
 Register resources:
 
-- [ ] `Category`
-- [ ] `Product` (show image attachments in form or custom field)
-- [ ] `User` (read-only or limited fields—avoid exposing tokens)
-- [ ] `Order`, `OrderItem` (after Phase D—can stub routes after models exist)
+- [x] `Category`
+- [x] `Product` — **`administrate-field-active_storage`** for `has_many_attached :images`; uploads handled in **`Admin::ProductsController`** (stash + attach after save — see *Operational notes — Product images & Active Storage*); `scoped_resource` uses `with_attached_images`.
+- [x] **`HomePromotion`** — home carousel + public **`/promotions/:slug`**; **`/admin/home_promotions`**; demo rows in **`db/seeds.rb`**. Details: **`docs/HOME_PROMOTIONS_PLAN.md`** and **README** (*Home page promotions*).
+- [x] `User` (no `password_digest` / sessions in UI; `password` + `password_confirmation` optional on edit via `Admin::UsersController#resource_params`)
+- [x] `Order`, `OrderItem` — models + migration; **`OrderDashboard`** / **`OrderItemDashboard`**; **`Admin::OrdersController`** / **`Admin::OrderItemsController`** (`scoped_resource` orders by `created_at` desc); routes `resources :orders`, `resources :order_items`. Storefront checkout/cart still **Phase D**.
 
 **Checklist:**
 
-- [ ] Non-admin users get 403/redirect from `/admin`.
-- [ ] Strong params in Administrate overrides match your model attributes.
+- [x] Non-admin users get 403/redirect from `/admin`. (Guests → sign-in; customers → root + flash.)
+- [x] Strong params in Administrate overrides match your model attributes. (`Admin::UsersController`, `ProductDashboard#permitted_attributes` for `images: []`.)
 
-**Phase C definition of done:** Admin can CRUD categories and products (including images) without touching the console.
+**Phase C definition of done:** Admin can CRUD categories, products (including images), and **orders / order lines** without the console. **Met** for resources above; **Phase D** still adds cart, public checkout, and automations (totals, stock).
 
 ---
 
@@ -215,11 +255,17 @@ Register resources:
 
 ### D.1 Cart storage
 
-**Choose one for v1:**
+**Requirements (from product planning):**
+
+- **Guest orders:** checkout and order creation **without** `User` — see A.3; do not gate `OrdersController` with `authenticate_user!`.
+- **Cart ~30 days:** persist guest (and optionally logged-in) cart for return visits using **`Rails.cache`** (e.g. Solid Cache in production) with **`expires_in: 30.days`**, keyed by a stable signed token in cookies (e.g. `guest_cart_id`) or `user_id` when present. Session-only storage is insufficient for a 30-day window unless session cookie lifetime is explicitly extended — prefer cache + explicit TTL.
+
+**Choose one for v1 (implementation detail):**
 
 | Approach | Pros | Cons |
 |----------|------|------|
-| Session (serialized product ids + qty) | Simple, no login | Size limits; no cross-device |
+| Session (serialized product ids + qty) | Simple, no login | Size limits; short TTL unless cookie max-age tuned |
+| **`Rails.cache` + cookie key** (30d TTL) | Matches “come back within a month” | Must define key rotation / merge on login |
 | `Cart` model + `session_id` / user | Clearer domain | More tables |
 
 **Tasks:**
@@ -228,9 +274,21 @@ Register resources:
 2. `CartsController` — show, update line qty, remove line.
 3. Turbo: update cart partial on change (optional).
 
+**Implemented (D.1):**
+
+- **`Cart`** PORO: `Rails.cache` keys `cart/g/<token>` (signed cookie `cart_token`, httponly, permanent) and `cart/u/<user_id>`; **`expires_in: 30.days`** on write; `add`, `set_quantity`, `remove`, `line_items`, `total`, `item_count`.
+- **`CurrentCart`** concern on **`ApplicationController`**: `current_cart`, **`cart_item_count`** (nav badge); guest token via **`ensure_guest_cart_token!`**.
+- **`Cart.merge_guest_into_user!`** after **`SessionsController#create`** and **`RegistrationsController#create`** (guest cookie cleared after merge).
+- **`CartsController`** (`allow_unauthenticated_access`): **`show`**, **`add`** (POST), **`update_line`** (PATCH), **`remove_line`** (DELETE); flash + `redirect_back` with fallback **`cart_path`**. Routes: **`resource :cart`** + member actions.
+- Views: **`carts/show`**, **`products/_add_to_cart`**; layout **Кошик** links to **`cart_path`** with optional count.
+- Tests: **`test/models/cart_test.rb`**, **`test/controllers/carts_controller_test.rb`**; **`config.cache_store = :memory_store`** in test so cart integration tests work. Run with **`bin/docker-test`** (see README).
+- **Cart UX:** **`add`** / **`update_line`** respond to **`turbo_stream`**: sync nav badges (desktop **cart icon + label**, **mobile header** icon, **mobile menu** cart row), replace per-product **`#add-to-cart-product-{id}`**; **`−` / `+`** stepper in grey bar when qty &gt; 0; **`animate-cart-line-appear`** on line refresh; **`#cart-toast`** only for errors. HTML still **`redirect_back`**. No disabled-button “✓” (was dropping rapid clicks).
+
 ### D.2 Orders
 
-**Migration sketch:**
+**Schema (implemented for admin — see C.2):** `orders` and `order_items` tables exist with `total` / `unit_price` as `decimal`, string `status`, optional `user_id`, shipping fields, `email` on `orders`.
+
+**Migration sketch (historical):**
 
 - `orders`: `user_id` (optional), `status` (enum: pending, confirmed, shipped, cancelled, …), `total_cents` or `total` decimal, shipping name/phone/address fields, `email`, timestamps.
 - `order_items`: `order_id`, `product_id`, `quantity`, `unit_price` (**snapshot**), timestamps.
@@ -241,12 +299,26 @@ Register resources:
 2. Clear cart on success.
 3. Administrate: allow status updates; read-only financial fields if needed.
 
+**Implemented (D.2):**
+
+- Migration **`public_token`** on `orders` (unique); guest-safe confirmation URL **`/o/:public_token`**.
+- **`Checkout`** PORO (`app/models/checkout.rb`, same autoload pattern as **`Cart`**): pessimistic lock active products, validate `Order` with **`:checkout`** (email + shipping fields), snapshot **`unit_price`**, **`recalculate_total!`**, decrement stock, **`cart.clear`** on success; roll back on validation or stock errors.
+- **`CheckoutsController`** (`new` / `create`), **`OrderConfirmationsController#show`**; routes **`resource :checkout`**, **`order_confirmation_path`**.
+- Views: **`checkouts/new`**, **`order_confirmations/show`**; cart CTA **`carts.checkout_cta`** → **`new_checkout_path`**.
+- Administrate: **`total`** removed from order **form** (still on show); **`public_token`** on show.
+- Tests: **`test/services/checkout_test.rb`**, **`test/controllers/checkouts_controller_test.rb`**.
+
 ### D.3 Mailers (optional)
 
-- [ ] `OrderMailer#confirmation` to customer.
-- [ ] `OrderMailer#notify_admin` to shop email.
+- [x] `OrderMailer#confirmation` to customer (after successful checkout, `deliver_later`).
+- [x] `OrderMailer#notify_admin` to **`ENV["SHOP_NOTIFICATION_EMAIL"]`** when set (same hook).
+- [x] **`MAILER_FROM`** default on `ApplicationMailer`; development uses **`:test`** delivery unless **`SMTP_*`** set; production configures **SMTP** when **`SMTP_ADDRESS`** is present (**`MAILER_HOST`**, **`MAILER_PROTOCOL`** for URL helpers).
+- [x] Tests: **`test/mailers/order_mailer_test.rb`**, checkout controller asserts **`assert_emails`** + **`perform_enqueued_jobs`**; previews **`test/mailers/previews/order_mailer_preview.rb`**.
 
-Configure `config/environments/production.rb` SMTP or transactional provider (SendGrid, Mailgun, Postmark, etc.).
+**D.3 — deferred / ops (revisit later):**
+
+- **`From:` / `MAILER_FROM`:** Must be visible inside the **`web`** container (`docker compose exec web env | grep MAILER`). Compose uses **`env_file: .env`**; no `export` in `.env`, UTF‑8 BOM can break the value — strip in code. **`ApplicationMailer#mail`** merges **`**kwargs`** so `mail(to:, subject:)` is not lost; **`OrderMailer`** also passes **`from: mailer_from_address`** explicitly. If **`From`** still shows **`noreply@example.com`**, the variable is empty in the running container — fix env, then rebuild/restart **`web`**.
+- **Verbose MIME in logs:** Not fixable via `Mail.logger=` on mail 2.9. **`docker-compose`** sets **`RAILS_LOG_LEVEL`** default **`info`** for **`web`** (override with **`RAILS_LOG_LEVEL=debug`** in `.env` when you need SQL detail). Gmail SMTP: **`MAILER_FROM`** should match **`SMTP_USERNAME`** unless “Send mail as” is configured.
 
 **Phase D definition of done:** Happy-path purchase without payment; admin sees order; stock decreases; prices on line items frozen.
 
@@ -256,25 +328,25 @@ Configure `config/environments/production.rb` SMTP or transactional provider (Se
 
 ### E.1 SEO & errors
 
-- [ ] `meta-tags` gem (or manual `<title>` / `description` per product/category).
-- [ ] `public/404.html`, `500.html` — localized static pages **or** dynamic errors with I18n.
-- [ ] `sitemap.xml` generator (gem or rake task) for products/categories.
+- [x] **`meta-tags`** gem; default title/description in **`ApplicationController`**; per-page tags for home, catalog, product (**`og:image`** when images exist), category, delivery, contacts, cart/checkout/confirmation (**`noindex`**).
+- [x] Dynamic **I18n** error pages via **`config.exceptions_app`** → **`ErrorsController`** (`/404`, `/500`), **`Accept-Language`** hint for uk/ru; static English fallbacks live at **`public/fallback_404.html`** / **`fallback_500.html`** (not `404.html` — that path is reserved by the static file server and would shadow the localized routes).
+- [x] **`/sitemap.xml`** (`SitemapsController` + **`show.xml.builder`**: root, catalog, products index, static pages, all categories/products); **`/robots.txt`** (`RobotsController`) with **`Disallow: /admin`** and **Sitemap** URL. Production: **`config.action_controller.default_url_options`** aligned with **`MAILER_HOST`** / **`MAILER_PROTOCOL`** for absolute URLs.
 
 ### E.2 Seeds & fixtures
 
-- [ ] `db/seeds.rb`: categories, products with images (placeholders), one admin user (document password in README **only for dev** or use env).
+- [x] `db/seeds.rb`: categories, products with images (placeholders), one admin user (document password in README **only for dev** or use env).
 
 ### E.3 Tests (minimum bar)
 
-- [ ] Model tests: validations, scopes, order creation + price snapshot.
-- [ ] System test (optional): browse + add to cart + checkout.
+- [x] Model tests: validations, scopes, order creation + price snapshot.
+- [x] System test (optional): browse + add to cart + checkout.
 
 ### E.4 Security pass
 
-- [ ] `force_ssl` in production.
-- [ ] Secure headers (Rails defaults + review).
-- [ ] Rate limit contact form / checkout (rack-attack optional).
-- [ ] Active Storage: private bucket if files must not be public; otherwise S3/R2 with sane CORS.
+- [x] `force_ssl` in production.
+- [x] Secure headers (Rails defaults + review).
+- [x] Rate limit contact form / checkout (rack-attack optional).
+- [x] Active Storage: private bucket if files must not be public; otherwise S3/R2 with sane CORS.
 
 **Phase E definition of done:** Demo-ready storefront; admin workflow complete; production config documented.
 
@@ -295,6 +367,50 @@ Configure `config/environments/production.rb` SMTP or transactional provider (Se
 ---
 
 ## Deployment
+
+### Current readiness & next steps
+
+This subsection summarizes **what the repo already provides** for going live, **what is still configuration work**, and a **concrete order of operations**. Phases **A–E** in this document are largely implemented; **Phase F** (payments, Telegram) remains deferred per [PLAN.md](./PLAN.md).
+
+#### Repository snapshot
+
+| Area | Status |
+|------|--------|
+| **Storefront** | Catalog (filters, Turbo frame), product detail, cart (cache + long-lived guest cookie), checkout, order confirmation, guest and logged-in flows. |
+| **Admin** | Administrate: categories, products (Active Storage images), orders, users, home promotions; public `/promotions/:slug`. |
+| **Mail** | Order confirmation + optional shop alert; production SMTP via env (`SMTP_*`, `MAILER_HOST`, `MAILER_PROTOCOL`). |
+| **SEO & errors** | Meta tags, sitemap, robots, localized `/404` and `/500`; static English fallbacks: `public/fallback_404.html`, `public/fallback_500.html` (for CDN/nginx — do not use `404.html` on URL `/404`, see Phase E.1). |
+| **Security (prod)** | `assume_ssl` / `force_ssl` (env toggles), Rack::Attack on POST `/checkout` and `/contacts`. |
+| **Tests & CI** | Minitest suite; GitHub Actions: Brakeman, bundler-audit, importmap audit, RuboCop, `bin/rails test`, `test:system`. |
+| **Containers** | `Dockerfile` (production build, assets, Thruster); dev via `docker-compose.yml` / `Dockerfile.dev`. |
+| **Kamal** | `config/deploy.yml` is a **template** (placeholder hosts/registry) — not production-ready until you replace servers, registry, proxy, and `.kamal/secrets`. |
+| **Deferred** | Payment gateways and Telegram bot (Phase F) — design orders accordingly before adding providers. |
+
+#### Gaps before a real production cutover
+
+| Topic | Notes |
+|-------|--------|
+| **PostgreSQL (multi-DB)** | `config/database.yml` production defines **primary**, **cache**, **queue**, and **cable** databases. Create all four (or equivalent URLs) and run **all** required migrations in release — not only `db:migrate` for primary. Single-URL PaaS Postgres may need env alignment with Rails multi-DB docs. |
+| **Active Storage** | Production defaults to **`:local`**; Kamal template mounts `app_storage`. For multiple app instances or ephemeral disks, switch to **S3/R2** in `config/storage.yml` and env. |
+| **`config.hosts`** | Set real hostnames in `config/environments/production.rb` (or env-driven allowlist) to avoid `HostAuthorization` errors. |
+| **Secrets / env** | At minimum: `RAILS_MASTER_KEY`, `SECRET_KEY_BASE` (if required by host), database credentials or `DATABASE_URL`, `MAILER_*` and `SMTP_*` for real mail, production admin credentials. See `.env.example` and README *Production security*. |
+| **Seeds** | `db:seed` is appropriate for **dev/staging**. In **production**, prefer creating an admin via console or a controlled task — avoid default seed passwords and optional network image fetches unless intended. |
+| **Static assets** | Either serve via the app (e.g. Thruster / `RAILS_SERVE_STATIC_FILES`) or offload `public/` to nginx/CDN — match your host’s recommendation. |
+| **Background jobs** | Mail uses `deliver_later`; Solid Queue uses the **queue** DB. Ensure queue migrations ran and the host runs workers or **SOLID_QUEUE_IN_PUMA** (as in Kamal template) consistently with your topology. |
+
+#### Recommended sequence
+
+1. **Choose one path first:** managed **PaaS** (Render, Fly.io, Railway, etc.) for speed, or **VPS + Kamal** for full control — avoid splitting attention on the first deploy.
+2. **Staging:** New app + DB, set `config.hosts`, mail env (or accept no outbound mail initially), run migrations for **all** DB roles, deploy (e.g. repo `Dockerfile`), smoke: `/`, product, cart → checkout, `/admin`, `/up`, `/sitemap.xml`.
+3. **Hardening:** Production admin user, rotate any seed-related passwords, confirm job processing for mail.
+4. **Production:** DNS, TLS, backups on Postgres, optional error tracking (Sentry, AppSignal, etc.).
+5. **Product:** When you need online payment, plan **Phase F** (provider, webhooks, idempotent order updates).
+
+#### Should you try to deploy?
+
+**Yes — on staging first.** The application is **feature-complete for a non-payment storefront**; remaining work is mostly **host-specific configuration**. A first deploy on a PaaS free/staging tier or a single VPS surfaces DB, env, and TLS issues early without committing to production DNS.
+
+---
 
 ### 1. Production principles
 
@@ -348,7 +464,7 @@ Only if you already run clusters—overkill for a mini shop unless org mandates 
 
 ### 5. CI/CD (recommended shape)
 
-1. **On push / PR:** `bundle exec rubocop` (if used), `rails test`.
+1. **On push / PR:** `bundle exec rubocop` (if used), `bin/rails test` inside the CI job’s Ruby image (same app as Docker), or mirror **`bin/docker-test`** locally.
 2. **On merge to main:** build image or trigger PaaS deploy; run migrations in a **release** step (not during asset compile only).
 
 ### 6. Post-deploy
@@ -392,5 +508,6 @@ db/
 |-------|----------|
 | Stack, locales, deferred features | [PLAN.md](./PLAN.md) |
 | Step-by-step tasks, deploy | This file (`DEVELOPMENT_PLAN.md`) |
+| Figma-inspired storefront UI/UX refresh (phased plan) | [docs/FIGMA_UI_UX_PLAN.md](./docs/FIGMA_UI_UX_PLAN.md) |
 
 When the Rails app exists, add a short **README.md** with “Quick start: Docker” and link both plans for collaborators.

@@ -19,15 +19,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
+    # Load MAILER_FROM, SMTP_*, SHOP_NOTIFICATION_EMAIL, etc. into the container (host file is gitignored).
+    env_file:
+      - .env
     command: bash -c "rm -f tmp/pids/server.pid && bin/rails tailwindcss:build && (bin/rails tailwindcss:watch &) && exec bin/rails server -b 0.0.0.0 -p 3000"
     volumes:
       - .:/app
       - bundle_data:/usr/local/bundle
     ports:
-      - "3001:3000"
+      - "3000:3000"
     environment:
       DATABASE_URL: postgres://budinfo:budinfo_dev_password@db:5432/app_development
       RAILS_ENV: development
+      # Browser hits localhost:3000; must match host port for redirects / Active Storage URLs
+      DEV_URL_OPTIONS_PORT: "3000"
+      # Avoid huge base64 MIME dumps in logs (Mail logs body at DEBUG). Override in .env: RAILS_LOG_LEVEL=debug
+      RAILS_LOG_LEVEL: ${RAILS_LOG_LEVEL:-info}
     depends_on:
       db:
         condition: service_healthy
