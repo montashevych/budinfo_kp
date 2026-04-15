@@ -1,11 +1,11 @@
-<div class="max-w-2xl">
-  <h1 class="text-3xl font-semibold tracking-tight text-stone-900"><%= t("home.heading") %></h1>
-  <p class="mt-4 text-stone-600"><%= t("home.intro") %></p>
-  <p class="mt-6 flex flex-wrap gap-x-4 gap-y-2">
-    <%= link_to t("categories.index.heading"), categories_path, class: "font-medium text-stone-900 underline hover:text-stone-600" %>
-    <%= link_to t("nav.products"), products_path, class: "font-medium text-stone-900 underline hover:text-stone-600" %>
-  </p>
-</div>
+<section class="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-surface-card via-surface-card to-surface-muted px-6 py-10 shadow-card sm:px-10 sm:py-12">
+  <h1 class="section-title"><%= t("home.heading") %></h1>
+  <p class="section-intro"><%= t("home.intro") %></p>
+  <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+    <%= link_to t("categories.index.heading"), categories_path, class: "btn-primary text-center" %>
+    <%= link_to t("nav.products"), products_path, class: "btn-secondary text-center" %>
+  </div>
+</section>
 
 <% if @home_promotions.any? %>
   <div class="mt-12 w-full">

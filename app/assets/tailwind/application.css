@@ -1,5 +1,51 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens — Phase A (FIGMA_UI_UX_PLAN.md). Sync with docs/DESIGN_TOKENS.md.
+ * Figma reference: Building Materials E-commerce (Community) + figma.site prototype.
+ */
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol";
+
+  --color-surface-page: #f7f6f4;
+  --color-surface-card: #ffffff;
+  --color-surface-muted: #eeedea;
+
+  --color-ink: #1c1917;
+  --color-ink-muted: #57534e;
+  --color-ink-subtle: #78716c;
+
+  --color-brand: #c2410c;
+  --color-brand-hover: #9a3412;
+  --color-on-brand: #fffaf5;
+
+  --color-border: #e7e5e4;
+  --color-border-strong: #d6d3d1;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.05), 0 1px 3px rgb(28 25 23 / 0.08);
+  --shadow-card-hover: 0 4px 6px rgb(28 25 23 / 0.06), 0 2px 4px rgb(28 25 23 / 0.05);
+}
+
+@layer base {
+  html {
+    @apply font-sans antialiased;
+  }
+
+  :where(a):focus-visible,
+  :where(button):focus-visible,
+  :where(input):focus-visible,
+  :where(select):focus-visible,
+  :where(textarea):focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand;
+  }
+}
+
 @keyframes cart-badge-pop {
   0% {
     transform: scale(0.88);
@@ -56,16 +102,57 @@
 }
 
 @layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-on-brand shadow-sm transition hover:bg-brand-hover focus-visible:outline-none;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border-2 border-border-strong bg-surface-card px-5 py-2.5 text-sm font-semibold text-ink shadow-sm transition hover:border-ink-subtle hover:bg-surface-muted focus-visible:outline-none;
+  }
+
+  .section-title {
+    @apply text-3xl font-bold tracking-tight text-ink sm:text-4xl;
+  }
+
+  .section-intro {
+    @apply mt-4 max-w-2xl text-base leading-relaxed text-ink-muted sm:text-lg;
+  }
+
+  .card {
+    @apply rounded-xl border border-border bg-surface-card shadow-card;
+  }
+
+  /* Phase B — shell: header nav + cart CTA */
+  .nav-link {
+    @apply rounded-lg px-3 py-2 text-sm font-medium text-ink-muted transition hover:bg-surface-muted hover:text-ink;
+  }
+
+  .nav-link-active {
+    @apply bg-surface-muted text-ink;
+  }
+
+  .nav-cart-cta {
+    @apply inline-flex items-center gap-2 rounded-lg bg-brand px-3 py-2 text-sm font-semibold text-on-brand shadow-sm transition hover:bg-brand-hover focus-visible:outline-none;
+  }
+
+  .footer-heading {
+    @apply text-xs font-semibold uppercase tracking-wider text-ink-subtle;
+  }
+
+  .footer-link {
+    @apply text-sm font-medium text-ink-muted transition hover:text-brand;
+  }
+
   .pagy-nav-wrap nav.pagy.series-nav {
     @apply flex flex-wrap items-center justify-center gap-1;
   }
 
   .pagy-nav-wrap nav.pagy.series-nav a {
-    @apply inline-flex min-w-[2.25rem] items-center justify-center rounded-md border border-stone-300 bg-white px-3 py-1.5 font-medium text-stone-700 no-underline hover:bg-stone-50;
+    @apply inline-flex min-w-[2.25rem] items-center justify-center rounded-md border border-border-strong bg-surface-card px-3 py-1.5 font-medium text-ink-muted no-underline transition hover:border-ink-subtle hover:bg-surface-muted hover:text-ink;
   }
 
   .pagy-nav-wrap nav.pagy.series-nav a[aria-disabled="true"],
   .pagy-nav-wrap nav.pagy.series-nav a[aria-current="page"] {
-    @apply cursor-default border-stone-900 bg-stone-900 text-white hover:bg-stone-900;
+    @apply cursor-default border-ink bg-ink text-on-brand hover:border-ink hover:bg-ink;
   }
 }

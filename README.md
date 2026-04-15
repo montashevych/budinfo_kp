@@ -61,7 +61,7 @@ Local Ruby is not documented for this repo; prefer Docker for consistency.
 - **Admin:** Sign in as an **admin** user → **`/admin/home_promotions`** (Administrate). Create slides with **title**, **teaser**, **slug** (URL segment), **body** (detail page), **position**, **active**, and **image**. Active rows **require** an image.
 - **Demo data:** After **`bin/docker-rails db:seed`** (or `db:seed` in the `web` container), sample promos include **`demo-cement-week`** and **`demo-insulation`** (Wikimedia images; see comment block at the top of **`db/seeds.rb`**). Inactive **`demo-draft`** does not appear on the home page.
 
-See **`docs/HOME_PROMOTIONS_PLAN.md`** for the full feature checklist.
+See **`docs/HOME_PROMOTIONS_PLAN.md`** for the full feature checklist. For a **storefront UI/UX refresh** aligned with the [Building Materials Figma reference](https://www.figma.com/make/1YFiUGhoQuROfByVqNV2Yq/Building-Materials-E-commerce-Website--Community-?p=f&t=qfQdcQML7hmFawCP-0) / [published prototype](https://final-boar-45996338.figma.site/), see **`docs/FIGMA_UI_UX_PLAN.md`**.
 
 ## Production security (summary)
 

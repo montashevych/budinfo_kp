@@ -508,5 +508,6 @@ db/
 |-------|----------|
 | Stack, locales, deferred features | [PLAN.md](./PLAN.md) |
 | Step-by-step tasks, deploy | This file (`DEVELOPMENT_PLAN.md`) |
+| Figma-inspired storefront UI/UX refresh (phased plan) | [docs/FIGMA_UI_UX_PLAN.md](./docs/FIGMA_UI_UX_PLAN.md) |
 
 When the Rails app exists, add a short **README.md** with “Quick start: Docker” and link both plans for collaborators.

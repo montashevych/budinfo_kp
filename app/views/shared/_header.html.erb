@@ -1,0 +1,99 @@
+<header class="sticky top-0 z-50 border-b border-border bg-surface-card/90 shadow-sm backdrop-blur-md">
+  <div class="mx-auto max-w-6xl px-4 py-3">
+    <div class="flex items-center gap-4">
+      <%# Brand %>
+      <div class="flex min-w-0 flex-shrink-0 flex-col justify-center">
+        <%= link_to root_path, class: "group min-w-0" do %>
+          <span class="block truncate text-lg font-bold tracking-tight text-ink transition group-hover:text-brand"><%= t("layouts.application.title") %></span>
+          <span class="mt-0.5 hidden truncate text-[0.6875rem] font-medium uppercase tracking-wide text-ink-subtle sm:block"><%= t("layouts.application.tagline") %></span>
+        <% end %>
+      </div>
+
+      <%# Desktop nav (centered) %>
+      <nav class="hidden min-w-0 flex-1 items-center justify-center md:flex" aria-label="<%= t("nav.main_navigation") %>">
+        <div class="flex max-w-full flex-wrap items-center justify-center gap-0.5 lg:gap-1">
+          <%= link_to t("nav.home"), root_path, class: ["nav-link", ("nav-link-active" if current_page?(root_path))].compact.join(" ") %>
+          <%= link_to t("nav.catalog"), categories_path, class: ["nav-link", ("nav-link-active" if current_page?(categories_path))].compact.join(" ") %>
+          <%= link_to t("nav.products"), products_path, class: ["nav-link", ("nav-link-active" if current_page?(products_path))].compact.join(" ") %>
+          <%= link_to t("nav.delivery"), delivery_path, class: ["nav-link", ("nav-link-active" if current_page?(delivery_path))].compact.join(" ") %>
+          <%= link_to t("nav.contacts"), new_contact_path, class: ["nav-link", ("nav-link-active" if current_page?(new_contact_path))].compact.join(" ") %>
+          <% if current_user&.admin? %>
+            <%= link_to t("admin.link"), admin_root_path, class: "nav-link text-brand hover:text-brand-hover hover:bg-brand/5", data: { turbo_frame: "_top" } %>
+          <% end %>
+        </div>
+      </nav>
+
+      <%# Desktop actions: locale, auth, cart %>
+      <div class="hidden flex-shrink-0 items-center gap-2 md:flex lg:gap-3">
+        <div class="flex items-center gap-1 border-r border-border pr-2 lg:pr-3">
+          <%= link_to "УК", set_locale_path(locale: :uk), class: locale_link_class(:uk) %>
+          <%= link_to "RU", set_locale_path(locale: :ru), class: locale_link_class(:ru) %>
+        </div>
+        <div class="flex items-center gap-2">
+          <% if authenticated? %>
+            <%= link_to t("nav.sign_out"), session_path, data: { turbo_method: :delete },
+                  class: "whitespace-nowrap text-sm font-medium text-ink-muted transition hover:text-ink" %>
+          <% else %>
+            <%= link_to t("nav.sign_in"), new_session_path, class: "whitespace-nowrap text-sm font-medium text-ink-muted transition hover:text-ink" %>
+            <%= link_to t("nav.sign_up"), new_registration_path, class: "whitespace-nowrap text-sm font-semibold text-brand transition hover:text-brand-hover" %>
+          <% end %>
+        </div>
+        <%= link_to cart_path, class: "nav-cart-cta whitespace-nowrap" do %>
+          <%= render "shared/cart_icon_svg", extra_class: "h-5 w-5 shrink-0" %>
+          <span><%= t("nav.cart") %></span>
+          <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-desktop", count: cart_item_count %>
+        <% end %>
+      </div>
+
+      <%# Mobile bar %>
+      <div class="ml-auto flex items-center gap-1.5 md:hidden">
+        <%= link_to cart_path,
+              class: "relative inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-brand px-3 text-sm font-semibold text-on-brand shadow-sm transition hover:bg-brand-hover",
+              aria: { label: t("nav.cart") } do %>
+          <%= render "shared/cart_icon_svg", extra_class: "h-5 w-5 shrink-0" %>
+          <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-bar", count: cart_item_count, variant: :overlay %>
+        <% end %>
+        <%= link_to "УК", set_locale_path(locale: :uk), class: "#{locale_link_class(:uk)} text-xs" %>
+        <%= link_to "RU", set_locale_path(locale: :ru), class: "#{locale_link_class(:ru)} text-xs" %>
+        <button type="button" class="rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="openButton" data-action="click->mobile-menu#open" aria-label="<%= t("nav.menu_toggle") %>">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <button type="button" class="hidden rounded-lg p-2 text-ink-muted transition hover:bg-surface-muted" data-mobile-menu-target="closeButton" data-action="click->mobile-menu#close" aria-label="<%= t("nav.menu_close") %>">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="hidden border-t border-border bg-surface-card px-4 py-4 md:hidden" data-mobile-menu-target="panel" aria-label="Mobile">
+    <div class="mx-auto flex max-w-6xl flex-col gap-1">
+      <%= link_to t("nav.home"), root_path, class: "nav-link #{"nav-link-active" if current_page?(root_path)}", data: { action: "click->mobile-menu#close" } %>
+      <%= link_to t("nav.catalog"), categories_path, class: "nav-link #{"nav-link-active" if current_page?(categories_path)}", data: { action: "click->mobile-menu#close" } %>
+      <%= link_to t("nav.products"), products_path, class: "nav-link #{"nav-link-active" if current_page?(products_path)}", data: { action: "click->mobile-menu#close" } %>
+      <%= link_to t("nav.delivery"), delivery_path, class: "nav-link #{"nav-link-active" if current_page?(delivery_path)}", data: { action: "click->mobile-menu#close" } %>
+      <%= link_to t("nav.contacts"), new_contact_path, class: "nav-link #{"nav-link-active" if current_page?(new_contact_path)}", data: { action: "click->mobile-menu#close" } %>
+      <% if current_user&.admin? %>
+        <%= link_to t("admin.link"), admin_root_path, class: "nav-link text-brand", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+      <% end %>
+      <div class="mt-3 border-t border-border pt-3">
+        <%= link_to cart_path,
+              class: "flex items-center gap-3 rounded-xl border border-border bg-surface-muted px-3 py-3 text-ink shadow-card transition hover:border-border-strong hover:bg-surface-card",
+              data: { action: "click->mobile-menu#close" } do %>
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand text-on-brand shadow-sm">
+            <%= render "shared/cart_icon_svg", extra_class: "h-6 w-6" %>
+          </span>
+          <span class="min-w-0 flex-1 font-semibold"><%= t("nav.cart") %></span>
+          <%= render "shared/cart_nav_badge_slot", id: "cart-nav-badge-mobile-panel", count: cart_item_count, wrapper_class: "ml-auto shrink-0 self-center" %>
+        <% end %>
+      </div>
+      <div class="mt-3 flex flex-col gap-2 border-t border-border pt-3">
+        <% if authenticated? %>
+          <%= link_to t("nav.sign_out"), session_path, data: { turbo_method: :delete, action: "click->mobile-menu#close" }, class: "text-sm font-medium text-ink-muted" %>
+        <% else %>
+          <%= link_to t("nav.sign_in"), new_session_path, class: "text-sm font-medium text-ink-muted", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+          <%= link_to t("nav.sign_up"), new_registration_path, class: "text-sm font-semibold text-brand", data: { action: "click->mobile-menu#close", turbo_frame: "_top" } %>
+        <% end %>
+      </div>
+    </div>
+  </nav>
+</header>

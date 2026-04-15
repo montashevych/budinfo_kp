@@ -6,6 +6,13 @@ uk:
     application:
       title: "Budinfo"
       meta_description: "Інтернет-магазин будівельних матеріалів"
+      tagline: "Будматеріали з доставкою"
+    footer:
+      blurb: "Сухі суміші, утеплення, пиломатеріали та інструмент. Оформлення замовлення онлайн."
+      shop_heading: "Магазин"
+      customers_heading: "Клієнтам"
+      account_heading: "Обліковий запис"
+      rights: "Усі права захищено."
   meta:
     titles:
       home: "Головна"
