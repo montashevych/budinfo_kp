@@ -32,12 +32,12 @@ RUN bundle install && \
 
 COPY . .
 
-# Windows / mis-stored git modes (100644) break ./bin/rails in Linux images.
+# Git on Windows often stores bin/* as 100644; Linux needs +x for ./bin/rails (Cloud Build exit 126).
 RUN chmod +x bin/rails bin/rake bin/docker-entrypoint bin/thrust
 
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 bundle exec rails assets:precompile
 
 FROM base
 
