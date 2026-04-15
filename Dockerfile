@@ -32,6 +32,9 @@ RUN bundle install && \
 
 COPY . .
 
+# Windows / mis-stored git modes (100644) break ./bin/rails in Linux images.
+RUN chmod +x bin/rails bin/rake bin/docker-entrypoint bin/thrust
+
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
