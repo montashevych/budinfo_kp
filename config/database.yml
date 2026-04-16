@@ -84,21 +84,58 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+# Production / Cloud Run: set DATABASE_URL to a full Postgres URL (e.g. Cloud SQL
+# socket: postgresql://USER:PASS@/app_production?host=/cloudsql/PROJECT:REGION:INSTANCE).
+# CACHE_/QUEUE_/CABLE_DATABASE_URL override per role; otherwise the same host/credentials
+# are reused with the default database names below (create all four DBs on the instance).
+<%
+  budinfo_prod_pg_url = lambda do |env_key, default_dbname|
+    if ENV[env_key].present?
+      ENV[env_key]
+    elsif ENV["DATABASE_URL"].present?
+      uri = URI.parse(ENV["DATABASE_URL"])
+      uri.path = "/#{default_dbname}"
+      uri.to_s
+    end
+  end
+%>
 production:
-  primary: &primary_production
+  primary:
     <<: *default
+<% if (u = budinfo_prod_pg_url.call("DATABASE_URL", "app_production")) %>
+    url: <%= u.inspect %>
+<% else %>
     database: app_production
     username: app
     password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+<% end %>
   cache:
-    <<: *primary_production
+    <<: *default
+<% if (u = budinfo_prod_pg_url.call("CACHE_DATABASE_URL", "app_production_cache")) %>
+    url: <%= u.inspect %>
+<% else %>
     database: app_production_cache
+    username: app
+    password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+<% end %>
     migrations_paths: db/cache_migrate
   queue:
-    <<: *primary_production
+    <<: *default
+<% if (u = budinfo_prod_pg_url.call("QUEUE_DATABASE_URL", "app_production_queue")) %>
+    url: <%= u.inspect %>
+<% else %>
     database: app_production_queue
+    username: app
+    password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+<% end %>
     migrations_paths: db/queue_migrate
   cable:
-    <<: *primary_production
+    <<: *default
+<% if (u = budinfo_prod_pg_url.call("CABLE_DATABASE_URL", "app_production_cable")) %>
+    url: <%= u.inspect %>
+<% else %>
     database: app_production_cable
+    username: app
+    password: <%= ENV["APP_DATABASE_PASSWORD"] %>
+<% end %>
     migrations_paths: db/cable_migrate
