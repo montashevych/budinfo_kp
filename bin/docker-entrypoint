@@ -5,7 +5,10 @@ export HTTP_PORT="${HTTP_PORT:-${PORT:-80}}"
 
 # If running the rails server then create or migrate existing database
 if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  if [ "${RAILS_ENV:-}" = "production" ] && [ -z "${DATABASE_URL:-}" ]; then
+  # Cloud Console can save a blank line as whitespace; Rails still treats that as missing.
+  _db_url_trim="${DATABASE_URL#"${DATABASE_URL%%[![:space:]]*}"}"
+  _db_url_trim="${_db_url_trim%"${_db_url_trim##*[![:space:]]}"}"
+  if [ "${RAILS_ENV:-}" = "production" ] && [ -z "${_db_url_trim}" ]; then
     echo "ERROR: DATABASE_URL is not set in this container." >&2
     echo "Rails would use a local Postgres socket and fail on Cloud Run." >&2
     echo "Fix: Cloud Run → service → Variables and secrets → add DATABASE_URL (Cloud SQL socket or TCP URL)." >&2
