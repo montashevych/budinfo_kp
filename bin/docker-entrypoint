@@ -8,11 +8,17 @@ if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
   # Cloud Console can save a blank line as whitespace; Rails still treats that as missing.
   _db_url_trim="${DATABASE_URL#"${DATABASE_URL%%[![:space:]]*}"}"
   _db_url_trim="${_db_url_trim%"${_db_url_trim##*[![:space:]]}"}"
-  if [ "${RAILS_ENV:-}" = "production" ] && [ -z "${_db_url_trim}" ]; then
+  # Production image expects a real Postgres URL. Cloud Run sets K_SERVICE; do not rely on
+  # RAILS_ENV alone (if it is overridden to development, Rails would use socket-based dev config).
+  _require_db_url=0
+  [ "${RAILS_ENV:-production}" = "production" ] && _require_db_url=1
+  [ -n "${K_SERVICE:-}" ] && _require_db_url=1
+  if [ "$_require_db_url" -eq 1 ] && [ -z "${_db_url_trim}" ]; then
     echo "ERROR: DATABASE_URL is not set in this container." >&2
+    echo "RAILS_ENV=${RAILS_ENV:-<unset>} K_SERVICE=${K_SERVICE:-<unset>}" >&2
     echo "Rails would use a local Postgres socket and fail on Cloud Run." >&2
-    echo "Fix: Cloud Run → service → Variables and secrets → add DATABASE_URL (Cloud SQL socket or TCP URL)." >&2
-    echo "Also attach the Cloud SQL instance under Connections. See .env.example (Cloud Run + Cloud SQL)." >&2
+    echo "Fix: Cloud Run → Variables and secrets → DATABASE_URL (Cloud SQL socket or TCP URL)." >&2
+    echo "Use RAILS_ENV=production for this image. Attach Cloud SQL under Connections. See .env.example." >&2
     exit 1
   fi
   ./bin/rails db:prepare
