@@ -20,7 +20,7 @@ gem "tailwindcss-rails"
 gem "jbuilder"
 
 # Pagination [https://github.com/ddnexus/pagy]
-gem "pagy", "~> 43.0"
+gem "pagy", "~> 43.5"
 
 # SEO defaults, Open Graph helpers [https://github.com/kpumuk/meta-tags]
 # Bundler would require "meta-tags" by default; the gem loads from "meta_tags".
