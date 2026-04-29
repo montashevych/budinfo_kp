@@ -15,15 +15,24 @@
 
   <div class="mt-8 grid gap-10 md:grid-cols-2">
     <div>
-      <% if @product.images.attached? %>
+      <% if @product.display_images? %>
         <div class="space-y-3">
           <% @product.images.each do |image| %>
-            <%# Aspect box so the column keeps height if the request fails or is slow; object-contain alone can collapse to 0 height. %>
-            <div class="aspect-square w-full overflow-hidden rounded-lg border border-stone-200 bg-stone-50">
-              <%= image_tag product_variant_image_path(image, [800, 800]),
-                    class: "h-full w-full object-contain",
+            <div class="flex max-h-[1080px] w-full items-center justify-center overflow-hidden rounded-lg border border-stone-200 bg-stone-50">
+              <%= image_tag product_variant_image_path(image, [ 1920, 1080 ]),
+                    class: "max-h-[1080px] w-full max-w-full object-contain",
                     loading: "eager",
                     decoding: "async",
+                    alt: @product.display_title %>
+            </div>
+          <% end %>
+          <% @product.image_urls.each do |url| %>
+            <div class="flex max-h-[1080px] w-full items-center justify-center overflow-hidden rounded-lg border border-stone-200 bg-stone-50">
+              <%= image_tag url,
+                    class: "max-h-[1080px] w-full max-w-full object-contain",
+                    loading: "eager",
+                    decoding: "async",
+                    referrerpolicy: "no-referrer",
                     alt: @product.display_title %>
             </div>
           <% end %>

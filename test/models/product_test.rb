@@ -61,6 +61,31 @@ class ProductTest < ActiveSupport::TestCase
     assert_not_includes Product.active, products(:hidden)
   end
 
+  test "rejects invalid image url" do
+    p = Product.new(
+      title_uk: "Test",
+      category: categories(:root),
+      price: 1,
+      stock: 1,
+      active: true,
+      image_urls: [ "javascript:alert(1)" ]
+    )
+    assert_not p.valid?
+    assert p.errors[:image_urls].any?
+  end
+
+  test "accepts https image url" do
+    p = Product.new(
+      title_uk: "Test Img",
+      category: categories(:root),
+      price: 1,
+      stock: 1,
+      active: true,
+      image_urls: [ "https://upload.wikimedia.org/wikipedia/commons/1/17/Measuring-tape.jpg" ]
+    )
+    assert p.valid?, p.errors.full_messages.inspect
+  end
+
   test "in_stock scope excludes zero stock" do
     out = Product.create!(
       title_uk: "Out",

@@ -154,6 +154,7 @@ uk:
     out_of_stock: "Немає в наявності"
     in_stock: "В наявності: %{count} шт."
     sku: "Артикул"
+    admin_media_summary: "файлів: %{files}, посилань: %{links}"
     pagination:
       nav_label: "Сторінки товарів"
     cart:
@@ -253,7 +254,9 @@ uk:
         active: Активний
         description_uk: Опис (укр.)
         description_ru: Опис (рос.)
-        images: Зображення
+        images: Зображення (завантаження)
+        media_summary: Зображення (файли та посилання)
+        image_urls_for_form: "Посилання на зображення в інтернеті (одне на рядок, https://). Додатково до файлів вище."
         order_items: Рядки замовлень
       user:
         email_address: Електронна пошта
@@ -304,6 +307,11 @@ uk:
               too_large: "розмір файлу не більше 5 МБ"
         product:
           attributes:
+            image_urls:
+              invalid_url: "некоректна адреса (потрібен http або https з ім'ям хоста)"
+              too_many: "не більше ніж %{max} зовнішніх посилань"
             images:
               invalid_type: "дозволені лише зображення JPEG, PNG, WebP або GIF"
-              too_large: "розмір файлу не більше 5 МБ"
+              too_large: "збережене зображення не більше 512 КБ"
+              too_many_attached: "не більше ніж %{max} зображень-файлів"
+              raw_too_large: "вихідний файл не більше 25 МБ (великі знімки стискаються до 1920×1080)"

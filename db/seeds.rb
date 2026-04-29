@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "open-uri"
+
 # Demo product photos are downloaded from Wikimedia Commons (open licenses). Keep attributions
 # on a public “Credits” or imprint page in production if you ship these files.
 #
@@ -9,8 +11,6 @@
 # | Ceemnt CEM II … na paletach | CC BY-SA 4.0 | Krugerr (cement bags on pallets)|
 # | Glass wool insulation       | CC BY-SA 3.0 | Radomil (glass/mineral wool)    |
 # | Measuring-tape              | Public domain| Evan-Amos                        |
-
-require "open-uri"
 
 def attach_open_license_demo_images(product, sources:)
   product.reload if product.persisted?
@@ -29,9 +29,9 @@ def attach_open_license_demo_images(product, sources:)
   rescue ActiveRecord::RecordNotUnique
     # Same blob already linked (checksum dedupe) or race with a previous partial seed.
     next
+  rescue OpenURI::HTTPError, SocketError, Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNREFUSED => e
+    warn "Demo image skipped for #{product.slug} (#{filename}): #{e.message}"
   end
-rescue OpenURI::HTTPError, SocketError, Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNREFUSED => e
-  warn "Demo images skipped for #{product.slug}: #{e.message}"
 end
 
 def attach_home_promotion_demo_image(home_promotion, url:, filename:)
@@ -120,7 +120,6 @@ ruletka_product = Product.find_or_create_by!(slug: "ruletka-5m") do |p|
   p.active = true
 end
 
-# Wikimedia Commons direct JPEGs (skipped if offline). Only when product has no images yet.
 attach_open_license_demo_images(cement_product, sources: [
   {
     url: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Bolsa_de_cemento_Plasticor_40_kg.jpg",

@@ -154,6 +154,7 @@ ru:
     out_of_stock: "Нет в наличии"
     in_stock: "В наличии: %{count} шт."
     sku: "Артикул"
+    admin_media_summary: "файлов: %{files}, ссылок: %{links}"
     pagination:
       nav_label: "Страницы товаров"
     cart:
@@ -228,6 +229,11 @@ ru:
               too_large: "размер файла не более 5 МБ"
         product:
           attributes:
+            image_urls:
+              invalid_url: "некорректный адрес (нужны http или https с именем хоста)"
+              too_many: "не больше %{max} внешних ссылок"
             images:
               invalid_type: "разрешены только изображения JPEG, PNG, WebP или GIF"
-              too_large: "размер файла не более 5 МБ"
+              too_large: "сохранённое изображение не больше 512 КБ"
+              too_many_attached: "не больше %{max} изображений-файлов"
+              raw_too_large: "исходный файл не больше 25 МБ (большие снимки сжимаются до 1920×1080)"

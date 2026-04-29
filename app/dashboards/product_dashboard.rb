@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "administrate/base_dashboard"
 require "administrate/field/active_storage"
 
@@ -9,11 +11,13 @@ class ProductDashboard < Administrate::BaseDashboard
     category: Field::BelongsTo,
     description_ru: Field::Text,
     description_uk: Field::Text,
+    media_summary: Field::String,
     images: Field::ActiveStorage.with_options(
       index_display_preview: true,
       index_preview_size: [ 72, 72 ],
       show_preview_size: [ 480, 480 ]
     ),
+    image_urls_for_form: Field::Text,
     price: Field::Number.with_options(decimals: 2, searchable: false),
     sku: Field::String,
     slug: Field::String,
@@ -30,7 +34,7 @@ class ProductDashboard < Administrate::BaseDashboard
     category
     price
     active
-    images
+    media_summary
   ].freeze
 
   SHOW_PAGE_ATTRIBUTES = %i[
@@ -46,6 +50,7 @@ class ProductDashboard < Administrate::BaseDashboard
     description_uk
     description_ru
     images
+    image_urls_for_form
     order_items
     created_at
     updated_at
@@ -63,11 +68,12 @@ class ProductDashboard < Administrate::BaseDashboard
     description_uk
     description_ru
     images
+    image_urls_for_form
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze
 
   def permitted_attributes(action = nil)
-    super + [ images: [] ]
+    super + [ :image_urls_for_form, { images: [] } ]
   end
 end

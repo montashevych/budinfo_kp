@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Admin
   class ProductsController < Admin::ApplicationController
     def find_resource(param)
@@ -86,14 +88,20 @@ module Admin
       uploads = @stashed_product_images
       return true if uploads.blank?
 
+      current = resource.images.attachments.size
+      if current + uploads.size > Product::MAX_UPLOADED_IMAGES
+        resource.errors.add(:images, :too_many_attached, max: Product::MAX_UPLOADED_IMAGES)
+        return false
+      end
+
       uploads.each do |file|
         type = file.content_type.to_s
         unless Product::ALLOWED_IMAGE_TYPES.include?(type)
           resource.errors.add(:images, :invalid_type)
           return false
         end
-        if file.size > Product::MAX_IMAGE_SIZE
-          resource.errors.add(:images, :too_large)
+        if file.size > Product::MAX_RAW_UPLOAD_BYTES
+          resource.errors.add(:images, :raw_too_large)
           return false
         end
       end
@@ -105,7 +113,16 @@ module Admin
       @stashed_product_images = nil
       return if uploads.blank?
 
-      uploads.each { |file| record.images.attach(file) }
+      uploads.each do |file|
+        io = nil
+        begin
+          io, filename, content_type = ProductUploadImageProcessor.call(file)
+          io.rewind if io.respond_to?(:rewind)
+          record.images.attach(io:, filename:, content_type:)
+        ensure
+          io&.close if io.respond_to?(:close) && !io.closed?
+        end
+      end
     end
   end
 end

@@ -25,12 +25,16 @@ class ProductsController < ApplicationController
     desc = helpers.strip_tags(@product.display_description.to_s).squish
     desc = desc.presence || t("layouts.application.meta_description")
     set_meta_tags title: @product.display_title, description: desc
-    if @product.images.attached?
-      img = @product.images.first
+    og_image = if @product.images.attached?
+      rails_blob_url(@product.images.first)
+    else
+      @product.first_external_image_url
+    end
+    if og_image.present?
       set_meta_tags og: {
         title: @product.display_title,
         description: desc,
-        image: rails_blob_url(img),
+        image: og_image,
         type: "website"
       }
     end

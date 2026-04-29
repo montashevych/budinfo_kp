@@ -22,7 +22,8 @@ services:
     # Load MAILER_FROM, SMTP_*, SHOP_NOTIFICATION_EMAIL, etc. into the container (host file is gitignored).
     env_file:
       - .env
-    command: bash -c "rm -f tmp/pids/server.pid && bin/rails tailwindcss:build && (bin/rails tailwindcss:watch &) && exec bin/rails server -b 0.0.0.0 -p 3000"
+    # Named volume hides image gems; run install when Gemfile.lock changes (e.g. puma/selenium bumps).
+    command: bash -c "bundle check || bundle install && rm -f tmp/pids/server.pid && bin/rails tailwindcss:build && (bin/rails tailwindcss:watch &) && exec bin/rails server -b 0.0.0.0 -p 3000"
     volumes:
       - .:/app
       - bundle_data:/usr/local/bundle

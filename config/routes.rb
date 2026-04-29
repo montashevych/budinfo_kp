@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # Chrome DevTools probes this path; a route avoids noisy ActionController::RoutingError in development.
+  if Rails.env.development?
+    get "/.well-known/appspecific/com.chrome.devtools.json", to: proc { [204, {}, []] }
+  end
+
   get "up" => "rails/health#show", as: :rails_health_check
 
   get "locale/:locale", to: "locales#update", as: :set_locale, constraints: { locale: /uk|ru/ }
